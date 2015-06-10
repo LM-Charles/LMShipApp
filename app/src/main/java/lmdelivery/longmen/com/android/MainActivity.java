@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.lmdelivery;
+package lmdelivery.longmen.com.android;
 
 import android.content.Context;
 import android.content.Intent;

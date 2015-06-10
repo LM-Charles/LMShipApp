@@ -18,4 +18,8 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="CardViewStyle.Dark" parent="CardView">
+        <item name="cardBackgroundColor">@color/card_background</item>
+    </style>
+
 </resources>

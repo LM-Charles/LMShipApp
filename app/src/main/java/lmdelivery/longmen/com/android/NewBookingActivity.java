@@ -1,5 +1,6 @@
-package lmdelivery.longmen.com.lmdelivery;
+package lmdelivery.longmen.com.android;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,7 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +16,10 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
 
-public class NewBookingActivity extends ActionBarActivity {
+
+public class NewBookingActivity extends AppCompatActivity implements PickupFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,12 @@ public class NewBookingActivity extends ActionBarActivity {
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.getTabAt(0).setIcon(R.drawable.shape_greendot);
+        tabLayout.getTabAt(1).setIcon(R.drawable.shape_greendot);
     }
 
     @Override
@@ -62,14 +67,18 @@ public class NewBookingActivity extends ActionBarActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-
-
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new TextFragment(), "Address");
+        adapter.addFragment(PickupFragment.newInstance(), "Pickup");
+        adapter.addFragment(new TextFragment(), "Destination");
         adapter.addFragment(new TextFragment(), "Package");
         adapter.addFragment(new TextFragment(), "Time");
         adapter.addFragment(new TextFragment(), "Quote");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     static class Adapter extends FragmentPagerAdapter {
