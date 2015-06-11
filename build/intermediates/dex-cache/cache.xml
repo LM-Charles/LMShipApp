@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e5b9f5b0aa8dee788beb63d23832cb29ce771343">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-76353fd84058c6116e3f2c9920a2016480363f6b.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-safetynet\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0708ef60917bf94913fe9ef972a655b99462dca7">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-dd46cab7da87960850ebcecdb3c3cb30c2237bb1.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7215ac1f2fca947b9415a6ee2a1bf991364aab24">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-21b39a09d055e998d2df848b9cb7246ebc09d5f1.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3988694bf9d8186ff97ad5cdfa4ed88b5010fe08">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-c4054d81886ea53a2c9832be077ddbbb501d0e34.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-63697dcf25c3e1c9a62e067ccd08223273df9e39.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b48d5c51a9a9e329005106b4667f54948de4d4d8">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-186f991000236e4d49eccb889e6f4505fec69f28.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="59652857a825fff0de62166fca1bc9553cc01abb">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-2842e4361bada757420935df31ca2504e99bc241.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-panorama\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="565a01f90f1529f73362707c4c185d0623a68782">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-a4b9b865e66f12197fe20ee028f69125251e2657.jar" />
+    </item>
+    <item
+        jar="C:\Users\Kaiyu\.gradle\caches\modules-2\files-2.1\com.mcxiaoke.volley\library\1.0.16\d8f5b9114ebe0f76de7fbf55e950540959ce4ff8\library-1.0.16.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d8f5b9114ebe0f76de7fbf55e950540959ce4ff8">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\library-1.0.16-80ed0e2859e189d6a38f792801ac03f0e326a78b.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-bc5c72e55258df23959d0993042eae2d9c48eb3f.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5ea948d825957be6c4358c48422bee60eef2d487">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-fd198541b8a1a92499b12f0de4118a1806ca0c28.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e5bf453b070c1e39297986144960e45afa0fdfad">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-21a31c51bbb31000e21798081b5f4a0079bde8a1.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3b4ff5c39dace8f3b4ab4cab8191785547a0815f">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-b70c8a6b35951963d50e6306e859f9efb055b4d6.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.android.support\design\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-b4027633fe197e0c0b34511146b87674230768fa.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="fe3e0c6de7cceed888b277487238b6af9a1cc299">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-4cf415c7f507c20f268f18a5782ab7d3bc6d6d35.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e35fae1b377c23aa5fd2d309a190c2d0f73d54ec">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-f2edfaf6d13720df45af5aca98ed939272151624.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wallet\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6046e5cdaf799120b7c56a5a061d80e8854c4d34">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-a05d7557452bcd572177f5e0c5b08f93f8492033.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appinvite\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="bb36004beb02b69562cbec9aa7d6a3cf16bf5d1b">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-774b10167312eae3c3082e02462a9c89a86598a9.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9c9dea9e85aceb09d95df5e6f7bc8a43fc286068">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-b560824fc66e776059cd26f378ad765d380cafa9.jar" />
+    </item>
+    <item
+        jar="F:\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-36bd6b2ee8af0be208a0483fabe3fdbc4ca61ab0.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b2c07cdb814fe988ad05f7b4d767a841514a5991">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-c4720e78cffe89df71eb7ac43b02eadb95ab8fd8.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f2f7ec211ce4d244ee97a57523eeb4526dc3cf8a">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-043a5d3b8c393c62fa302db4d546f24f0ed37373.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-03e64da3e210b1069c273624037a5e55c83f9f8c.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a0ce76dfaccbfbd6c551ed2174280aaabe60fe47">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-319ff0609b293fdb1beb9b479eece344176336ea.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-8d7f4028c2b436ca87cc667c18e76e62476d0544.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appstate\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0180d031a7b54dabb93b4af3869468b55dc938bd">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-8d038eb7610110b34a67dc5696e71986de89e634.jar" />
+    </item>
+    <item
+        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\7.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4f4fe3c23776540625f3c2844152a7510fddf9f1">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-8d6842a34a4dc050c694797b6f8741130a1262bd.jar" />
+    </item>
+
+</items>

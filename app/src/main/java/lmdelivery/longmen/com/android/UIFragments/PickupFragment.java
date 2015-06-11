@@ -1,38 +1,40 @@
 package lmdelivery.longmen.com.android.UIFragments;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.AutocompleteFilter;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.PlaceTypes;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
 
 /**
@@ -53,6 +55,8 @@ public class PickupFragment extends Fragment {
     private AutoCompleteTextView mAutocompleteView;
 
     private OnFragmentInteractionListener mListener;
+
+    private EditText etUnit, etStreetNumber, etPostal, etStreetName;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,17 +86,20 @@ public class PickupFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_pickup, container, false);
         // Retrieve the AutoCompleteTextView that will display Place suggestions.
         mAutocompleteView = (AutoCompleteTextView) rootView.findViewById(R.id.autocomplete_places);
+        etPostal = (EditText) rootView.findViewById(R.id.et_postal);
+        etStreetName = (EditText) rootView.findViewById(R.id.et_street_name);
+        etStreetNumber = (EditText) rootView.findViewById(R.id.et_street_number);
+        etUnit = (EditText) rootView.findViewById(R.id.et_unit);
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-
 
 
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
         Set<Integer> filterTypes = new HashSet<>();
         filterTypes.add(Place.TYPE_STREET_ADDRESS);
-        mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity)getActivity()).mGoogleApiClient, BOUNDS_GREATER_VANCOUVER, null);//AutocompleteFilter.create(filterTypes));
+        mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_GREATER_VANCOUVER, null);//AutocompleteFilter.create(filterTypes));
         mAutocompleteView.setAdapter(mAdapter);
         // Inflate the layout for this fragment
         return rootView;
@@ -159,40 +166,86 @@ public class PickupFragment extends Fragment {
 
             Logger.i(TAG, "Autocomplete item selected: " + item.description);
 
-            /*
-             Issue a request to the Places Geo Data API to retrieve a Place object with additional
-              details about the place.
-              */
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(((NewBookingActivity) getActivity()).mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            getPlaceDetailById(placeId);
+            Util.closeKeyBoard(getActivity().getApplicationContext(), mAutocompleteView);
 
-            Toast.makeText(getActivity().getApplicationContext(), "Clicked: " + item.description, Toast.LENGTH_SHORT).show();
             Logger.i(TAG, "Called getPlaceById to get Place details for " + item.placeId);
         }
     };
 
-    /**
-     * Callback for results from a Places Geo Data API query that shows the first place result in
-     * the details view on screen.
-     */
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                // Request did not complete successfully
-                Logger.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
-                places.release();
-                return;
+    private void getPlaceDetailById(String placeID) {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
+        url += placeID + "&key=" + Constant.GOOGLE_PLACE_API_SERVER_KEY;
+
+        Logger.e(TAG, url);
+        // Request a string response from the provided URL.
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Display the first 500 characters of the response string.
+                        Log.e(TAG, "Response is: " + response.toString());
+                        try {
+                            JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
+                            String streetNumber = "", streetName = "", city = "", province = "", country = "", post = "", adminLevel2 = "";
+                            for (int i = 0; i < addrComponentArr.length(); i++) {
+
+                                JSONObject component = ((JSONObject) addrComponentArr.get(i));
+                                JSONArray typeArr = component.getJSONArray("types");
+                                Logger.e(TAG, typeArr.get(0).toString());
+                                if (typeArr.length() > 0) {
+
+                                    String type = typeArr.get(0).toString();
+                                    if(type.equals("administrative_area_level_2")){
+                                        adminLevel2 = component.getString("long_name");
+                                    }
+                                    else if(type.equals("street_number")){
+                                        streetNumber = component.getString("long_name");
+                                    }
+                                    else if(type.equals("route")){
+                                        streetName = component.getString("long_name");
+                                    }else if(type.equals("locality")){
+                                        city = component.getString("long_name");
+                                    }else if(type.equals("administrative_area_level_1")){
+                                        province = component.getString("long_name");
+                                    }else if(type.equals("country")){
+                                        country = component.getString("long_name");
+                                    }else if(type.equals("postal_code_prefix")){
+                                        post = component.getString("long_name");
+                                    }else if(type.equals("postal_code")){
+                                        post = component.getString("long_name");
+                                    }
+
+
+                                }
+                            }
+
+                            if(!adminLevel2.equals("Greater Vancouver")){
+                                Toast.makeText(getActivity(), "We can only pick up address in Great Vancouver", Toast.LENGTH_SHORT).show();
+                            }else{
+                                etPostal.setText(post);
+                                etStreetName.setText(streetName);
+                                etStreetNumber.setText(streetNumber);
+                                mAutocompleteView.setText("");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "That didn't work!");
             }
-            // Get the Place object from the buffer.
-            final Place place = places.get(0);
-
-            Logger.i(TAG, "Place details received: " + place.getAddress());
-
-            places.release();
-        }
-    };
-
+        });
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
+    }
 
 
 }
