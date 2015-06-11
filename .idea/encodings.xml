@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/lmdelivery/longmen/com/android/util/Logger.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/lmdelivery/longmen/com/android/widget/PlaceAutocompleteAdapter.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-mdpi" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi" charset="windows-1252" />

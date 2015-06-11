@@ -16,6 +16,9 @@
   -->
 
 <resources>
-    <color name="window_background">#263238</color>
+    <color name="window_background">#FFF5F5F5</color>
+    <color name="white_text">#FFF5F5F5</color>
     <color name="card_background">#37474F</color>
+    <color name="pickup_card_title_background">#01579B</color>
+
 </resources>

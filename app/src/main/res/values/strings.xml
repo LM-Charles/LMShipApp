@@ -3,8 +3,15 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_new_booking">NewBookingActivity</string>
+    <string name="title_activity_new_booking">Ship a package</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_address">Search Address</string>
+    <string name="pickup_address">Pickup Address</string>
+    <string name="unit_number">Unit Number</string>
+    <string name="bc_canada">BC, Canada</string>
+    <string name="street_number">Street Number</string>
+    <string name="street_name">Street Name</string>
+    <string name="postal_code">Postal Code</string>
 </resources>
