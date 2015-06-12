@@ -56,7 +56,7 @@ public class PickupFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private EditText etUnit, etStreetNumber, etPostal, etStreetName;
+    private EditText etUnit, etPostal, etCity;
 
     /**
      * Use this factory method to create a new instance of
@@ -87,8 +87,7 @@ public class PickupFragment extends Fragment {
         // Retrieve the AutoCompleteTextView that will display Place suggestions.
         mAutocompleteView = (AutoCompleteTextView) rootView.findViewById(R.id.autocomplete_places);
         etPostal = (EditText) rootView.findViewById(R.id.et_postal);
-        etStreetName = (EditText) rootView.findViewById(R.id.et_street_name);
-        etStreetNumber = (EditText) rootView.findViewById(R.id.et_street_number);
+        etCity = (EditText) rootView.findViewById(R.id.et_city);
         etUnit = (EditText) rootView.findViewById(R.id.et_unit);
 
         // Register a listener that receives callbacks when a suggestion has been selected
@@ -167,6 +166,7 @@ public class PickupFragment extends Fragment {
             Logger.i(TAG, "Autocomplete item selected: " + item.description);
 
             getPlaceDetailById(placeId);
+            mAutocompleteView.setText("");
             Util.closeKeyBoard(getActivity().getApplicationContext(), mAutocompleteView);
 
             Logger.i(TAG, "Called getPlaceById to get Place details for " + item.placeId);
@@ -226,9 +226,10 @@ public class PickupFragment extends Fragment {
                                 Toast.makeText(getActivity(), "We can only pick up address in Great Vancouver", Toast.LENGTH_SHORT).show();
                             }else{
                                 etPostal.setText(post);
-                                etStreetName.setText(streetName);
-                                etStreetNumber.setText(streetNumber);
-                                mAutocompleteView.setText("");
+                                etCity.setText(city);
+                                mAutocompleteView.setAdapter(null);
+                                mAutocompleteView.setText(((streetNumber.isEmpty())?"":(streetNumber + " ")) + ((streetName.isEmpty())?"":streetName));
+                                mAutocompleteView.setAdapter(mAdapter);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

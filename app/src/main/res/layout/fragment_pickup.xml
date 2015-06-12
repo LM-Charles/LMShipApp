@@ -1,136 +1,161 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="lmdelivery.longmen.com.android.UIFragments.PickupFragment">
 
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_padding">
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Ship from:"
+            android:textSize="@dimen/title_font_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/normal_padding"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:fontFamily="sans-serif"
+            android:text="We will pick up your packages from this address"
+            android:textSize="@dimen/sub_title_font_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="@dimen/small_padding">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_search" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/unit_number"
+                    tools:text="unit"
+                    android:textSize="@dimen/edit_text_font_size" />
+            </android.support.design.widget.TextInputLayout>
+
+            <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/icon_check"
+                android:textSize="@dimen/check_icon_size"
+                geekui:customTypeface="fonts/ionicons.ttf"/>
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <AutoCompleteTextView
                     android:id="@+id/autocomplete_places"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/search_address" />
+                    android:hint="@string/search_address"
+                    tools:text="address"
+                    android:textSize="@dimen/edit_text_font_size"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/icon_check"
+                android:textSize="@dimen/check_icon_size"
+                geekui:customTypeface="fonts/ionicons.ttf"/>
         </LinearLayout>
 
-
-    </android.support.v7.widget.CardView>
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="@dimen/normal_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TextView
-                style="@style/CardTitle"
-                android:background="@color/pickup_card_title_background"
-                android:text="@string/pickup_address" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/et_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="city"
+                    android:textSize="@dimen/edit_text_font_size"
+                    android:hint="@string/city" />
+            </android.support.design.widget.TextInputLayout>
+
+            <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="@dimen/card_margin">
+                android:gravity="center"
+                android:text="@string/icon_check"
+                android:textSize="@dimen/check_icon_size"
+                geekui:customTypeface="fonts/ionicons.ttf"/>
+        </LinearLayout>
 
-                <LinearLayout
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_postal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="postal"
+                    android:hint="@string/postal_code" />
+            </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/et_unit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/unit_number" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/et_street_number"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/street_number" />
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/til_street_name"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2">
-
-                        <EditText
-                            android:id="@+id/et_street_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/street_name" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/et_postal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/postal_code" />
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/normal_padding"
-                    android:text="@string/bc_canada"
-                    android:textSize="18sp" />
-            </LinearLayout>
+            <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/icon_check"
+                android:textSize="@dimen/check_icon_size"
+                geekui:customTypeface="fonts/ionicons.ttf"/>
 
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
 
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:text="@string/bc_canada"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</ScrollView>
