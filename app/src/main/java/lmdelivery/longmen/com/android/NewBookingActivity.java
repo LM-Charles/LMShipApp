@@ -1,6 +1,5 @@
 package lmdelivery.longmen.com.android;
 
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,34 +10,30 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import lmdelivery.longmen.com.android.UIFragments.DestinationFragment;
 import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
+import lmdelivery.longmen.com.android.UIFragments.TimeFragment;
 import lmdelivery.longmen.com.android.util.Logger;
-import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
 
 
 public class NewBookingActivity extends AppCompatActivity implements PickupFragment.OnFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener {
     private static final java.lang.String TAG = NewBookingActivity.class.getName();
+    private String pickupStreet, pickupCity, pickupPostal, pickupUnit;
+    private String dropoffStreet, dropoffCity, dropoffPostal, dropoffUnit;
+    private TabLayout tabLayout;
+
+
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
      * to the user's sign in state as well as the Google's APIs.
@@ -66,11 +61,15 @@ public class NewBookingActivity extends AppCompatActivity implements PickupFragm
             setupViewPager(viewPager);
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.getTabAt(0).setIcon(R.drawable.shape_greendot);
         tabLayout.getTabAt(1).setIcon(R.drawable.shape_greendot);
+    }
+
+    public void scrollTo(int tabPosition){
+        tabLayout.getTabAt(tabPosition).select();
     }
 
     @Override
@@ -97,11 +96,11 @@ public class NewBookingActivity extends AppCompatActivity implements PickupFragm
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(PickupFragment.newInstance(), "Pickup");
-        adapter.addFragment(new TextFragment(), "Destination");
-        adapter.addFragment(new TextFragment(), "Package");
-        adapter.addFragment(new TextFragment(), "Time");
-        adapter.addFragment(new TextFragment(), "Quote");
+        adapter.addFragment(PickupFragment.newInstance(), getString(R.string.tab_title_from));
+        adapter.addFragment(DestinationFragment.newInstance(), getString(R.string.tab_title_to));
+        adapter.addFragment(new TextFragment(), getString(R.string.tab_title_package));
+        adapter.addFragment(TimeFragment.newInstance(), getString(R.string.tab_title_time));
+        adapter.addFragment(new TextFragment(), getString(R.string.tab_title_quote));
         viewPager.setAdapter(adapter);
     }
 
@@ -139,7 +138,21 @@ public class NewBookingActivity extends AppCompatActivity implements PickupFragm
         }
     }
 
-
+//    private EditText.OnFocusChangeListener notEmptyFocusChangeListener = new View.OnFocusChangeListener() {
+//        @Override
+//        public void onFocusChange(View v, boolean hasFocus) {
+//            if(!hasFocus){
+//                switch (v.getId()){
+//                    case R.id.et_city:
+//                    case R.id.et_to_city:
+//                        if()
+//                        ((EditText) v).setError("City cannot be empty");
+//
+//
+//                }
+//            }
+//        }
+//    };
 
 
     /**
@@ -159,5 +172,70 @@ public class NewBookingActivity extends AppCompatActivity implements PickupFragm
         Toast.makeText(this,
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
+    }
+
+
+    public String getPickupStreet() {
+        return pickupStreet;
+    }
+
+    public void setPickupStreet(String pickupStreet) {
+        this.pickupStreet = pickupStreet;
+    }
+
+    public String getPickupCity() {
+        return pickupCity;
+    }
+
+    public void setPickupCity(String pickupCity) {
+        this.pickupCity = pickupCity;
+    }
+
+    public String getPickupPostal() {
+        return pickupPostal;
+    }
+
+    public void setPickupPostal(String pickupPostal) {
+        this.pickupPostal = pickupPostal;
+    }
+
+    public String getPickupUnit() {
+        return pickupUnit;
+    }
+
+    public void setPickupUnit(String pickupUnit) {
+        this.pickupUnit = pickupUnit;
+    }
+
+    public String getDropoffStreet() {
+        return dropoffStreet;
+    }
+
+    public void setDropoffStreet(String dropoffStreet) {
+        this.dropoffStreet = dropoffStreet;
+    }
+
+    public String getDropoffCity() {
+        return dropoffCity;
+    }
+
+    public void setDropoffCity(String dropoffCity) {
+        this.dropoffCity = dropoffCity;
+    }
+
+    public String getDropoffPostal() {
+        return dropoffPostal;
+    }
+
+    public void setDropoffPostal(String dropoffPostal) {
+        this.dropoffPostal = dropoffPostal;
+    }
+
+    public String getDropoffUnit() {
+        return dropoffUnit;
+    }
+
+    public void setDropoffUnit(String dropoffUnit) {
+        this.dropoffUnit = dropoffUnit;
     }
 }

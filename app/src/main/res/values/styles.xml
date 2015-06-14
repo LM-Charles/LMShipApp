@@ -20,6 +20,20 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
+    <style name="FragmentTitleTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@android:color/background_dark</item>
+        <item name="android:textSize">@dimen/title_font_size</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="FragmentSubTitleTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@android:color/background_dark</item>
+        <item name="android:textSize">@dimen/sub_title_font_size</item>
+    </style>
+
     <style name="Widget.CardContent" parent="android:Widget">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
@@ -33,12 +47,17 @@
     </style>
 
     <style name="CardTitle"  parent="android:Widget.TextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/card_title_height</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingStart">@dimen/card_title_padding</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/window_background</item>
         <item name="android:textSize">@dimen/card_title_font_size</item>
+    </style>
+
+    <style name="CardSubTitle"  parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/window_background</item>
+        <item name="android:textSize">@dimen/card_sub_title_font_size</item>
     </style>
 
 </resources>

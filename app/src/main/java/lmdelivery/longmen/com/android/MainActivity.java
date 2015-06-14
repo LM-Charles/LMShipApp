@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private Context context;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,11 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
             break;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
-
 
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -89,6 +88,4 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
