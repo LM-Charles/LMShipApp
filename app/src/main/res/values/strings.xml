@@ -8,7 +8,7 @@
     <string name="search_address">Street Address (Search)</string>
     <string name="pickup_address">Pickup Address</string>
     <string name="unit_number">Unit Number</string>
-    <string name="bc_canada">BC, Canada</string>
+    <string name="bc_canada"> BC Canada </string>
     <string name="street_number">Street Number</string>
     <string name="street_name">Street Name</string>
     <string name="postal_code">Postal Code</string>
@@ -26,10 +26,22 @@
     <string name="ship_to">Ship to</string>
     <string name="province">Province</string>
     <string name="ship_from">Ship from</string>
+    <string name="dash">-</string>
+    <string name="length">Length (cm)</string>
+    <string name="weight">Weight (lb)</string>
+    <string name="width">Width (cm)</string>
+    <string name="height">Height (cm)</string>
 
 
     <string-array name="dropoff_country_array">
         <item>Canada</item>
         <item>China</item>
+    </string-array>
+
+    <string-array name="time_interval_array">
+        <item>9am - 11am</item>
+        <item>11am - 1pm</item>
+        <item>1pm - 3pm</item>
+        <item>3pm - 6pm</item>
     </string-array>
 </resources>

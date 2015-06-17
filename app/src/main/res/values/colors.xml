@@ -22,4 +22,10 @@
     <color name="pickup_card_title_background">#01579B</color>
     <color name="destination_card_title_background">#2E7D32</color>
 
+    <color name="time_selected">#FF8A65</color>
+    <color name="time_ripple">#FF7043</color>
+    <color name="package_item_title_background">#5E35B1</color>
+    <color name="light_gray">#BDBDBD</color>
+
+
 </resources>

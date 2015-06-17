@@ -1,7 +1,5 @@
 package lmdelivery.longmen.com.android.UIFragments;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -46,9 +44,6 @@ import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DestinationFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link DestinationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -60,7 +55,6 @@ public class DestinationFragment extends Fragment {
     private PlaceAutocompleteAdapter mAdapter;
 
     private AutoCompleteTextView mAutocompleteView;
-    private OnFragmentInteractionListener mListener;
 
     private EditText etUnit, etPostal, etCity, etProvince;
     private Spinner spinner;
@@ -137,28 +131,7 @@ public class DestinationFragment extends Fragment {
         return rootView;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnDestinationFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     private TextWatcher watcher = new TextWatcher() {
         @Override
@@ -254,19 +227,6 @@ public class DestinationFragment extends Fragment {
         return isValid;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
-    }
 
     /**
      * Listener that handles selections from suggestions from the AutoCompleteTextView that
@@ -324,7 +284,8 @@ public class DestinationFragment extends Fragment {
 
                                 JSONObject component = ((JSONObject) addrComponentArr.get(i));
                                 JSONArray typeArr = component.getJSONArray("types");
-                                Logger.e(TAG, typeArr.get(0).toString());
+                                if (typeArr.length() > 0)
+                                    Logger.e(TAG, typeArr.get(0).toString());
                                 if (typeArr.length() > 0) {
                                     String type = typeArr.get(0).toString();
                                     if(type.equals("administrative_area_level_2")){
@@ -338,7 +299,7 @@ public class DestinationFragment extends Fragment {
                                     }else if(type.equals("locality")){
                                         city = component.getString("long_name");
                                     }else if(type.equals("administrative_area_level_1")){
-                                        province = component.getString("long_name");
+                                        province = component.getString("short_name");
                                     }else if(type.equals("country")){
                                         country = component.getString("long_name");
                                         countryCode = component.getString("short_name");

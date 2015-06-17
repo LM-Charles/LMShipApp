@@ -6,7 +6,7 @@
     <style name="Base.Theme.LMTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#E53935</item>
         <item name="colorPrimaryDark">#C62828</item>
-        <item name="colorAccent">#009688</item>
+        <item name="colorAccent">#FF4081</item>
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
@@ -47,10 +47,12 @@
     </style>
 
     <style name="CardTitle"  parent="android:Widget.TextView">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/window_background</item>
         <item name="android:textSize">@dimen/card_title_font_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:padding">@dimen/card_margin</item>
     </style>
 
     <style name="CardSubTitle"  parent="android:Widget.TextView">

@@ -12,6 +12,7 @@
     <dimen name="card_sub_title_font_size">12sp</dimen>
     <dimen name="title_font_size">26sp</dimen>
     <dimen name="sub_title_font_size">16sp</dimen>
-    <dimen name="edit_text_font_size">22sp</dimen>
+    <dimen name="edit_text_font_size">16sp</dimen>
     <dimen name="check_icon_size">18sp</dimen>
+    <dimen name="edit_text_margin_bot">6dp</dimen>
 </resources>

@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,53 +7,47 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:fillViewport="true"
     tools:context="lmdelivery.longmen.com.android.UIFragments.PickupFragment">
 
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@color/pickup_card_title_background"
+                android:orientation="vertical"
+                android:padding="@dimen/card_margin">
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@style/CardTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/pickup_card_title_background"
-                    android:orientation="vertical"
-                    android:padding="@dimen/card_margin">
+                    android:fontFamily="sans-serif"
+                    android:text="@string/ship_from" />
 
-                    <TextView
-                        style="@style/CardTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
-                        android:text="@string/ship_from" />
+                <TextView
+                    style="@style/CardSubTitle"
+                    android:layout_marginTop="@dimen/normal_padding"
+                    android:fontFamily="sans-serif"
+                    android:text="We will pick up your packages from this address"
+                    android:textSize="@dimen/sub_title_font_size" />
 
-                    <TextView
-                        style="@style/CardSubTitle"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginTop="@dimen/normal_padding"
-                        android:text="We will pick up your packages from this address"
-                        android:textSize="@dimen/sub_title_font_size" />
+            </LinearLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                    android:padding="@dimen/normal_padding"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/normal_padding">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,26 +69,11 @@
                             tools:text="unit" />
                     </android.support.design.widget.TextInputLayout>
 
-                    <lmdelivery.longmen.com.android.widget.TypefaceTextView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/icon_check"
-                        android:textSize="@dimen/check_icon_size"
-                        android:visibility="gone"
-                        geekui:customTypeface="fonts/ionicons.ttf" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal">
 
                         <AutoCompleteTextView
@@ -108,14 +87,6 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <lmdelivery.longmen.com.android.widget.TypefaceTextView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/icon_check"
-                        android:textSize="@dimen/check_icon_size"
-                        android:visibility="gone"
-                        geekui:customTypeface="fonts/ionicons.ttf" />
                 </LinearLayout>
 
 
@@ -139,6 +110,14 @@
                             tools:text="city" />
                     </android.support.design.widget.TextInputLayout>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/bc_canada"
+                        android:textSize="@dimen/edit_text_font_size" />
+
                     <lmdelivery.longmen.com.android.widget.TypefaceTextView
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
@@ -147,13 +126,6 @@
                         android:textSize="@dimen/check_icon_size"
                         android:visibility="gone"
                         geekui:customTypeface="fonts/ionicons.ttf" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
@@ -168,38 +140,30 @@
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="postal" />
                     </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
 
                     <lmdelivery.longmen.com.android.widget.TypefaceTextView
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:inputType="text"
                         android:text="@string/icon_check"
                         android:textSize="@dimen/check_icon_size"
-                        android:inputType="text"
                         android:visibility="gone"
                         geekui:customTypeface="fonts/ionicons.ttf" />
                 </LinearLayout>
 
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/normal_padding"
-                    android:text="@string/bc_canada"
-                    android:textSize="18sp" />
             </LinearLayout>
-            </LinearLayout>
+        </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
 
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_chevron_right_white_36dp" />
-
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

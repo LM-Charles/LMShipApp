@@ -1,6 +1,5 @@
 package lmdelivery.longmen.com.android;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,16 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lmdelivery.longmen.com.android.UIFragments.DestinationFragment;
+import lmdelivery.longmen.com.android.UIFragments.PackageFragment;
 import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
 import lmdelivery.longmen.com.android.UIFragments.TimeFragment;
 import lmdelivery.longmen.com.android.util.Logger;
 
 
-public class NewBookingActivity extends AppCompatActivity implements PickupFragment.OnFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener {
+public class NewBookingActivity extends AppCompatActivity implements TimeFragment.OnTimeSelectedListener, GoogleApiClient.OnConnectionFailedListener {
     private static final java.lang.String TAG = NewBookingActivity.class.getName();
     private String pickupStreet, pickupCity, pickupPostal, pickupUnit;
     private String dropoffStreet, dropoffCity, dropoffPostal, dropoffUnit;
     private TabLayout tabLayout;
+
+    public int selectedTime=-1;
 
 
     /**
@@ -98,15 +100,15 @@ public class NewBookingActivity extends AppCompatActivity implements PickupFragm
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(PickupFragment.newInstance(), getString(R.string.tab_title_from));
         adapter.addFragment(DestinationFragment.newInstance(), getString(R.string.tab_title_to));
-        adapter.addFragment(new TextFragment(), getString(R.string.tab_title_package));
+        adapter.addFragment(PackageFragment.newInstance(), getString(R.string.tab_title_package));
         adapter.addFragment(TimeFragment.newInstance(), getString(R.string.tab_title_time));
         adapter.addFragment(new TextFragment(), getString(R.string.tab_title_quote));
         viewPager.setAdapter(adapter);
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onTimeSelected(int category) {
+        selectedTime = category;
     }
 
     static class Adapter extends FragmentPagerAdapter {
