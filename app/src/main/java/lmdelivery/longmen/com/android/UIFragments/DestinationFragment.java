@@ -107,15 +107,15 @@ public class DestinationFragment extends Fragment {
         etUnit.addTextChangedListener(watcher);
         etProvince.addTextChangedListener(watcher);
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validateToForm()){
-                    ((NewBookingActivity) getActivity()).scrollTo(Constant.TAB_POTSITION_TO+1);
-                }
-            }
-        });
+//        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(validateToForm()){
+//                    ((NewBookingActivity) getActivity()).scrollTo(Constant.TAB_POTSITION_TO+1);
+//                }
+//            }
+//        });
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
@@ -168,21 +168,21 @@ public class DestinationFragment extends Fragment {
             isValid = false;
         }
 
-        if(isValid){
-            fab.setVisibility(View.VISIBLE);
-            fab.setScaleX(0);
-            fab.setScaleY(0);
-            fab.animate().scaleX(1).scaleY(1).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new OvershootInterpolator()).start();
-        }else{
-            if(fab.getVisibility()==View.VISIBLE){
-                fab.animate().scaleX(0).scaleY(0).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new AccelerateInterpolator()).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        fab.setVisibility(View.GONE);
-                    }
-                }).start();
-            }
-        }
+//        if(isValid){
+//            fab.setVisibility(View.VISIBLE);
+//            fab.setScaleX(0);
+//            fab.setScaleY(0);
+//            fab.animate().scaleX(1).scaleY(1).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new OvershootInterpolator()).start();
+//        }else{
+//            if(fab.getVisibility()==View.VISIBLE){
+//                fab.animate().scaleX(0).scaleY(0).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new AccelerateInterpolator()).withEndAction(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        fab.setVisibility(View.GONE);
+//                    }
+//                }).start();
+//            }
+//        }
     }
 
     public boolean validateToForm(){
