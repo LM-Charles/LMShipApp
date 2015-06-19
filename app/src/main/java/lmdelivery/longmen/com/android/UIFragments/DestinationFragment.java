@@ -2,7 +2,9 @@ package lmdelivery.longmen.com.android.UIFragments;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -59,6 +61,8 @@ public class DestinationFragment extends Fragment {
     private EditText etUnit, etPostal, etCity, etProvince;
     private Spinner spinner;
     private FloatingActionButton fab;
+    private CardView cardView;
+    private TextInputLayout tilAddress;
 
     /**
      * Use this factory method to create a new instance of
@@ -78,13 +82,22 @@ public class DestinationFragment extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        Logger.e(TAG, "onResume");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.e(TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Logger.e(TAG, "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_destination, container, false);
+
         spinner = (Spinner) rootView.findViewById(R.id.spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.dropoff_country_array, android.R.layout.simple_spinner_item);
@@ -101,7 +114,8 @@ public class DestinationFragment extends Fragment {
         etCity = (EditText) rootView.findViewById(R.id.et_to_city);
         etUnit = (EditText) rootView.findViewById(R.id.et_to_unit);
         etProvince = (EditText) rootView.findViewById(R.id.et_to_province);
-
+        cardView = (CardView) rootView.findViewById(R.id.card_to);
+        tilAddress = (TextInputLayout) rootView.findViewById(R.id.til_address);
         etPostal.addTextChangedListener(watcher);
         etCity.addTextChangedListener(watcher);
         etUnit.addTextChangedListener(watcher);

@@ -24,6 +24,7 @@ import lmdelivery.longmen.com.android.UIFragments.DestinationFragment;
 import lmdelivery.longmen.com.android.UIFragments.PackageFragment;
 import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
 import lmdelivery.longmen.com.android.UIFragments.TimeFragment;
+import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 
 
@@ -33,7 +34,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private String dropoffStreet, dropoffCity, dropoffPostal, dropoffUnit;
     private TabLayout tabLayout;
 
-    public int selectedTime=-1;
+    public MyTime selectedTime;
 
 
     /**
@@ -107,8 +108,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     @Override
-    public void onTimeSelected(int category) {
-        selectedTime = category;
+    public void onTimeSelected(MyTime myTime) {
+        selectedTime = myTime;
     }
 
     static class Adapter extends FragmentPagerAdapter {

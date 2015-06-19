@@ -87,7 +87,6 @@ public class PickupFragment extends Fragment {
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
 
-
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
         Set<Integer> filterTypes = new HashSet<>();
@@ -97,7 +96,6 @@ public class PickupFragment extends Fragment {
         // Inflate the layout for this fragment
         return rootView;
     }
-
 
     /**
      * Listener that handles selections from suggestions from the AutoCompleteTextView that
@@ -173,8 +171,6 @@ public class PickupFragment extends Fragment {
                                     }else if(type.equals("postal_code")){
                                         post = component.getString("long_name");
                                     }
-
-
                                 }
                             }
 

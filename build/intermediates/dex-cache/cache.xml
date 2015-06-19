@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
+        jar="C:\AndroidSamples\LMShipApp\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
-        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-0957c03a5fe7ba51c123c61c7da121468688f1cc.jar" />
+        <dex dex="C:\AndroidSamples\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-06b21620d341e65d2d153d8e3252fdb108cb35d1.jar" />
     </item>
 
 </items>

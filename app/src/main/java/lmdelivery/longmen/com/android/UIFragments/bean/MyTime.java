@@ -40,4 +40,15 @@ public class MyTime {
     public void setTimeCatergory(int timeCatergory) {
         this.timeCatergory = timeCatergory;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof MyTime))
+            return false;
+        if (obj == this)
+            return true;
+
+        MyTime rhs = (MyTime) obj;
+        return timeCatergory == rhs.getTimeCatergory() && (isToday==rhs.isToday);
+    }
 }

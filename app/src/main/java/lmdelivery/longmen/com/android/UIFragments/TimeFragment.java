@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
 
@@ -33,20 +34,10 @@ import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
  * interface.
  */
 
-public class TimeFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class TimeFragment extends Fragment {
 
     private OnTimeSelectedListener mListener;
 
-    /**
-     * The fragment's ListView/GridView.
-     */
-    private ListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
 
 
     public static TimeFragment newInstance() {
@@ -85,8 +76,9 @@ public class TimeFragment extends Fragment implements AbsListView.OnItemClickLis
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(), buildAvailableTimeArray()));
+        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter( buildAvailableTimeArray()));
     }
 
     private ArrayList<MyTime> buildAvailableTimeArray() {
@@ -177,28 +169,6 @@ public class TimeFragment extends Fragment implements AbsListView.OnItemClickLis
         mListener = null;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            view.setSelected(true);
-            mListener.onTimeSelected(((MyTime) mAdapter.getItem(position)).getTimeCatergory());
-        }
-    }
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -212,7 +182,7 @@ public class TimeFragment extends Fragment implements AbsListView.OnItemClickLis
      */
     public interface OnTimeSelectedListener {
 
-        void onTimeSelected(int category);
+        void onTimeSelected(MyTime myTime);
     }
 
     private class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
@@ -220,6 +190,7 @@ public class TimeFragment extends Fragment implements AbsListView.OnItemClickLis
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private List<MyTime> mValues;
+        private int selectedPosition;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public String mBoundString;
@@ -245,28 +216,34 @@ public class TimeFragment extends Fragment implements AbsListView.OnItemClickLis
             return mValues.get(position);
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, List<MyTime> items) {
-            context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
-            mBackground = mTypedValue.resourceId;
+        public SimpleStringRecyclerViewAdapter(List<MyTime> items) {
             mValues = items;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.time_item_layout, parent, false);
-            view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder,final int position) {
             holder.time.setText(getResources().getStringArray(R.array.time_interval_array)[mValues.get(position).getTimeCatergory()]);
             holder.date.setText(mValues.get(position).isToday() ? "Today" : "Tomorrow");
+
+            if(mValues.get(position).equals(((NewBookingActivity)getActivity()).selectedTime))
+                holder.mView.setSelected(true);
+            else
+                holder.mView.setSelected(false);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if (null != mListener) {
+                        mListener.onTimeSelected(mValues.get(position));
+                        holder.mView.setSelected(true);
+                        notifyDataSetChanged();
+                    }
                 }
             });
 

@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -28,7 +28,8 @@
                 android:padding="@dimen/card_margin">
 
                 <TextView
-                    style="@style/CardTitle"
+                    android:textSize="@dimen/card_title_font_size"
+                    android:textColor="@color/window_background"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
@@ -70,7 +71,7 @@
                     </android.support.design.widget.TextInputLayout>
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -85,7 +86,7 @@
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="address" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
                 </LinearLayout>
 
@@ -110,14 +111,6 @@
                             tools:text="city" />
                     </android.support.design.widget.TextInputLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="5dp"
-                        android:text="@string/bc_canada"
-                        android:textSize="@dimen/edit_text_font_size" />
-
                     <lmdelivery.longmen.com.android.widget.TypefaceTextView
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
@@ -140,6 +133,14 @@
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="postal" />
                     </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/bc_canada"
+                        android:textSize="@dimen/edit_text_font_size" />
                 </LinearLayout>
 
 
@@ -166,4 +167,4 @@
 
     </android.support.v7.widget.CardView>
 
-</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
