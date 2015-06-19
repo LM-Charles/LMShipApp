@@ -37,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <android.support.design.widget.TextInputLayout
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                             android:id="@+id/til_unit"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -50,9 +50,9 @@
                                 android:hint="@string/unit_number"
                                 android:textSize="@dimen/edit_text_font_size"
                                 tools:text="unit" />
-                        </android.support.design.widget.TextInputLayout>
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                             android:id="@+id/til_address"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                                 android:textSize="@dimen/edit_text_font_size"
                                 tools:text="address" />
 
-                        </android.support.design.widget.TextInputLayout>
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
                     </LinearLayout>
 
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <android.support.design.widget.TextInputLayout
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
@@ -106,9 +106,9 @@
                                 android:hint="@string/city"
                                 android:textSize="@dimen/edit_text_font_size"
                                 tools:text="city" />
-                        </android.support.design.widget.TextInputLayout>
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
@@ -120,9 +120,9 @@
                                 android:hint="@string/province"
                                 android:textSize="@dimen/edit_text_font_size"
                                 tools:text="province" />
-                        </android.support.design.widget.TextInputLayout>
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
@@ -134,16 +134,19 @@
                                 android:hint="@string/postal_code"
                                 android:textSize="@dimen/edit_text_font_size"
                                 tools:text="postal" />
-                        </android.support.design.widget.TextInputLayout>
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+                        <Spinner
+                            android:id="@+id/spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
 
 
                     </LinearLayout>
 
 
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
 
 

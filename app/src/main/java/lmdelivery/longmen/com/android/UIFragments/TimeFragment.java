@@ -1,7 +1,6 @@
 package lmdelivery.longmen.com.android.UIFragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +9,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -78,7 +73,7 @@ public class TimeFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter( buildAvailableTimeArray()));
+        recyclerView.setAdapter(new TimeRecyclerViewAdapter( buildAvailableTimeArray()));
     }
 
     private ArrayList<MyTime> buildAvailableTimeArray() {
@@ -138,16 +133,16 @@ public class TimeFragment extends Fragment {
         }
 
         //fake
-//        for (int j = 0; j < 4; j++) {
-//            MyTime myTime = new MyTime(timeSlots[j], j, false);
-//            myTimes.add(myTime);
-//        }for (int j = 0; j < 4; j++) {
-//            MyTime myTime = new MyTime(timeSlots[j], j, false);
-//            myTimes.add(myTime);
-//        }for (int j = 0; j < 4; j++) {
-//            MyTime myTime = new MyTime(timeSlots[j], j, false);
-//            myTimes.add(myTime);
-//        }
+        for (int j = 0; j < 4; j++) {
+            MyTime myTime = new MyTime(timeSlots[j], j, false);
+            myTimes.add(myTime);
+        }for (int j = 0; j < 4; j++) {
+            MyTime myTime = new MyTime(timeSlots[j], j, false);
+            myTimes.add(myTime);
+        }for (int j = 0; j < 4; j++) {
+            MyTime myTime = new MyTime(timeSlots[j], j, false);
+            myTimes.add(myTime);
+        }
 
         return myTimes;
     }
@@ -185,7 +180,7 @@ public class TimeFragment extends Fragment {
         void onTimeSelected(MyTime myTime);
     }
 
-    private class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+    private class TimeRecyclerViewAdapter extends RecyclerView.Adapter<TimeRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
@@ -216,7 +211,7 @@ public class TimeFragment extends Fragment {
             return mValues.get(position);
         }
 
-        public SimpleStringRecyclerViewAdapter(List<MyTime> items) {
+        public TimeRecyclerViewAdapter(List<MyTime> items) {
             mValues = items;
         }
 
@@ -255,42 +250,6 @@ public class TimeFragment extends Fragment {
         }
     }
 
-//    private class TimeAdapter extends ArrayAdapter<MyTime> {
-//
-//        private final List<MyTime> list;
-//        private final Activity context;
-//
-//        public TimeAdapter(Activity context, List<MyTime> list) {
-//            super(context, R.layout.time_item_layout, list);
-//            this.context = context;
-//            this.list = list;
-//        }
-//
-//        private class ViewHolder {
-//            protected TextView time;
-//            protected TextView date;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            View view;
-//            if (convertView == null) {
-//                LayoutInflater inflator = context.getLayoutInflater();
-//                view = inflator.inflate(R.layout.time_item_layout, null);
-//                final ViewHolder viewHolder = new ViewHolder();
-//                viewHolder.date = (TextView) view.findViewById(R.id.tv_date);
-//                viewHolder.time = (TextView) view.findViewById(R.id.tv_time_interval);
-//                view.setTag(viewHolder);
-//            } else {
-//                view = convertView;
-//            }
-//            ViewHolder holder = (ViewHolder) view.getTag();
-//
-//            holder.date.setText(list.get(position).isToday() ? "Today" : "Tomorrow");
-//            holder.time.setText(getResources().getStringArray(R.array.time_interval_array)[list.get(position).getTimeCatergory()]);
-//            return view;
-//        }
-//    }
 
 
 }

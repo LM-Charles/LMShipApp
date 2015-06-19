@@ -8,10 +8,24 @@
     <!--<ListView android:id="@android:id/list"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent" />-->
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="When should we pick come to pick up the package?"
+            android:textSize="18sp"
+            android:padding="@dimen/normal_padding"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </FrameLayout>
