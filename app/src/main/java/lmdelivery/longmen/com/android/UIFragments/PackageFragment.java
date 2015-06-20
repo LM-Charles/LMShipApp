@@ -8,13 +8,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
+import lmdelivery.longmen.com.android.widget.TypefaceTextView;
 
 
 public class PackageFragment extends Fragment {
@@ -36,8 +42,6 @@ public class PackageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -66,6 +70,7 @@ public class PackageFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         mAdapter = new PackageRecyclerViewAdapter(myPackageArrayList);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.setItemAnimator(new SlideInLeftAnimator());
     }
 
     private class PackageRecyclerViewAdapter extends RecyclerView.Adapter<PackageRecyclerViewAdapter.ViewHolder> {
@@ -74,19 +79,25 @@ public class PackageFragment extends Fragment {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView date;
-            public final TextView time;
+            public final TypefaceTextView closeIcon;
+            public final LinearLayout llLmBox;
+            public final LinearLayout llOwnBox;
+            public final Switch aSwitch;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 date = (TextView) view.findViewById(R.id.tv_date);
-                time = (TextView) view.findViewById(R.id.tv_time_interval);
+                closeIcon = (TypefaceTextView) view.findViewById(R.id.ic_close);
+                llLmBox = (LinearLayout) view.findViewById(R.id.ll_lm_box);
+                llOwnBox = (LinearLayout) view.findViewById(R.id.ll_own_box);
+                aSwitch = (Switch) view.findViewById(R.id.switch1);
             }
 
-            @Override
-            public String toString() {
-                return super.toString() + " '" + time.getText();
-            }
+//            @Override
+//            public String toString() {
+//                return super.toString() + " '" + time.getText();
+//            }
         }
 
         public MyPackage getValueAt(int position) {
@@ -97,6 +108,15 @@ public class PackageFragment extends Fragment {
             mValues.add(new MyPackage());
             notifyItemInserted(mValues.size());
             recyclerView.scrollToPosition(mValues.size() - 1);
+        }
+
+        private void removePackage(int position){
+            if(mValues.size()==1) {
+                //TODO: add a toast
+            }else{
+                mValues.remove(position);
+                notifyItemRemoved(position);
+            }
         }
 
         public PackageRecyclerViewAdapter(List<MyPackage> items) {
@@ -111,6 +131,26 @@ public class PackageFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder,final int position) {
+            holder.closeIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removePackage(position);
+                }
+            });
+
+            holder.aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        holder.llOwnBox.setVisibility(View.VISIBLE);
+                        holder.llLmBox.setVisibility(View.GONE);
+                    }else{
+                        holder.llOwnBox.setVisibility(View.GONE);
+                        holder.llLmBox.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            });
 //            holder.time.setText(getResources().getStringArray(R.array.time_interval_array)[mValues.get(position).getTimeCatergory()]);
 //            holder.date.setText(mValues.get(position).isToday() ? "Today" : "Tomorrow");
 //

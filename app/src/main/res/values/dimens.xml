@@ -15,4 +15,11 @@
     <dimen name="edit_text_font_size">16sp</dimen>
     <dimen name="check_icon_size">18sp</dimen>
     <dimen name="edit_text_margin_bot">6dp</dimen>
+    <dimen name="big_box_icon_size">30sp</dimen>
+    <dimen name="med_box_icon_size">22sp</dimen>
+    <dimen name="small_box_icon_size">16sp</dimen>
+
+    <dimen name="box_icon_width">36dp</dimen>
+    <dimen name="box_type_font_size">18sp</dimen>
+    <dimen name="box_dimention_font_size">12sp</dimen>
 </resources>

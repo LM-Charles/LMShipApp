@@ -249,7 +249,4 @@ public class TimeFragment extends Fragment {
             return mValues.size();
         }
     }
-
-
-
 }

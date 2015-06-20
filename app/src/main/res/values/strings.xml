@@ -15,6 +15,9 @@
     <string name="city">City</string>
     <string name="icon_check">\uf121</string>
     <string name="icon_home">\uf144</string>
+    <string name="icon_close">\uf404</string>
+    <string name="icon_box">\uf3ec</string>
+
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -31,6 +34,11 @@
     <string name="weight">Weight (lb)</string>
     <string name="width">Width (cm)</string>
     <string name="height">Height (cm)</string>
+    <string name="package_title">Package</string>
+    <string name="big_box">Big Box</string>
+    <string name="big_box_dimention">50 L X 50 W X 50 H (cm)</string>
+    <string name="med_box">Medium Box</string>
+    <string name="small_box">Small Box</string>
 
 
     <string-array name="dropoff_country_array">

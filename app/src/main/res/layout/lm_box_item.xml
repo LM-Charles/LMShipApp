@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="55dp">
+
+    <lmdelivery.longmen.com.android.widget.TypefaceTextView
+        android:layout_width="@dimen/box_icon_width"
+        android:layout_height="match_parent"
+        android:text="@string/icon_box"
+        android:textSize="@dimen/big_box_icon_size"
+        android:gravity="center"
+        geekui:customTypeface="fonts/ionicons.ttf"
+        android:id="@+id/view" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/big_box"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/view"
+        android:textSize="@dimen/box_type_font_size"
+        android:id="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/big_box_dimention"
+        android:layout_centerVertical="true"
+        android:id="@+id/textView2"
+        android:textSize="@dimen/box_dimention_font_size"
+        android:layout_toEndOf="@id/view"
+        android:layout_below="@+id/textView" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/normal_padding"/>
+
+</RelativeLayout>

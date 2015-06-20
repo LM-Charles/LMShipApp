@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,10 +16,33 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/CardTitle"
-                android:text="Package 1"
-                android:background="@color/package_item_title_background"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/package_item_title_background"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/CardTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/package_item_title_background"
+                    android:text="@string/package_title" />
+
+
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    android:id="@+id/ic_close"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/icon_close"
+                    android:textColor="@color/window_background"
+                    android:textSize="24sp"
+                    geekui:customTypeface="fonts/ionicons.ttf" />
+
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -27,20 +51,20 @@
 
                 <Switch
 
+                    android:id="@+id/switch1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/normal_padding"
-                    android:checked="true"
-                    android:id="@+id/switch1" />
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/switch1"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/normal_padding"
-                    android:text="I have my own box"/>
+                    android:layout_toEndOf="@+id/switch1"
+                    android:text="I have my own box" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -48,14 +72,15 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/normal_padding"
-                    android:text="Free"/>
+                    android:text="Free" />
             </RelativeLayout>
 
-            <View android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginStart="@dimen/normal_padding"
                 android:layout_marginEnd="@dimen/normal_padding"
-                android:background="@color/light_gray"/>
+                android:layout_marginStart="@dimen/normal_padding"
+                android:background="@color/light_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,49 +88,217 @@
                 android:orientation="vertical"
                 android:padding="@dimen/normal_padding">
 
-                <android.support.design.widget.TextInputLayout
+                <LinearLayout
+                    android:id="@+id/ll_own_box"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="165dp"
+                    android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/et_length"
+                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/length"
-                        android:labelFor="@string/length"
-                        android:textSize="@dimen/edit_text_font_size"
-                        tools:text="length" />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_height="wrap_content">
 
-                <android.support.design.widget.TextInputLayout
+                        <EditText
+                            android:id="@+id/et_length"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/length"
+                            android:labelFor="@string/length"
+                            android:textSize="@dimen/edit_text_font_size"
+                            tools:text="length" />
+                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/et_width"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/width"
+                            android:inputType="numberSigned"
+                            android:textSize="@dimen/edit_text_font_size"
+                            tools:text="width" />
+                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/et_height"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/height"
+                            android:inputType="numberSigned"
+                            android:textSize="@dimen/edit_text_font_size"
+                            tools:text="height" />
+                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_lm_box"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="165dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/et_width"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/width"
-                        android:inputType="numberSigned"
-                        android:textSize="@dimen/edit_text_font_size"
-                        tools:text="width" />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_height="54dp">
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                        <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                            android:id="@+id/ic_small_box"
+                            android:layout_width="@dimen/box_icon_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/icon_box"
+                            android:textSize="@dimen/small_box_icon_size"
+                            geekui:customTypeface="fonts/ionicons.ttf" />
 
-                    <EditText
-                        android:id="@+id/et_height"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/ic_small_box"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="@string/small_box"
+                                android:textSize="@dimen/box_type_font_size" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/big_box_dimention"
+                                android:textSize="@dimen/box_dimention_font_size" />
+                        </LinearLayout>
+
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/normal_padding" />
+
+                    </RelativeLayout>
+
+
+
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/height"
-                        android:inputType="numberSigned"
-                        android:textSize="@dimen/edit_text_font_size"
-                        tools:text="height" />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_height="1dp"
+                        android:background="@color/light_gray" />
 
-                <android.support.design.widget.TextInputLayout
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp">
+
+                        <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                            android:id="@+id/ic_med_box"
+                            android:layout_width="@dimen/box_icon_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/icon_box"
+                            android:textSize="@dimen/med_box_icon_size"
+                            geekui:customTypeface="fonts/ionicons.ttf" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/ic_med_box"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_med_box"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="@string/med_box"
+                                android:textSize="@dimen/box_type_font_size" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/big_box_dimention"
+                                android:textSize="@dimen/box_dimention_font_size" />
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/normal_padding" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_gray" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp">
+
+                        <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                            android:id="@+id/ic_big_box"
+                            android:layout_width="@dimen/box_icon_width"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/icon_box"
+                            android:textSize="@dimen/big_box_icon_size"
+                            geekui:customTypeface="fonts/ionicons.ttf" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/ic_big_box"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_bigbox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="@string/big_box"
+                                android:textSize="@dimen/box_type_font_size" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/big_box_dimention"
+                                android:textSize="@dimen/box_dimention_font_size" />
+                        </LinearLayout>
+
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/normal_padding" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_gray" />
+
+                </LinearLayout>
+
+                <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -117,11 +310,10 @@
                         android:inputType="numberSigned"
                         android:textSize="@dimen/edit_text_font_size"
                         tools:text="weight" />
-                </android.support.design.widget.TextInputLayout>
+
+                </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
             </LinearLayout>
-
-
 
 
         </LinearLayout>
