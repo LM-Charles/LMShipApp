@@ -1,7 +1,10 @@
 package lmdelivery.longmen.com.android.UIFragments;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +30,13 @@ import org.json.JSONObject;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.UIFragments.bean.MyAddress;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
@@ -83,6 +89,7 @@ public class PickupFragment extends Fragment {
         etPostal = (EditText) rootView.findViewById(R.id.et_postal);
         etCity = (EditText) rootView.findViewById(R.id.et_city);
         etUnit = (EditText) rootView.findViewById(R.id.et_unit);
+        etCity.setOnFocusChangeListener(mFocusChangeListener);
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
@@ -93,8 +100,90 @@ public class PickupFragment extends Fragment {
         filterTypes.add(Place.TYPE_STREET_ADDRESS);
         mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_GREATER_VANCOUVER, null);//AutocompleteFilter.create(filterTypes));
         mAutocompleteView.setAdapter(mAdapter);
+
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+
+    private EditText.OnFocusChangeListener mFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                NewBookingActivity activity = ((NewBookingActivity)getActivity());
+                switch (v.getId()) {
+                    case R.id.et_unit:
+                        activity.pickupAddr.setUnitNumber(etUnit.getText().toString());
+                    case R.id.et_city:
+                        activity.pickupAddr.setCity(etCity.getText().toString());
+                        validatePickupCity();
+                    case R.id.et_postal:
+                        activity.pickupAddr.setPostalCode(etPostal.getText().toString());
+                        validatePostalCode();
+                }
+            }
+        }
+    };
+
+    public boolean saveAndValidate(){
+        ((NewBookingActivity)getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
+        boolean cityValid = validatePickupCity();
+        boolean postValid = validatePostalCode();
+        boolean streetValid = validateStreet();
+        return cityValid && postValid && streetValid;
+    }
+
+    private boolean validateStreet(){
+        String street = mAutocompleteView.getText().toString();
+        ((NewBookingActivity)getActivity()).pickupAddr.setStreetName(street);
+        if(street.isEmpty()){
+            ((TextInputLayout)mAutocompleteView.getParent()).setError(getString(R.string.required));
+            return false;
+        }
+        else {
+            ((TextInputLayout)mAutocompleteView.getParent()).setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean validatePickupCity(){
+        String city = etCity.getText().toString();
+        ((NewBookingActivity)getActivity()).pickupAddr.setCity(city);
+        if(city.isEmpty()){
+            ((TextInputLayout)etCity.getParent()).setError(getString(R.string.err_city_empty));
+            return false;
+        }
+        else if(!Constant.citiesInVan.contains(city.toUpperCase())){
+            ((TextInputLayout)etCity.getParent()).setError(city + getString(R.string.err_not_in_van));
+            return false;
+        }
+        else {
+            ((TextInputLayout)etCity.getParent()).setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean validatePostalCode(){
+        String zip = etPostal.getText().toString();
+        ((NewBookingActivity)getActivity()).pickupAddr.setPostalCode(zip);
+
+        if(zip.isEmpty()){
+            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.err_post_empty));
+            return false;
+        }
+
+        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(zip);
+
+        if(!matcher.matches()){
+            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+            return false;
+        }else{
+            ((TextInputLayout)etPostal.getParent()).setErrorEnabled(false);
+            return true;
+        }
     }
 
     /**
@@ -127,7 +216,7 @@ public class PickupFragment extends Fragment {
         }
     };
 
-    private void getPlaceDetailById(String placeID) {
+    private void getPlaceDetailById(final String placeID) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
@@ -152,35 +241,33 @@ public class PickupFragment extends Fragment {
                                 if (typeArr.length() > 0) {
 
                                     String type = typeArr.get(0).toString();
-                                    if(type.equals("administrative_area_level_2")){
+                                    if (type.equals("administrative_area_level_2")) {
                                         adminLevel2 = component.getString("long_name");
-                                    }
-                                    else if(type.equals("street_number")){
+                                    } else if (type.equals("street_number")) {
                                         streetNumber = component.getString("long_name");
-                                    }
-                                    else if(type.equals("route")){
+                                    } else if (type.equals("route")) {
                                         streetName = component.getString("long_name");
-                                    }else if(type.equals("locality")){
+                                    } else if (type.equals("locality")) {
                                         city = component.getString("long_name");
-                                    }else if(type.equals("administrative_area_level_1")){
+                                    } else if (type.equals("administrative_area_level_1")) {
                                         province = component.getString("long_name");
-                                    }else if(type.equals("country")){
+                                    } else if (type.equals("country")) {
                                         country = component.getString("long_name");
-                                    }else if(type.equals("postal_code_prefix")){
+                                    } else if (type.equals("postal_code_prefix")) {
                                         post = component.getString("long_name");
-                                    }else if(type.equals("postal_code")){
+                                    } else if (type.equals("postal_code")) {
                                         post = component.getString("long_name");
                                     }
                                 }
                             }
 
-                            if(!adminLevel2.equals("Greater Vancouver")){
-                                Toast.makeText(getActivity(), "We can only pick up address in Great Vancouver for now", Toast.LENGTH_SHORT).show();
-                            }else{
+                            if (!adminLevel2.equals("Greater Vancouver")) {
+                                Toast.makeText(getActivity(), getActivity().getString(R.string.can_only_pick_up_in_van), Toast.LENGTH_SHORT).show();
+                            } else {
                                 etPostal.setText(post);
                                 etCity.setText(city);
                                 mAutocompleteView.setAdapter(null);
-                                mAutocompleteView.setText(((streetNumber.isEmpty())?"":(streetNumber + " ")) + ((streetName.isEmpty())?"":streetName));
+                                mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
                                 mAutocompleteView.setAdapter(mAdapter);
                             }
                         } catch (JSONException e) {
@@ -199,7 +286,6 @@ public class PickupFragment extends Fragment {
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
     }
-
 
 
 }

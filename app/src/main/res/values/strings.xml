@@ -25,7 +25,7 @@
     <string name="tab_title_to">To</string>
     <string name="tab_title_package">Package</string>
     <string name="tab_title_time">Time</string>
-    <string name="tab_title_quote">Quote</string>
+    <string name="tab_title_summary">Summary</string>
     <string name="ship_to">Ship to</string>
     <string name="province">Province</string>
     <string name="ship_from">Ship from</string>
@@ -39,6 +39,13 @@
     <string name="big_box_dimention">50 L X 50 W X 50 H (cm)</string>
     <string name="med_box">Medium Box</string>
     <string name="small_box">Small Box</string>
+    <string name="can_only_pick_up_in_van">We can only pick up address in Great Vancouver for now</string>
+    <string name="err_city_empty">City cannot be empty</string>
+    <string name="err_not_in_van">" is not in great vancouver area"</string>
+    <string name="err_post_empty">Postal Code cannot be empty</string>
+    <string name="err_post_wrong_format">Postal format: V6X 0A5</string>
+    <string name="err_street_empty">Street is empty</string>
+    <string name="required">Required</string>
 
 
     <string-array name="dropoff_country_array">

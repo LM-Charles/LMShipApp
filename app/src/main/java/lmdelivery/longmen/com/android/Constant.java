@@ -1,5 +1,10 @@
 package lmdelivery.longmen.com.android;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Created by Kaiyu on 2015-06-10.
  */
@@ -10,10 +15,24 @@ public class Constant {
     public static final int MAX_CITY_LENGTH = 15;
     public static final int MAX_PROVINCE_LENGTH = 15;
 
-    public static final int TAB_POTSITION_FROM = 0;
-    public static final int TAB_POTSITION_TO = 1;
-    public static final int TAB_POTSITION_PACKAGE = 2;
-    public static final int TAB_POTSITION_TIME = 3;
-    public static final int TAB_POTSITION_QUOTE = 4;
+    public static final int TAB_FROM = 0;
+    public static final int TAB_TO = 1;
+    public static final int TAB_PACKAGE = 2;
+    public static final int TAB_TIME = 3;
+    public static final int TAB_SUMMARY = 4;
+
+    public static final Set<String> citiesInVan = new HashSet<>();
+
+    static {
+        citiesInVan.add("VANCOUVER");
+        citiesInVan.add("NORTH VANCOUVER");
+        citiesInVan.add("WEST VANCOUVER");
+        citiesInVan.add("RICHMOND");
+        citiesInVan.add("SURREY");
+        citiesInVan.add("DELTA");
+        citiesInVan.add("BURNABY");
+        citiesInVan.add("COQUITLAM");
+    }
+
 
 }

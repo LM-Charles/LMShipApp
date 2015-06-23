@@ -1,6 +1,7 @@
 package lmdelivery.longmen.com.android;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,32 +12,41 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.UIFragments.DestinationFragment;
 import lmdelivery.longmen.com.android.UIFragments.PackageFragment;
 import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
 import lmdelivery.longmen.com.android.UIFragments.TimeFragment;
+import lmdelivery.longmen.com.android.UIFragments.bean.MyAddress;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 
 
 public class NewBookingActivity extends AppCompatActivity implements TimeFragment.OnTimeSelectedListener, GoogleApiClient.OnConnectionFailedListener {
     private static final java.lang.String TAG = NewBookingActivity.class.getName();
-    private String pickupStreet, pickupCity, pickupPostal, pickupUnit;
-    private String dropoffStreet, dropoffCity, dropoffPostal, dropoffUnit;
     private TabLayout tabLayout;
+    private PickupFragment pickupFragment;
+    private DestinationFragment dropOffFragment;
+    private PackageFragment packageFragment;
+    private TimeFragment timeFragment;
+
 
     public MyTime selectedTime;
-
-
+    public MyAddress pickupAddr;
+    public MyAddress dropOffAddr;
+    private Adapter adapter;
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
      * to the user's sign in state as well as the Google's APIs.
@@ -59,19 +69,71 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         final ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
 
+
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.getTabAt(0).setIcon(R.drawable.shape_greendot);
-        tabLayout.getTabAt(1).setIcon(R.drawable.shape_greendot);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                int currentTab = tab.getPosition();
+                if (currentTab == Constant.TAB_FROM) {
+                    if (pickupFragment.saveAndValidate()) {
+                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_greendot);
+                    }else{
+                        tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_reddot);
+                    }
+                }else if(currentTab == Constant.TAB_TO) {
+                    if (dropOffFragment.saveAndValidate()) {
+                        tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
+                    }else{
+                        tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_reddot);
+                    }
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentTab = viewPager.getCurrentItem();
+                if (currentTab == Constant.TAB_FROM) {
+                    if (pickupFragment.saveAndValidate()) {
+                        viewPager.setCurrentItem(Constant.TAB_TO, true);
+                    }
+                }else if (currentTab == Constant.TAB_TO) {
+                    if (dropOffFragment.saveAndValidate()) {
+                        viewPager.setCurrentItem(Constant.TAB_PACKAGE, true);
+                    }
+                }
+            }
+        });
+
+        init();
     }
 
-    public void scrollTo(int tabPosition){
+    private void init() {
+        pickupAddr = new MyAddress();
+        dropOffAddr = new MyAddress();
+    }
+
+    public void scrollTo(int tabPosition) {
         tabLayout.getTabAt(tabPosition).select();
     }
 
@@ -98,13 +160,38 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(PickupFragment.newInstance(), getString(R.string.tab_title_from));
-        adapter.addFragment(DestinationFragment.newInstance(), getString(R.string.tab_title_to));
-        adapter.addFragment(PackageFragment.newInstance(), getString(R.string.tab_title_package));
-        adapter.addFragment(TimeFragment.newInstance(), getString(R.string.tab_title_time));
-        adapter.addFragment(new TextFragment(), getString(R.string.tab_title_quote));
+        adapter = new Adapter(getSupportFragmentManager());
+
+        if (pickupFragment == null)
+            pickupFragment = PickupFragment.newInstance();
+        if(dropOffFragment==null)
+            dropOffFragment = DestinationFragment.newInstance();
+        if(packageFragment==null)
+            packageFragment = PackageFragment.newInstance();
+        if(timeFragment==null)
+            timeFragment = TimeFragment.newInstance();
+
+        adapter.addFragment(pickupFragment, getString(R.string.tab_title_from));
+        adapter.addFragment(dropOffFragment, getString(R.string.tab_title_to));
+        adapter.addFragment(packageFragment, getString(R.string.tab_title_package));
+        adapter.addFragment(timeFragment, getString(R.string.tab_title_time));
+        adapter.addFragment(new TextFragment(), getString(R.string.tab_title_summary));
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
     }
 
     @Override
@@ -141,22 +228,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         }
     }
 
-//    private EditText.OnFocusChangeListener notEmptyFocusChangeListener = new View.OnFocusChangeListener() {
-//        @Override
-//        public void onFocusChange(View v, boolean hasFocus) {
-//            if(!hasFocus){
-//                switch (v.getId()){
-//                    case R.id.et_city:
-//                    case R.id.et_to_city:
-//                        if()
-//                        ((EditText) v).setError("City cannot be empty");
-//
-//
-//                }
-//            }
-//        }
-//    };
-
 
     /**
      * Called when the Activity could not connect to Google Play services and the auto manager
@@ -177,68 +248,60 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 Toast.LENGTH_SHORT).show();
     }
 
+    private List<String> validatePickup() {
+        ArrayList<String> errList = new ArrayList<>();
 
-    public String getPickupStreet() {
-        return pickupStreet;
+        //validate street
+        String street = pickupAddr.getStreetName();
+        if (street.isEmpty()) {
+            errList.add(getString(R.string.err_street_empty));
+        }
+
+        //validate city
+        String city = pickupAddr.getCity();
+        if (city.isEmpty()) {
+            errList.add(getString(R.string.err_city_empty));
+        } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
+            errList.add(city + getString(R.string.err_not_in_van));
+        }
+
+        //validate postal
+        String zip = pickupAddr.getPostalCode();
+        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(zip);
+        if (zip.isEmpty())
+            errList.add(getString(R.string.err_post_empty));
+        else if (!matcher.matches())
+            errList.add(getString(R.string.err_post_wrong_format));
+
+        printErrList(errList);
+        return errList;
     }
 
-    public void setPickupStreet(String pickupStreet) {
-        this.pickupStreet = pickupStreet;
+    private void printErrList(ArrayList<String> errList) {
+        String out = "";
+        for (int i = 0; i < errList.size(); i++) {
+            out += errList.get(i) + "\n";
+        }
+        Logger.e(TAG, "error: " + out);
     }
 
-    public String getPickupCity() {
-        return pickupCity;
+
+    public void updatePickupAddress(String unitNumber, String streetName, String city, String post) {
+        pickupAddr.setUnitNumber(unitNumber);
+        pickupAddr.setStreetName(streetName);
+        pickupAddr.setPostalCode(post);
+        pickupAddr.setCity(city);
     }
 
-    public void setPickupCity(String pickupCity) {
-        this.pickupCity = pickupCity;
+    public void updateDropOffAddress(String unitNumber, String streetName, String city, String province, String country, String post) {
+        dropOffAddr.setUnitNumber(unitNumber);
+        dropOffAddr.setStreetName(streetName);
+        dropOffAddr.setCity(city);
+        dropOffAddr.setPostalCode(post);
+        dropOffAddr.setProvince(province);
+        dropOffAddr.setCountry(country);
     }
 
-    public String getPickupPostal() {
-        return pickupPostal;
-    }
-
-    public void setPickupPostal(String pickupPostal) {
-        this.pickupPostal = pickupPostal;
-    }
-
-    public String getPickupUnit() {
-        return pickupUnit;
-    }
-
-    public void setPickupUnit(String pickupUnit) {
-        this.pickupUnit = pickupUnit;
-    }
-
-    public String getDropoffStreet() {
-        return dropoffStreet;
-    }
-
-    public void setDropoffStreet(String dropoffStreet) {
-        this.dropoffStreet = dropoffStreet;
-    }
-
-    public String getDropoffCity() {
-        return dropoffCity;
-    }
-
-    public void setDropoffCity(String dropoffCity) {
-        this.dropoffCity = dropoffCity;
-    }
-
-    public String getDropoffPostal() {
-        return dropoffPostal;
-    }
-
-    public void setDropoffPostal(String dropoffPostal) {
-        this.dropoffPostal = dropoffPostal;
-    }
-
-    public String getDropoffUnit() {
-        return dropoffUnit;
-    }
-
-    public void setDropoffUnit(String dropoffUnit) {
-        this.dropoffUnit = dropoffUnit;
-    }
 }

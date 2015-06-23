@@ -36,6 +36,8 @@ import org.json.JSONObject;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.NewBookingActivity;
@@ -60,7 +62,6 @@ public class DestinationFragment extends Fragment {
 
     private EditText etUnit, etPostal, etCity, etProvince;
     private Spinner spinner;
-    private FloatingActionButton fab;
     private CardView cardView;
     private TextInputLayout tilAddress;
 
@@ -116,20 +117,7 @@ public class DestinationFragment extends Fragment {
         etProvince = (EditText) rootView.findViewById(R.id.et_to_province);
         cardView = (CardView) rootView.findViewById(R.id.card_to);
         tilAddress = (TextInputLayout) rootView.findViewById(R.id.til_address);
-        etPostal.addTextChangedListener(watcher);
-        etCity.addTextChangedListener(watcher);
-        etUnit.addTextChangedListener(watcher);
-        etProvince.addTextChangedListener(watcher);
 
-//        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(validateToForm()){
-//                    ((NewBookingActivity) getActivity()).scrollTo(Constant.TAB_POTSITION_TO+1);
-//                }
-//            }
-//        });
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
@@ -146,99 +134,81 @@ public class DestinationFragment extends Fragment {
     }
 
 
-
-    private TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            showFab();
-        }
-    };
-
-    private void showFab(){
-        boolean isValid = true;
-        if(etPostal.getText().toString().isEmpty()){
-            isValid = false;
-        }
-
-        if(etCity.getText().toString().isEmpty()){
-            isValid = false;
-        }
-
-        if(etProvince.getText().toString().isEmpty()){
-            isValid = false;
-        }
-
-        if(mAutocompleteView.getText().toString().isEmpty()){
-            isValid = false;
-        }
-
-//        if(isValid){
-//            fab.setVisibility(View.VISIBLE);
-//            fab.setScaleX(0);
-//            fab.setScaleY(0);
-//            fab.animate().scaleX(1).scaleY(1).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new OvershootInterpolator()).start();
-//        }else{
-//            if(fab.getVisibility()==View.VISIBLE){
-//                fab.animate().scaleX(0).scaleY(0).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new AccelerateInterpolator()).withEndAction(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        fab.setVisibility(View.GONE);
-//                    }
-//                }).start();
-//            }
-//        }
+    public boolean saveAndValidate(){
+        ((NewBookingActivity)getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
+        ((NewBookingActivity)getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
+        boolean cityValid = validateDropoffCity();
+        boolean postValid = validatePostalCode();
+        boolean streetValid = validateStreet();
+        boolean provinceValid = validateProvince();
+        return cityValid && postValid && streetValid && provinceValid;
     }
 
-    public boolean validateToForm(){
-        boolean isValid = true;
-        if(etPostal.getText().toString().isEmpty()){
-            etPostal.setError("Postal code cannot be empty");
-            isValid = false;
+    private boolean validateProvince(){
+        String province = etProvince.getText().toString();
+        ((NewBookingActivity)getActivity()).dropOffAddr.setProvince(province);
+        if(province.isEmpty()){
+            ((TextInputLayout)etProvince.getParent()).setError(getString(R.string.required));
+            return false;
+        }
+        else {
+            ((TextInputLayout)etProvince.getParent()).setErrorEnabled(false);
+            return true;
+        }
+    }
+
+
+    private boolean validateStreet(){
+        String street = mAutocompleteView.getText().toString();
+        ((NewBookingActivity)getActivity()).dropOffAddr.setStreetName(street);
+        if(street.isEmpty()){
+            ((TextInputLayout)mAutocompleteView.getParent()).setError(getString(R.string.required));
+            return false;
+        }
+        else {
+            ((TextInputLayout)mAutocompleteView.getParent()).setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean validateDropoffCity(){
+        String city = etCity.getText().toString();
+        ((NewBookingActivity)getActivity()).dropOffAddr.setCity(city);
+        if(city.isEmpty()){
+            ((TextInputLayout)etCity.getParent()).setError(getString(R.string.err_city_empty));
+            return false;
+        }
+        else if(!Constant.citiesInVan.contains(city.toUpperCase())){
+            ((TextInputLayout)etCity.getParent()).setError(city + getString(R.string.err_not_in_van));
+            return false;
+        }
+        else {
+            ((TextInputLayout)etCity.getParent()).setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean validatePostalCode(){
+        String zip = etPostal.getText().toString();
+        ((NewBookingActivity)getActivity()).dropOffAddr.setPostalCode(zip);
+
+        if(zip.isEmpty()){
+            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.err_post_empty));
+            return false;
         }
 
-        if(etCity.getText().toString().isEmpty()){
-            etCity.setError("City cannot be empty");
-            isValid = false;
-        }
+        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
 
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(zip);
 
-        if(etProvince.getText().toString().isEmpty()){
-            etProvince.setError("Province cannot be empty");
-            isValid = false;
-        }
-
-        if(mAutocompleteView.getText().toString().isEmpty()){
-            mAutocompleteView.setError("Street address cannot be empty");
-            isValid = false;
-        }
-
-        if(isValid){
-            fab.setVisibility(View.VISIBLE);
-            fab.setScaleX(0);
-            fab.setScaleY(0);
-            fab.animate().scaleX(1).scaleY(1).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new OvershootInterpolator()).start();
+        if(!matcher.matches()){
+            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+            return false;
         }else{
-            if(fab.getVisibility()==View.VISIBLE){
-                fab.animate().scaleX(0).scaleY(0).setDuration(Constant.FAB_ANIMTION_DURATION).setInterpolator(new AccelerateInterpolator()).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        fab.setVisibility(View.GONE);
-                    }
-                }).start();
-            }
+            ((TextInputLayout)etPostal.getParent()).setErrorEnabled(false);
+            return true;
         }
-
-        return isValid;
     }
 
 
