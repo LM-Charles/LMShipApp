@@ -4,23 +4,48 @@ package lmdelivery.longmen.com.android.UIFragments.bean;
  * Created by Kaiyu on 2015-06-16.
  */
 public class MyPackage {
+    public static final int SMALL_BOX = 0;
+    public static final int MED_BOX = 1;
+    public static final int BIG_BOX = 2;
     private String length, width, height, weight;
-    private int boxType;
+    private int boxSize;
+    private boolean isOwnBox;
+    private boolean showValidation;
 
-    public MyPackage(String length, String width, String height, String weight, int boxType) {
-        this.length = length;
-        this.width = width;
-        this.height = height;
-        this.weight = weight;
-        this.boxType = boxType;
-    }
+
 
     public MyPackage() {
         this.length = "";
         this.width = "";
         this.height = "";
         this.weight = "";
-        this.boxType = 0;
+        this.boxSize = 0;
+        this.isOwnBox = true;
+        this.showValidation = false;
+    }
+
+    public boolean isShowValidation() {
+        return showValidation;
+    }
+
+    public void setShowValidation(boolean showValidation) {
+        this.showValidation = showValidation;
+    }
+
+    public int getBoxSize() {
+        return boxSize;
+    }
+
+    public void setBoxSize(int boxSize) {
+        this.boxSize = boxSize;
+    }
+
+    public boolean isOwnBox() {
+        return isOwnBox;
+    }
+
+    public void setIsOwnBox(boolean isOwnBox) {
+        this.isOwnBox = isOwnBox;
     }
 
     public String getLength() {
@@ -55,11 +80,4 @@ public class MyPackage {
         this.weight = weight;
     }
 
-    public int getBoxType() {
-        return boxType;
-    }
-
-    public void setBoxType(int boxType) {
-        this.boxType = boxType;
-    }
 }

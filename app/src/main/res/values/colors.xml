@@ -26,6 +26,6 @@
     <color name="time_ripple">#FF7043</color>
     <color name="package_item_title_background">#5E35B1</color>
     <color name="light_gray">#BDBDBD</color>
-
+    <color name="default_text_color">#737373</color>
 
 </resources>

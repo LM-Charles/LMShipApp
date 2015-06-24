@@ -30,6 +30,7 @@ import lmdelivery.longmen.com.android.UIFragments.PackageFragment;
 import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
 import lmdelivery.longmen.com.android.UIFragments.TimeFragment;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyAddress;
+import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 
@@ -42,6 +43,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private PackageFragment packageFragment;
     private TimeFragment timeFragment;
 
+    public ArrayList<MyPackage> myPackageArrayList;
 
     public MyTime selectedTime;
     public MyAddress pickupAddr;
@@ -87,18 +89,29 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 int currentTab = tab.getPosition();
-                if (currentTab == Constant.TAB_FROM) {
-                    if (pickupFragment.saveAndValidate()) {
+                switch (currentTab) {
+                    case Constant.TAB_FROM:
+                        if (pickupFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_greendot);
-                    }else{
-                        tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_reddot);
-                    }
-                }else if(currentTab == Constant.TAB_TO) {
-                    if (dropOffFragment.saveAndValidate()) {
-                        tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
-                    }else{
-                        tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_reddot);
-                    }
+                        } else {
+                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_reddot);
+                        }
+                        break;
+                    case Constant.TAB_TO:
+                        if (dropOffFragment.saveAndValidate()) {
+                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
+                        } else {
+                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_reddot);
+                        }
+                        break;
+                    case Constant.TAB_PACKAGE:
+                        if (packageFragment.validateAllPackage()) {
+                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_greendot);
+                        } else {
+                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_reddot);
+                        }
+
+                        break;
                 }
             }
 
@@ -117,9 +130,13 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     if (pickupFragment.saveAndValidate()) {
                         viewPager.setCurrentItem(Constant.TAB_TO, true);
                     }
-                }else if (currentTab == Constant.TAB_TO) {
+                } else if (currentTab == Constant.TAB_TO) {
                     if (dropOffFragment.saveAndValidate()) {
                         viewPager.setCurrentItem(Constant.TAB_PACKAGE, true);
+                    }
+                } else if (currentTab == Constant.TAB_PACKAGE) {
+                    if (packageFragment.validateAllPackage()) {
+                        viewPager.setCurrentItem(Constant.TAB_TIME, true);
                     }
                 }
             }
@@ -131,6 +148,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void init() {
         pickupAddr = new MyAddress();
         dropOffAddr = new MyAddress();
+        myPackageArrayList = new ArrayList<>();
+        myPackageArrayList.add(new MyPackage());
     }
 
     public void scrollTo(int tabPosition) {
@@ -164,11 +183,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
         if (pickupFragment == null)
             pickupFragment = PickupFragment.newInstance();
-        if(dropOffFragment==null)
+        if (dropOffFragment == null)
             dropOffFragment = DestinationFragment.newInstance();
-        if(packageFragment==null)
+        if (packageFragment == null)
             packageFragment = PackageFragment.newInstance();
-        if(timeFragment==null)
+        if (timeFragment == null)
             timeFragment = TimeFragment.newInstance();
 
         adapter.addFragment(pickupFragment, getString(R.string.tab_title_from));
