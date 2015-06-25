@@ -38,7 +38,7 @@
                     android:gravity="center"
                     android:text="@string/icon_close"
                     android:textColor="@color/window_background"
-                    android:textSize="24sp"
+                    android:textSize="30sp"
                     geekui:customTypeface="fonts/ionicons.ttf" />
 
             </LinearLayout>
@@ -75,272 +75,271 @@
                     android:layout_marginEnd="@dimen/normal_padding"
                     android:text="Free" />
             </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginEnd="@dimen/normal_padding"
-                android:layout_marginStart="@dimen/normal_padding"
-                android:background="@color/light_gray" />
-
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginEnd="@dimen/normal_padding"-->
+            <!--android:layout_marginStart="@dimen/normal_padding"-->
+            <!--android:background="@color/light_gray" />-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/normal_padding">
+                android:orientation="horizontal"
+                android:paddingEnd="@dimen/normal_padding"
+                android:paddingStart="@dimen/normal_padding">
 
-                <LinearLayout
-                    android:id="@+id/ll_own_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="165dp"
-                    android:orientation="vertical">
-
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <EditText
-                            android:id="@+id/et_length"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/length"
-                            android:labelFor="@string/length"
-                            android:textSize="@dimen/edit_text_font_size"
-                            tools:text="length" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <EditText
-                            android:id="@+id/et_width"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/width"
-                            android:inputType="numberSigned"
-                            android:textSize="@dimen/edit_text_font_size"
-                            tools:text="width" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <EditText
-                            android:id="@+id/et_height"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/height"
-                            android:inputType="numberSigned"
-                            android:textSize="@dimen/edit_text_font_size"
-                            tools:text="height" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_lm_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="165dp"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <RelativeLayout
-                        android:id="@+id/rl_small_box"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp">
-
-                        <lmdelivery.longmen.com.android.widget.TypefaceTextView
-                            android:id="@+id/ic_small_box"
-                            android:layout_width="@dimen/box_icon_width"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/icon_box"
-                            android:textColor="@color/default_text_color"
-                            android:textSize="@dimen/small_box_icon_size"
-                            geekui:customTypeface="fonts/ionicons.ttf" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_toEndOf="@id/ic_small_box"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:text="@string/small_box"
-                                android:textSize="@dimen/box_type_font_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/big_box_dimention"
-                                android:textSize="@dimen/box_dimention_font_size" />
-                        </LinearLayout>
-
-
-                        <RadioButton
-                            android:id="@+id/rb_small_box"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
-
-                    </RelativeLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_gray" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_med_box"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp">
-
-                        <lmdelivery.longmen.com.android.widget.TypefaceTextView
-                            android:id="@+id/ic_med_box"
-                            android:layout_width="@dimen/box_icon_width"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/icon_box"
-                            android:textColor="@color/default_text_color"
-                            android:textSize="@dimen/med_box_icon_size"
-                            geekui:customTypeface="fonts/ionicons.ttf" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_toEndOf="@id/ic_med_box"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tv_med_box"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:text="@string/med_box"
-                                android:textSize="@dimen/box_type_font_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/big_box_dimention"
-                                android:textSize="@dimen/box_dimention_font_size" />
-                        </LinearLayout>
-
-                        <RadioButton
-                            android:id="@+id/rb_med_box"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_gray" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_big_box"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp">
-
-                        <lmdelivery.longmen.com.android.widget.TypefaceTextView
-                            android:id="@+id/ic_big_box"
-                            android:layout_width="@dimen/box_icon_width"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/icon_box"
-                            android:textColor="@color/default_text_color"
-                            android:textSize="@dimen/big_box_icon_size"
-                            geekui:customTypeface="fonts/ionicons.ttf" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_toEndOf="@id/ic_big_box"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tv_bigbox"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:text="@string/big_box"
-                                android:textSize="@dimen/box_type_font_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/big_box_dimention"
-                                android:textSize="@dimen/box_dimention_font_size" />
-                        </LinearLayout>
-
-
-                        <RadioButton
-                            android:id="@+id/rb_big_box"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_gray" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1">
 
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                        android:layout_width="0dp"
+                    <EditText
+                        android:id="@+id/et_weight"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        android:hint="@string/weight"
+                        android:inputType="numberSigned"
+                        android:textSize="@dimen/edit_text_font_size"
+                        tools:text="weight" />
 
-                        <EditText
-                            android:id="@+id/et_weight"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/weight"
-                            android:inputType="numberSigned"
-                            android:textSize="@dimen/edit_text_font_size"
-                            tools:text="weight" />
+                </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                <Spinner
+                    android:id="@+id/spinner_package_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-                    <Spinner
-                        android:id="@+id/spinner_package_type"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                    </Spinner>
-
-
-                </LinearLayout>
+                </Spinner>
 
 
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/ll_own_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingEnd="@dimen/normal_padding"
+                android:paddingStart="@dimen/normal_padding">
+
+                <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/et_length"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/length"
+                        android:labelFor="@string/length"
+                        android:textSize="@dimen/edit_text_font_size"
+                        android:inputType="numberSigned"
+                        tools:text="length" />
+                </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+                <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/et_width"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/width"
+                        android:inputType="numberSigned"
+                        android:textSize="@dimen/edit_text_font_size"
+                        tools:text="width" />
+                </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+                <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/et_height"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/height"
+                        android:inputType="numberSigned"
+                        android:textSize="@dimen/edit_text_font_size"
+                        tools:text="height" />
+                </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_lm_box"
+                android:layout_width="match_parent"
+                android:layout_height="165dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/rl_small_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp">
+
+                    <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                        android:id="@+id/ic_small_box"
+                        android:layout_width="@dimen/box_icon_width"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/icon_box"
+                        android:textColor="@color/default_text_color"
+                        android:textSize="@dimen/small_box_icon_size"
+                        geekui:customTypeface="fonts/ionicons.ttf" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/ic_small_box"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:text="@string/small_box"
+                            android:textSize="@dimen/box_type_font_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/big_box_dimention"
+                            android:textSize="@dimen/box_dimention_font_size" />
+                    </LinearLayout>
+
+
+                    <RadioButton
+                        android:id="@+id/rb_small_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/light_gray" />-->
+
+                <RelativeLayout
+                    android:id="@+id/rl_med_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp">
+
+                    <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                        android:id="@+id/ic_med_box"
+                        android:layout_width="@dimen/box_icon_width"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/icon_box"
+                        android:textColor="@color/default_text_color"
+                        android:textSize="@dimen/med_box_icon_size"
+                        geekui:customTypeface="fonts/ionicons.ttf" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/ic_med_box"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_med_box"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:text="@string/med_box"
+                            android:textSize="@dimen/box_type_font_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/big_box_dimention"
+                            android:textSize="@dimen/box_dimention_font_size" />
+                    </LinearLayout>
+
+                    <RadioButton
+                        android:id="@+id/rb_med_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/light_gray" />-->
+
+                <RelativeLayout
+                    android:id="@+id/rl_big_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp">
+
+                    <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                        android:id="@+id/ic_big_box"
+                        android:layout_width="@dimen/box_icon_width"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/icon_box"
+                        android:textColor="@color/default_text_color"
+                        android:textSize="@dimen/big_box_icon_size"
+                        geekui:customTypeface="fonts/ionicons.ttf" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/ic_big_box"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_bigbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:text="@string/big_box"
+                            android:textSize="@dimen/box_type_font_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/big_box_dimention"
+                            android:textSize="@dimen/box_dimention_font_size" />
+                    </LinearLayout>
+
+
+                    <RadioButton
+                        android:id="@+id/rb_big_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/light_gray" />-->
+
+            </LinearLayout>
+
+
         </LinearLayout>
+
 
     </android.support.v7.widget.CardView>
 

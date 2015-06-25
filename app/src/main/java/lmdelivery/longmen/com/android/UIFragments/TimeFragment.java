@@ -133,16 +133,16 @@ public class TimeFragment extends Fragment {
         }
 
         //fake
-        for (int j = 0; j < 4; j++) {
-            MyTime myTime = new MyTime(timeSlots[j], j, false);
-            myTimes.add(myTime);
-        }for (int j = 0; j < 4; j++) {
-            MyTime myTime = new MyTime(timeSlots[j], j, false);
-            myTimes.add(myTime);
-        }for (int j = 0; j < 4; j++) {
-            MyTime myTime = new MyTime(timeSlots[j], j, false);
-            myTimes.add(myTime);
-        }
+//        for (int j = 0; j < 4; j++) {
+//            MyTime myTime = new MyTime(timeSlots[j], j, false);
+//            myTimes.add(myTime);
+//        }for (int j = 0; j < 4; j++) {
+//            MyTime myTime = new MyTime(timeSlots[j], j, false);
+//            myTimes.add(myTime);
+//        }for (int j = 0; j < 4; j++) {
+//            MyTime myTime = new MyTime(timeSlots[j], j, false);
+//            myTimes.add(myTime);
+//        }
 
         return myTimes;
     }

@@ -24,6 +24,10 @@ public class MyPackage {
         this.showValidation = false;
     }
 
+    @Override public String toString(){
+        return "l w h: " + length + " " + width + " " + height + "box size: " + boxSize;
+    }
+
     public boolean isShowValidation() {
         return showValidation;
     }

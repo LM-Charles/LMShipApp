@@ -19,7 +19,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -97,6 +96,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                             tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_reddot);
                         }
                         break;
+
                     case Constant.TAB_TO:
                         if (dropOffFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
@@ -104,6 +104,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                             tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_reddot);
                         }
                         break;
+
                     case Constant.TAB_PACKAGE:
                         if (packageFragment.validateAllPackage()) {
                             tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_greendot);
@@ -133,10 +134,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 } else if (currentTab == Constant.TAB_TO) {
                     if (dropOffFragment.saveAndValidate()) {
                         viewPager.setCurrentItem(Constant.TAB_PACKAGE, true);
+
                     }
                 } else if (currentTab == Constant.TAB_PACKAGE) {
                     if (packageFragment.validateAllPackage()) {
                         viewPager.setCurrentItem(Constant.TAB_TIME, true);
+                    }
+                    for(int i = 0 ; i < myPackageArrayList.size(); i++){
+                        Logger.e(TAG,myPackageArrayList.get(i).toString());
                     }
                 }
             }
