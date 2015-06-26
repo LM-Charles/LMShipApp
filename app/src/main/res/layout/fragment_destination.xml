@@ -136,16 +136,15 @@
                                 tools:text="postal" />
                         </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
-                        <Spinner
-                            android:id="@+id/spinner"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
+
 
 
                     </LinearLayout>
 
-
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 

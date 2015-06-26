@@ -310,7 +310,7 @@ public class PackageFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     myPackage.setHeight(holder.etHeight.getText().toString());
-                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position,myPackage);
+                    //((NewBookingActivity)getActivity()).myPackageArrayList.set(position,myPackage);
                 }
             });
 
@@ -324,7 +324,7 @@ public class PackageFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     myPackage.setLength(holder.etLength.getText().toString());
-                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
+//                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
                 }
             });
 
@@ -338,7 +338,7 @@ public class PackageFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     myPackage.setWeight(holder.etWeight.getText().toString());
-                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
+//                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
                 }
             });
 
@@ -351,32 +351,11 @@ public class PackageFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    Logger.e(TAG, "setting width");
                     myPackage.setWidth(holder.etWidth.getText().toString());
-                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
+//                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
                 }
             });
-            
-            
 
-//            holder.time.setText(getResources().getStringArray(R.array.time_interval_array)[mValues.get(position).getTimeCatergory()]);
-//            holder.date.setText(mValues.get(position).isToday() ? "Today" : "Tomorrow");
-//
-//            if(mValues.get(position).equals(((NewBookingActivity)getActivity()).selectedTime))
-//                holder.mView.setSelected(true);
-//            else
-//                holder.mView.setSelected(false);
-//
-//            holder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (null != mListener) {
-//                        mListener.onTimeSelected(mValues.get(position));
-//                        holder.mView.setSelected(true);
-//                        notifyDataSetChanged();
-//                    }
-//                }
-//            });
         }
 
         @Override

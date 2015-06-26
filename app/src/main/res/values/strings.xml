@@ -43,7 +43,7 @@
     <string name="err_city_empty">City cannot be empty</string>
     <string name="err_not_in_van">" is not in great vancouver area"</string>
     <string name="err_post_empty">Postal Code cannot be empty</string>
-    <string name="err_post_wrong_format">Postal format: V6X 0A5</string>
+    <string name="err_post_wrong_format">Postal format:\nV6X 0A5</string>
     <string name="err_street_empty">Street is empty</string>
     <string name="required">Required</string>
     <string name="free">Free</string>

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 import lmdelivery.longmen.com.android.UIFragments.DestinationFragment;
 import lmdelivery.longmen.com.android.UIFragments.PackageFragment;
 import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
+import lmdelivery.longmen.com.android.UIFragments.SummaryFragment;
 import lmdelivery.longmen.com.android.UIFragments.TimeFragment;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyAddress;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
@@ -37,10 +39,12 @@ import lmdelivery.longmen.com.android.util.Logger;
 public class NewBookingActivity extends AppCompatActivity implements TimeFragment.OnTimeSelectedListener, GoogleApiClient.OnConnectionFailedListener {
     private static final java.lang.String TAG = NewBookingActivity.class.getName();
     private TabLayout tabLayout;
-    private PickupFragment pickupFragment;
-    private DestinationFragment dropOffFragment;
-    private PackageFragment packageFragment;
-    private TimeFragment timeFragment;
+    public PickupFragment pickupFragment;
+    public DestinationFragment dropOffFragment;
+    public PackageFragment packageFragment;
+    public TimeFragment timeFragment;
+    public SummaryFragment summaryFragment;
+
 
     public ArrayList<MyPackage> myPackageArrayList;
 
@@ -111,8 +115,16 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         } else {
                             tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_reddot);
                         }
-
                         break;
+
+                    case Constant.TAB_TIME:
+                        if (selectedTime!=null) {
+                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_greendot);
+                        } else {
+                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_reddot);
+                        }
+                        break;
+
                 }
             }
 
@@ -143,6 +155,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     for(int i = 0 ; i < myPackageArrayList.size(); i++){
                         Logger.e(TAG,myPackageArrayList.get(i).toString());
                     }
+                } else if (currentTab == Constant.TAB_TIME) {
+                    if (selectedTime!=null) {
+                        viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
+                    }
                 }
             }
         });
@@ -152,6 +168,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private void init() {
         pickupAddr = new MyAddress();
+        pickupAddr.setCountry("Canada");
+        pickupAddr.setProvince("BC");
         dropOffAddr = new MyAddress();
         myPackageArrayList = new ArrayList<>();
         myPackageArrayList.add(new MyPackage());
@@ -194,12 +212,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             packageFragment = PackageFragment.newInstance();
         if (timeFragment == null)
             timeFragment = TimeFragment.newInstance();
+        if (summaryFragment == null)
+            summaryFragment = SummaryFragment.newInstance();
 
         adapter.addFragment(pickupFragment, getString(R.string.tab_title_from));
         adapter.addFragment(dropOffFragment, getString(R.string.tab_title_to));
         adapter.addFragment(packageFragment, getString(R.string.tab_title_package));
         adapter.addFragment(timeFragment, getString(R.string.tab_title_time));
-        adapter.addFragment(new TextFragment(), getString(R.string.tab_title_summary));
+        adapter.addFragment(summaryFragment, getString(R.string.tab_title_summary));
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

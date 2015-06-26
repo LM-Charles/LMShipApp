@@ -23,6 +23,15 @@ public class MyAddress {
         province="";
     }
 
+    public String buildFullAddress(){
+        String result = "";
+        if(!unitNumber.isEmpty()){
+            result += unitNumber+"-";
+        }
+        result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + country;
+        return result;
+    }
+
     public String getFullAddress() {
         return fullAddress;
     }

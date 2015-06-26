@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -85,18 +86,18 @@ public class DestinationFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        Logger.e(TAG, "onResume");
+//        Logger.e(TAG, "onResume");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.e(TAG, "onCreate");
+//        Logger.e(TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Logger.e(TAG, "onCreateView");
+//        Logger.e(TAG, "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_destination, container, false);
 
         spinner = (Spinner) rootView.findViewById(R.id.spinner);
@@ -129,8 +130,91 @@ public class DestinationFragment extends Fragment {
         filterTypes.add(Place.TYPE_STREET_ADDRESS);
         mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_CANADA, null);//AutocompleteFilter.create(filterTypes));
         mAutocompleteView.setAdapter(mAdapter);
+        setUpTextLinstener();
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    private void setUpTextLinstener(){
+        etProvince.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!etProvince.getText().toString().isEmpty()){
+                    ((TextInputLayout)etProvince.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity)getActivity()).dropOffAddr.setProvince(etProvince.getText().toString());
+                }
+            }
+        });
+
+        etCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!etCity.getText().toString().isEmpty()){
+                    ((TextInputLayout)etCity.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity)getActivity()).dropOffAddr.setCity(etCity.getText().toString());
+                }
+            }
+        });
+
+        etPostal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!etPostal.getText().toString().isEmpty()){
+                    ((TextInputLayout)etPostal.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity)getActivity()).dropOffAddr.setPostalCode(etPostal.getText().toString());
+                }
+            }
+        });
+
+        etUnit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!etUnit.getText().toString().isEmpty()){
+                    ((TextInputLayout)etUnit.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity)getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
+                }
+            }
+        });
+
+        mAutocompleteView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!mAutocompleteView.getText().toString().isEmpty()){
+                    ((TextInputLayout)mAutocompleteView.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity)getActivity()).dropOffAddr.setStreetName(mAutocompleteView.getText().toString());
+                }
+            }
+        });
     }
 
 
@@ -175,7 +259,7 @@ public class DestinationFragment extends Fragment {
         String city = etCity.getText().toString();
         ((NewBookingActivity)getActivity()).dropOffAddr.setCity(city);
         if(city.isEmpty()){
-            ((TextInputLayout)etCity.getParent()).setError(getString(R.string.err_city_empty));
+            ((TextInputLayout)etCity.getParent()).setError(getString(R.string.required));
             return false;
         }
         else if(!Constant.citiesInVan.contains(city.toUpperCase())){
@@ -193,7 +277,7 @@ public class DestinationFragment extends Fragment {
         ((NewBookingActivity)getActivity()).dropOffAddr.setPostalCode(zip);
 
         if(zip.isEmpty()){
-            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.err_post_empty));
+            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.required));
             return false;
         }
 
