@@ -228,7 +228,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
             return false;
         } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
-            ((TextInputLayout) etCity.getParent()).setError(city + getString(R.string.err_not_in_van));
+            ((TextInputLayout) etCity.getParent()).setError(getString(R.string.err_not_in_van));
             return false;
         } else {
             ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);

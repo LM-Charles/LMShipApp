@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +20,11 @@ import lmdelivery.longmen.com.android.R;
  * create an instance of this fragment.
  */
 public class SummaryFragment extends Fragment {
+
+    private TextView tvPickup;
+    private TextView tvDropoff;
+    private TextView tvTime;
+    private TextView tvPackage;
 
     /**
      * Use this factory method to create a new instance of
@@ -41,32 +49,58 @@ public class SummaryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_summary, container, false);
-        TextView tvPickup = (TextView) view.findViewById(R.id.tv_pickup_addr);
-        TextView tvDropoff = (TextView) view.findViewById(R.id.tv_dropoff_addr);
-        TextView tvTime = (TextView) view.findViewById(R.id.tv_pickup_time);
-        TextView tvPackage = (TextView) view.findViewById(R.id.tv_package_info);
-        NewBookingActivity newBookingActivity = ((NewBookingActivity) getActivity());
+    public void onResume() {
+        super.onResume();
 
-        if(newBookingActivity.pickupFragment.saveAndValidate()){
+    }
+
+    public void setupView(){
+        NewBookingActivity newBookingActivity = ((NewBookingActivity) getActivity());
+        if (newBookingActivity.pickupFragment.saveAndValidate()) {
             tvPickup.setText(newBookingActivity.pickupAddr.buildFullAddress());
-        }else{
+        } else {
             tvPickup.setText("Pick up address invalid");
         }
 
-        if(newBookingActivity.dropOffFragment.saveAndValidate()){
+        if (newBookingActivity.dropOffFragment.saveAndValidate()) {
             tvDropoff.setText(newBookingActivity.dropOffAddr.buildFullAddress());
-        }else{
+        } else {
             tvDropoff.setText("Drop off address invalid");
         }
 
-        if(newBookingActivity.selectedTime!=null){
-            tvTime.setText(newBookingActivity.selectedTime.isToday() ? "Today" : "Tomorrow" + " " + getResources().getStringArray(R.array.time_interval_array)[newBookingActivity.selectedTime.getTimeCatergory()]);
+        if(newBookingActivity.packageFragment.validateAllPackage()){
+            tvPackage.setText(buildPackageString());
         }else{
+            tvPackage.setText("Package info is invalid");
+        }
+
+        if (newBookingActivity.selectedTime != null) {
+            tvTime.setText(newBookingActivity.selectedTime.isToday() ? "Today" : "Tomorrow" + " " + getResources().getStringArray(R.array.time_interval_array)[newBookingActivity.selectedTime.getTimeCatergory()]);
+        } else {
             tvTime.setText("Pickup time not selected");
         }
+    }
+
+    private String buildPackageString(){
+        ArrayList<MyPackage> myPackageArrayList = ((NewBookingActivity) getActivity()).myPackageArrayList;
+        String result = "";
+        for(int i = 0; i < myPackageArrayList.size(); i++){
+            if(!result.isEmpty())
+                result += "\n\n";
+            result += "Box " + (i+1) + ":\n" + myPackageArrayList.get(i).toString();
+        }
+        return result;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_summary, container, false);
+        tvPickup = (TextView) view.findViewById(R.id.tv_pickup_addr);
+        tvDropoff = (TextView) view.findViewById(R.id.tv_dropoff_addr);
+        tvTime = (TextView) view.findViewById(R.id.tv_pickup_time);
+        tvPackage = (TextView) view.findViewById(R.id.tv_package_info);
+
 
         return view;
     }

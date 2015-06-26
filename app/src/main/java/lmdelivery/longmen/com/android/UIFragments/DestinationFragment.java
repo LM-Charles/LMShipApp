@@ -1,22 +1,20 @@
 package lmdelivery.longmen.com.android.UIFragments;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,13 +25,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -63,8 +65,10 @@ public class DestinationFragment extends Fragment {
 
     private EditText etUnit, etPostal, etCity, etProvince;
     private Spinner spinner;
-    private CardView cardView;
-    private TextInputLayout tilAddress;
+
+    private static View rootView;
+    private GoogleMap mMap;
+    private FrameLayout mapView;
 
     /**
      * Use this factory method to create a new instance of
@@ -84,7 +88,7 @@ public class DestinationFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 //        Logger.e(TAG, "onResume");
     }
@@ -98,129 +102,159 @@ public class DestinationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        Logger.e(TAG, "onCreateView");
-        View rootView = inflater.inflate(R.layout.fragment_destination, container, false);
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null)
+                parent.removeView(rootView);
+        }
+        try {
+            rootView = inflater.inflate(R.layout.fragment_destination, container, false);
 
-        spinner = (Spinner) rootView.findViewById(R.id.spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.dropoff_country_array, android.R.layout.simple_spinner_item);
+            spinner = (Spinner) rootView.findViewById(R.id.spinner);
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dropoff_country_array, R.layout.spinner_item);
 
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+            // Apply the adapter to the spinner
+            spinner.setAdapter(adapter);
 
-        // Retrieve the AutoCompleteTextView that will display Place suggestions.
-        mAutocompleteView = (AutoCompleteTextView) rootView.findViewById(R.id.to_autocomplete_places);
-        etPostal = (EditText) rootView.findViewById(R.id.et_to_postal);
-        etCity = (EditText) rootView.findViewById(R.id.et_to_city);
-        etUnit = (EditText) rootView.findViewById(R.id.et_to_unit);
-        etProvince = (EditText) rootView.findViewById(R.id.et_to_province);
-        cardView = (CardView) rootView.findViewById(R.id.card_to);
-        tilAddress = (TextInputLayout) rootView.findViewById(R.id.til_address);
+            // Retrieve the AutoCompleteTextView that will display Place suggestions.
+            mAutocompleteView = (AutoCompleteTextView) rootView.findViewById(R.id.to_autocomplete_places);
+            etPostal = (EditText) rootView.findViewById(R.id.et_to_postal);
+            etCity = (EditText) rootView.findViewById(R.id.et_to_city);
+            etUnit = (EditText) rootView.findViewById(R.id.et_to_unit);
+            etProvince = (EditText) rootView.findViewById(R.id.et_to_province);
+            mapView = (FrameLayout) rootView.findViewById(R.id.map_view);
 
-
-        // Register a listener that receives callbacks when a suggestion has been selected
-        mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+            // Register a listener that receives callbacks when a suggestion has been selected
+            mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
 
 
-        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-        // the entire world.
-        Set<Integer> filterTypes = new HashSet<>();
-        filterTypes.add(Place.TYPE_STREET_ADDRESS);
-        mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_CANADA, null);//AutocompleteFilter.create(filterTypes));
-        mAutocompleteView.setAdapter(mAdapter);
-        setUpTextLinstener();
-        // Inflate the layout for this fragment
+            // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+            // the entire world.
+            Set<Integer> filterTypes = new HashSet<>();
+            filterTypes.add(Place.TYPE_STREET_ADDRESS);
+            mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_CANADA, null);//AutocompleteFilter.create(filterTypes));
+            mAutocompleteView.setAdapter(mAdapter);
+            setUpTextLinsener();
+            setUpMapIfNeeded();
+        } catch (InflateException e) {
+            /* map is already there, just return view as it is */
+        }
         return rootView;
     }
 
-    private void setUpTextLinstener(){
+    private void setUpMapIfNeeded() {
+        if (mMap == null) {
+            final SupportMapFragment mMapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
+            // Try to obtain the map from the SupportMapFragment.
+            mMapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    mMap = googleMap;
+                }
+            });
+        }
+    }
+
+    private void setUpTextLinsener() {
         etProvince.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!etProvince.getText().toString().isEmpty()){
-                    ((TextInputLayout)etProvince.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity)getActivity()).dropOffAddr.setProvince(etProvince.getText().toString());
+                if (!etProvince.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etProvince.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(etProvince.getText().toString());
                 }
             }
         });
 
         etCity.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!etCity.getText().toString().isEmpty()){
-                    ((TextInputLayout)etCity.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity)getActivity()).dropOffAddr.setCity(etCity.getText().toString());
+                if (!etCity.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setCity(etCity.getText().toString());
                 }
             }
         });
 
         etPostal.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!etPostal.getText().toString().isEmpty()){
-                    ((TextInputLayout)etPostal.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity)getActivity()).dropOffAddr.setPostalCode(etPostal.getText().toString());
+                if (!etPostal.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(etPostal.getText().toString());
                 }
             }
         });
 
         etUnit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!etUnit.getText().toString().isEmpty()){
-                    ((TextInputLayout)etUnit.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity)getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
+                if (!etUnit.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etUnit.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
                 }
             }
         });
 
         mAutocompleteView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!mAutocompleteView.getText().toString().isEmpty()){
-                    ((TextInputLayout)mAutocompleteView.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity)getActivity()).dropOffAddr.setStreetName(mAutocompleteView.getText().toString());
+                if (!mAutocompleteView.getText().toString().isEmpty()) {
+                    ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(mAutocompleteView.getText().toString());
                 }
             }
         });
     }
 
 
-    public boolean saveAndValidate(){
-        ((NewBookingActivity)getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
-        ((NewBookingActivity)getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
+    public boolean saveAndValidate() {
+        ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
+        ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
         boolean cityValid = validateDropoffCity();
         boolean postValid = validatePostalCode();
         boolean streetValid = validateStreet();
@@ -228,56 +262,49 @@ public class DestinationFragment extends Fragment {
         return cityValid && postValid && streetValid && provinceValid;
     }
 
-    private boolean validateProvince(){
+    private boolean validateProvince() {
         String province = etProvince.getText().toString();
-        ((NewBookingActivity)getActivity()).dropOffAddr.setProvince(province);
-        if(province.isEmpty()){
-            ((TextInputLayout)etProvince.getParent()).setError(getString(R.string.required));
+        ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(province);
+        if (province.isEmpty()) {
+            ((TextInputLayout) etProvince.getParent()).setError(getString(R.string.required));
             return false;
-        }
-        else {
-            ((TextInputLayout)etProvince.getParent()).setErrorEnabled(false);
+        } else {
+            ((TextInputLayout) etProvince.getParent()).setErrorEnabled(false);
             return true;
         }
     }
 
 
-    private boolean validateStreet(){
+    private boolean validateStreet() {
         String street = mAutocompleteView.getText().toString();
-        ((NewBookingActivity)getActivity()).dropOffAddr.setStreetName(street);
-        if(street.isEmpty()){
-            ((TextInputLayout)mAutocompleteView.getParent()).setError(getString(R.string.required));
+        ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(street);
+        if (street.isEmpty()) {
+            ((TextInputLayout) mAutocompleteView.getParent()).setError(getString(R.string.required));
             return false;
-        }
-        else {
-            ((TextInputLayout)mAutocompleteView.getParent()).setErrorEnabled(false);
+        } else {
+            ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
             return true;
         }
     }
 
-    private boolean validateDropoffCity(){
+    private boolean validateDropoffCity() {
         String city = etCity.getText().toString();
-        ((NewBookingActivity)getActivity()).dropOffAddr.setCity(city);
-        if(city.isEmpty()){
-            ((TextInputLayout)etCity.getParent()).setError(getString(R.string.required));
+        ((NewBookingActivity) getActivity()).dropOffAddr.setCity(city);
+        if (city.isEmpty()) {
+            ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
             return false;
-        }
-        else if(!Constant.citiesInVan.contains(city.toUpperCase())){
-            ((TextInputLayout)etCity.getParent()).setError(city + getString(R.string.err_not_in_van));
-            return false;
-        }
-        else {
-            ((TextInputLayout)etCity.getParent()).setErrorEnabled(false);
+        }  else {
+            ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
             return true;
         }
     }
 
-    private boolean validatePostalCode(){
+    private boolean validatePostalCode() {
         String zip = etPostal.getText().toString();
-        ((NewBookingActivity)getActivity()).dropOffAddr.setPostalCode(zip);
+        ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(zip);
 
-        if(zip.isEmpty()){
-            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.required));
+        if (zip.isEmpty()) {
+            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
             return false;
         }
 
@@ -286,11 +313,11 @@ public class DestinationFragment extends Fragment {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(zip);
 
-        if(!matcher.matches()){
-            ((TextInputLayout)etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+        if (!matcher.matches()) {
+            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
             return false;
-        }else{
-            ((TextInputLayout)etPostal.getParent()).setErrorEnabled(false);
+        } else {
+            ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
             return true;
         }
     }
@@ -329,12 +356,12 @@ public class DestinationFragment extends Fragment {
         }
     };
 
-    private void getPlaceDetailById(String placeID,boolean isChinese) {
+    private void getPlaceDetailById(String placeID, boolean isChinese) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
         url += placeID + "&key=" + Constant.GOOGLE_PLACE_API_SERVER_KEY;
-        if(isChinese)
+        if (isChinese)
             url += "&language=zh-CN";
 
         Logger.e(TAG, url);
@@ -345,6 +372,28 @@ public class DestinationFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
                         Log.e(TAG, "Response is: " + response.toString());
+                        try{
+                            JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                            String lat = location.getString("lat");
+                            String lng = location.getString("lng");
+                            if(lat!=null && lng !=null && !lat.isEmpty() && !lng.isEmpty()){
+                                try{
+                                    Double dLat = Double.parseDouble(lat);
+                                    Double dLng = Double.parseDouble(lng);
+                                    LatLng latLng = new LatLng(dLat, dLng);
+                                    if(mMap!=null){
+                                        mapView.setVisibility(View.VISIBLE);
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                        mMap.addMarker(new MarkerOptions().position(latLng));
+                                    }
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         try {
                             JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
                             String streetNumber = "", streetName = "", city = "", province = "", country = "", post = "", adminLevel2 = "", countryCode = "";
@@ -356,37 +405,40 @@ public class DestinationFragment extends Fragment {
                                     Logger.e(TAG, typeArr.get(0).toString());
                                 if (typeArr.length() > 0) {
                                     String type = typeArr.get(0).toString();
-                                    if(type.equals("administrative_area_level_2")){
+                                    if (type.equals("administrative_area_level_2")) {
                                         adminLevel2 = component.getString("long_name");
-                                    }
-                                    else if(type.equals("street_number")){
+                                    } else if (type.equals("street_number")) {
                                         streetNumber = component.getString("long_name");
-                                    }
-                                    else if(type.equals("route")){
+                                    } else if (type.equals("route")) {
                                         streetName = component.getString("long_name");
-                                    }else if(type.equals("locality")){
+                                    } else if (type.equals("locality")) {
                                         city = component.getString("long_name");
-                                    }else if(type.equals("administrative_area_level_1")){
+                                    } else if (type.equals("administrative_area_level_1")) {
                                         province = component.getString("short_name");
-                                    }else if(type.equals("country")){
+                                    } else if (type.equals("country")) {
                                         country = component.getString("long_name");
                                         countryCode = component.getString("short_name");
-                                    }else if(type.equals("postal_code_prefix")){
+                                    } else if (type.equals("postal_code_prefix")) {
                                         post = component.getString("long_name");
-                                    }else if(type.equals("postal_code")){
+                                    } else if (type.equals("postal_code")) {
                                         post = component.getString("long_name");
                                     }
                                 }
                             }
 
-                            if(!countryCode.equalsIgnoreCase("CN") && !countryCode.equalsIgnoreCase("CA")){
+                            if (!countryCode.equalsIgnoreCase("CN") && !countryCode.equalsIgnoreCase("CA")) {
                                 Toast.makeText(getActivity(), "We only support shipping to Canada or China for now", Toast.LENGTH_SHORT).show();
-                            }else{
+                            } else {
+                                if(countryCode.equalsIgnoreCase("CN")){
+                                    spinner.setSelection(1,true);
+                                }else{
+                                    spinner.setSelection(0,true);
+                                }
                                 etPostal.setText(post);
                                 etCity.setText(city);
                                 etProvince.setText(province);
                                 mAutocompleteView.setAdapter(null);
-                                mAutocompleteView.setText(((streetNumber.isEmpty())?"":(streetNumber + " ")) + ((streetName.isEmpty())?"":streetName));
+                                mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
                                 mAutocompleteView.setAdapter(mAdapter);
                             }
                         } catch (JSONException e) {

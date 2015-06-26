@@ -3,6 +3,11 @@ package lmdelivery.longmen.com.android.UIFragments.bean;
 /**
  * Created by Kaiyu on 2015-06-16.
  */
+
+import android.content.res.Resources;
+
+import lmdelivery.longmen.com.android.MyApplication;
+import lmdelivery.longmen.com.android.R;
 public class MyPackage {
     public static final int SMALL_BOX = 0;
     public static final int MED_BOX = 1;
@@ -25,7 +30,25 @@ public class MyPackage {
     }
 
     @Override public String toString(){
-        return "l w h: " + length + " " + width + " " + height + "box size: " + boxSize;
+        if(isOwnBox){
+            Resources resources = MyApplication.getAppContext().getResources();
+            return resources.getString(R.string.length) + ": " + length + "  " + resources.getString(R.string.width) + ": " + width + "\n" +
+                    resources.getString(R.string.height) + ": " + height + "  " + resources.getString(R.string.weight) + ": " + weight;
+        }else{
+            String strBoxSize = "";
+            switch (boxSize){
+                case SMALL_BOX:
+                    strBoxSize = "Small Box";
+                    break;
+                case MED_BOX:
+                    strBoxSize = "Medium Box";
+                    break;
+                case BIG_BOX:
+                    strBoxSize = "Big Box";
+                    break;
+            }
+            return "Longmen " + strBoxSize + " ($5)";
+        }
     }
 
     public boolean isShowValidation() {

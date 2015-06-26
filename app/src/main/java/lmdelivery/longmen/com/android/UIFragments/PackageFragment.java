@@ -26,7 +26,6 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
-import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.widget.TypefaceTextView;
 
 
@@ -309,8 +308,10 @@ public class PackageFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    myPackage.setHeight(holder.etHeight.getText().toString());
-                    //((NewBookingActivity)getActivity()).myPackageArrayList.set(position,myPackage);
+                    if(!holder.etHeight.getText().toString().isEmpty()) {
+                        ((TextInputLayout) holder.etHeight.getParent()).setErrorEnabled(false);
+                        myPackage.setHeight(holder.etHeight.getText().toString());
+                    }
                 }
             });
 
@@ -323,8 +324,11 @@ public class PackageFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    myPackage.setLength(holder.etLength.getText().toString());
-//                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
+                    if(!holder.etLength.getText().toString().isEmpty()) {
+                        ((TextInputLayout) holder.etLength.getParent()).setErrorEnabled(false);
+                        myPackage.setLength(holder.etLength.getText().toString());
+                    }
+
                 }
             });
 
@@ -337,8 +341,10 @@ public class PackageFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    myPackage.setWeight(holder.etWeight.getText().toString());
-//                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
+                    if(!holder.etWeight.getText().toString().isEmpty()) {
+                        ((TextInputLayout) holder.etWeight.getParent()).setErrorEnabled(false);
+                        myPackage.setWeight(holder.etWeight.getText().toString());
+                    }
                 }
             });
 
@@ -351,8 +357,10 @@ public class PackageFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    myPackage.setWidth(holder.etWidth.getText().toString());
-//                    ((NewBookingActivity)getActivity()).myPackageArrayList.set(position, myPackage);
+                    if(!holder.etWidth.getText().toString().isEmpty()) {
+                        ((TextInputLayout) holder.etWidth.getParent()).setErrorEnabled(false);
+                        myPackage.setWidth(holder.etWidth.getText().toString());
+                    }
                 }
             });
 

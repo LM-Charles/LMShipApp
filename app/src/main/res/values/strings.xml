@@ -41,7 +41,7 @@
     <string name="small_box">Small Box</string>
     <string name="can_only_pick_up_in_van">We can only pick up address in Great Vancouver for now</string>
     <string name="err_city_empty">City cannot be empty</string>
-    <string name="err_not_in_van">" is not in great vancouver area"</string>
+    <string name="err_not_in_van">"We can only pickup in great vancouver area for now"</string>
     <string name="err_post_empty">Postal Code cannot be empty</string>
     <string name="err_post_wrong_format">Postal format:\nV6X 0A5</string>
     <string name="err_street_empty">Street is empty</string>
