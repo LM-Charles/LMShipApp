@@ -38,13 +38,13 @@ public class MyPackage {
             String strBoxSize = "";
             switch (boxSize){
                 case SMALL_BOX:
-                    strBoxSize = "Small Box";
+                    strBoxSize = MyApplication.getAppContext().getString(R.string.small_box);
                     break;
                 case MED_BOX:
-                    strBoxSize = "Medium Box";
+                    strBoxSize = MyApplication.getAppContext().getString(R.string.med_box);
                     break;
                 case BIG_BOX:
-                    strBoxSize = "Big Box";
+                    strBoxSize = MyApplication.getAppContext().getString(R.string.big_box);
                     break;
             }
             return "Longmen " + strBoxSize + " ($5)";

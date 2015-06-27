@@ -9,9 +9,6 @@
                 <color android:color="@color/time_selected" />
             </item>
 
-            <item android:state_activated="true">
-                <color android:color="@color/time_ripple" />
-            </item>
 
             <item>
                 <color android:color="@color/window_background" />

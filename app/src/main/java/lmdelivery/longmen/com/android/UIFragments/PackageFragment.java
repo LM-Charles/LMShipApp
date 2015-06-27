@@ -266,7 +266,11 @@ public class PackageFragment extends Fragment {
                     }
                 }
             });
-            
+
+            holder.rbBig.setClickable(false);
+            holder.rbMed.setClickable(false);
+            holder.rbSmall.setClickable(false);
+
             holder.rlBigBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

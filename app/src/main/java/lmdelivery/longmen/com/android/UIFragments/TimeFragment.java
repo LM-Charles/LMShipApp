@@ -7,7 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import java.util.List;
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
+import lmdelivery.longmen.com.android.util.Logger;
 
 /**
  * A fragment representing a list of Items.
@@ -31,8 +34,8 @@ import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
 
 public class TimeFragment extends Fragment {
 
+    private static final java.lang.String TAG = TimeFragment.class.getName();
     private OnTimeSelectedListener mListener;
-
 
 
     public static TimeFragment newInstance() {
@@ -73,7 +76,7 @@ public class TimeFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new TimeRecyclerViewAdapter( buildAvailableTimeArray()));
+        recyclerView.setAdapter(new TimeRecyclerViewAdapter(buildAvailableTimeArray()));
     }
 
     private ArrayList<MyTime> buildAvailableTimeArray() {
@@ -109,18 +112,18 @@ public class TimeFragment extends Fragment {
 
 
         if (now.compareTo(startOfFirstInterval) == -1) {
-            i=0;
+            i = 0;
         } else if (now.compareTo(startOfSecondInterval) == -1) {
-            i=1;
+            i = 1;
         } else if (now.compareTo(startOfThirdInterval) == -1) {
-            i=2;
+            i = 2;
         } else if (now.compareTo(startOfForthInterval) == -1) {
-            i=3;
+            i = 3;
         } else {
-            i=4;
+            i = 4;
         }
 
-        while(i < 4) {
+        while (i < 4) {
             MyTime myTime = new MyTime(timeSlots[i], i, true);
             myTimes.add(myTime);
             i++;
@@ -222,11 +225,12 @@ public class TimeFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder,final int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.time.setText(getResources().getStringArray(R.array.time_interval_array)[mValues.get(position).getTimeCatergory()]);
             holder.date.setText(mValues.get(position).isToday() ? "Today" : "Tomorrow");
 
-            if(mValues.get(position).equals(((NewBookingActivity)getActivity()).selectedTime))
+
+            if (mValues.get(position).equals(((NewBookingActivity) getActivity()).selectedTime))
                 holder.mView.setSelected(true);
             else
                 holder.mView.setSelected(false);
@@ -241,12 +245,29 @@ public class TimeFragment extends Fragment {
                     }
                 }
             });
-
         }
 
         @Override
         public int getItemCount() {
             return mValues.size();
         }
+
+        private void selectButton(View view, int startX, int startY, int position) {
+            Logger.e(TAG, "Selecting " + position);
+            if (null != mListener) {
+                mListener.onTimeSelected(mValues.get(position));
+            }
+            view.setSelected(true);
+
+
+            ViewAnimationUtils.createCircularReveal(view,
+                    startX,
+                    startY,
+                    0,
+                    view.getWidth()).start();
+
+        }
     }
+
+
 }

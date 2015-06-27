@@ -24,4 +24,5 @@
     <dimen name="box_icon_width">36dp</dimen>
     <dimen name="box_type_font_size">18sp</dimen>
     <dimen name="box_dimention_font_size">12sp</dimen>
+    <dimen name="box_item_height">54dp</dimen>
 </resources>
