@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -241,7 +240,7 @@ public class TimeFragment extends Fragment {
                     if (null != mListener) {
                         mListener.onTimeSelected(mValues.get(position));
                         holder.mView.setSelected(true);
-                        notifyDataSetChanged();
+                        notifyItemRangeChanged(0,mValues.size());
                     }
                 }
             });

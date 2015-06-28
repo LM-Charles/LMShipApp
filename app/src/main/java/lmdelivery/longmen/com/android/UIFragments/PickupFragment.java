@@ -66,6 +66,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     private EditText etUnit, etPostal, etCity;
     private GoogleMap mMap;
     private FrameLayout mapView;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -202,11 +203,14 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
     public boolean saveAndValidate() {
-        ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
-        boolean cityValid = validatePickupCity();
-        boolean postValid = validatePostalCode();
-        boolean streetValid = validateStreet();
-        return cityValid && postValid && streetValid;
+        if (isAdded()) {
+            ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
+            boolean cityValid = validatePickupCity();
+            boolean postValid = validatePostalCode();
+            boolean streetValid = validateStreet();
+            return cityValid && postValid && streetValid;
+        }
+        return false;
     }
 
     private boolean validateStreet() {
@@ -222,40 +226,48 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
     private boolean validatePickupCity() {
-        String city = etCity.getText().toString();
-        ((NewBookingActivity) getActivity()).pickupAddr.setCity(city);
-        if (city.isEmpty()) {
-            ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
-            return false;
-        } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
-            ((TextInputLayout) etCity.getParent()).setError(getString(R.string.err_not_in_van));
-            return false;
-        } else {
-            ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
-            return true;
+        if(isAdded()) {
+            String city = etCity.getText().toString();
+            ((NewBookingActivity) getActivity()).pickupAddr.setCity(city);
+            if (city.isEmpty()) {
+                ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
+                return false;
+            } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
+                ((TextInputLayout) etCity.getParent()).setError(getString(R.string.err_not_in_van));
+                return false;
+            } else {
+                ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
+                return true;
+            }
         }
+        else
+            return false;
     }
 
     private boolean validatePostalCode() {
-        String zip = etPostal.getText().toString();
-        ((NewBookingActivity) getActivity()).pickupAddr.setPostalCode(zip);
+        if(isAdded()) {
+            String zip = etPostal.getText().toString();
+            ((NewBookingActivity) getActivity()).pickupAddr.setPostalCode(zip);
 
-        if (zip.isEmpty()) {
-            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
+            if (zip.isEmpty()) {
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
+                return false;
+            }
+
+            String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+
+            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(zip);
+
+            if (!matcher.matches()) {
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+                return false;
+            } else {
+                ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
+                return true;
+            }
+        }else{
             return false;
-        }
-
-        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(zip);
-
-        if (!matcher.matches()) {
-            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
-            return false;
-        } else {
-            ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
-            return true;
         }
     }
 
@@ -303,75 +315,77 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                     @Override
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
-                        Log.e(TAG, "Response is: " + response.toString());
-                        try{
-                            JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
-                            String lat = location.getString("lat");
-                            String lng = location.getString("lng");
-                            if(lat!=null && lng !=null && !lat.isEmpty() && !lng.isEmpty()){
-                                try{
-                                    Double dLat = Double.parseDouble(lat);
-                                    Double dLng = Double.parseDouble(lng);
-                                    LatLng latLng = new LatLng(dLat, dLng);
-                                    if(mMap!=null){
-                                        mapView.setVisibility(View.VISIBLE);
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                        mMap.addMarker(new MarkerOptions().position(latLng));
-                                    }
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            }
-                        }catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
-                            String streetNumber = "", streetName = "", city = "", province = "", country = "", post = "", adminLevel2 = "";
-                            for (int i = 0; i < addrComponentArr.length(); i++) {
-
-                                JSONObject component = ((JSONObject) addrComponentArr.get(i));
-                                JSONArray typeArr = component.getJSONArray("types");
-                                Logger.e(TAG, typeArr.get(0).toString());
-                                if (typeArr.length() > 0) {
-
-                                    String type = typeArr.get(0).toString();
-                                    if (type.equals("administrative_area_level_2")) {
-                                        adminLevel2 = component.getString("long_name");
-                                    } else if (type.equals("street_number")) {
-                                        streetNumber = component.getString("long_name");
-                                    } else if (type.equals("route")) {
-                                        streetName = component.getString("long_name");
-                                    } else if (type.equals("locality")) {
-                                        city = component.getString("long_name");
-                                    } else if (type.equals("administrative_area_level_1")) {
-                                        province = component.getString("long_name");
-                                    } else if (type.equals("country")) {
-                                        country = component.getString("long_name");
-                                    } else if (type.equals("postal_code_prefix")) {
-                                        post = component.getString("long_name");
-                                    } else if (type.equals("postal_code")) {
-                                        post = component.getString("long_name");
+                        if (isAdded()) {
+                            Log.e(TAG, "Response is: " + response.toString());
+                            try {
+                                JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                                String lat = location.getString("lat");
+                                String lng = location.getString("lng");
+                                if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
+                                    try {
+                                        Double dLat = Double.parseDouble(lat);
+                                        Double dLng = Double.parseDouble(lng);
+                                        LatLng latLng = new LatLng(dLat, dLng);
+                                        if (mMap != null && mapView != null) {
+                                            mapView.setVisibility(View.VISIBLE);
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                            mMap.addMarker(new MarkerOptions().position(latLng));
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
                                 }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
-                            if (!adminLevel2.equals("Greater Vancouver")) {
-                                Toast.makeText(getActivity(), getActivity().getString(R.string.can_only_pick_up_in_van), Toast.LENGTH_SHORT).show();
-                            } else {
-                                etPostal.setText(post);
-                                etCity.setText(city);
-                                mAutocompleteView.setAdapter(null);
-                                mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
-                                mAutocompleteView.setAdapter(mAdapter);
+                            try {
+                                JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
+                                String streetNumber = "", streetName = "", city = "", province = "", country = "", post = "", adminLevel2 = "";
+                                for (int i = 0; i < addrComponentArr.length(); i++) {
+
+                                    JSONObject component = ((JSONObject) addrComponentArr.get(i));
+                                    JSONArray typeArr = component.getJSONArray("types");
+                                    Logger.e(TAG, typeArr.get(0).toString());
+                                    if (typeArr.length() > 0) {
+
+                                        String type = typeArr.get(0).toString();
+                                        if (type.equals("administrative_area_level_2")) {
+                                            adminLevel2 = component.getString("long_name");
+                                        } else if (type.equals("street_number")) {
+                                            streetNumber = component.getString("long_name");
+                                        } else if (type.equals("route")) {
+                                            streetName = component.getString("long_name");
+                                        } else if (type.equals("locality")) {
+                                            city = component.getString("long_name");
+                                        } else if (type.equals("administrative_area_level_1")) {
+                                            province = component.getString("long_name");
+                                        } else if (type.equals("country")) {
+                                            country = component.getString("long_name");
+                                        } else if (type.equals("postal_code_prefix")) {
+                                            post = component.getString("long_name");
+                                        } else if (type.equals("postal_code")) {
+                                            post = component.getString("long_name");
+                                        }
+                                    }
+                                }
+
+                                if (!Constant.citiesInVan.contains(city.toUpperCase())) {
+                                    Toast.makeText(getActivity(), getActivity().getString(R.string.can_only_pick_up_in_van), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    etPostal.setText(post);
+                                    etCity.setText(city);
+                                    mAutocompleteView.setAdapter(null);
+                                    mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
+                                    mAutocompleteView.setAdapter(mAdapter);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override

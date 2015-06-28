@@ -253,13 +253,16 @@ public class DestinationFragment extends Fragment {
 
 
     public boolean saveAndValidate() {
-        ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
-        ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
-        boolean cityValid = validateDropoffCity();
-        boolean postValid = validatePostalCode();
-        boolean streetValid = validateStreet();
-        boolean provinceValid = validateProvince();
-        return cityValid && postValid && streetValid && provinceValid;
+        if(isAdded()) {
+            ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
+            ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
+            boolean cityValid = validateDropoffCity();
+            boolean postValid = validatePostalCode();
+            boolean streetValid = validateStreet();
+            boolean provinceValid = validateProvince();
+            return cityValid && postValid && streetValid && provinceValid;
+        }else
+            return false;
     }
 
     private boolean validateProvince() {
@@ -276,50 +279,61 @@ public class DestinationFragment extends Fragment {
 
 
     private boolean validateStreet() {
-        String street = mAutocompleteView.getText().toString();
-        ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(street);
-        if (street.isEmpty()) {
-            ((TextInputLayout) mAutocompleteView.getParent()).setError(getString(R.string.required));
+        if(isAdded()) {
+            String street = mAutocompleteView.getText().toString();
+            ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(street);
+            if (street.isEmpty()) {
+                ((TextInputLayout) mAutocompleteView.getParent()).setError(getString(R.string.required));
+                return false;
+            } else {
+                ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
+                return true;
+            }
+        }else {
             return false;
-        } else {
-            ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
-            return true;
         }
     }
 
     private boolean validateDropoffCity() {
-        String city = etCity.getText().toString();
-        ((NewBookingActivity) getActivity()).dropOffAddr.setCity(city);
-        if (city.isEmpty()) {
-            ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
-            return false;
-        }  else {
-            ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
-            return true;
+        if(isAdded()) {
+            String city = etCity.getText().toString();
+            ((NewBookingActivity) getActivity()).dropOffAddr.setCity(city);
+            if (city.isEmpty()) {
+                ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
+                return false;
+            } else {
+                ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
+                return true;
+            }
         }
+        return false;
     }
 
     private boolean validatePostalCode() {
-        String zip = etPostal.getText().toString();
-        ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(zip);
+        if(isAdded()) {
+            String zip = etPostal.getText().toString();
+            ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(zip);
 
-        if (zip.isEmpty()) {
-            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
-            return false;
+            if (zip.isEmpty()) {
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
+                return false;
+            }
+
+            String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+
+            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(zip);
+
+            if (!matcher.matches()) {
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+                return false;
+            } else {
+                ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
+                return true;
+            }
         }
-
-        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(zip);
-
-        if (!matcher.matches()) {
-            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+        else
             return false;
-        } else {
-            ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
-            return true;
-        }
     }
 
 

@@ -44,7 +44,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public TimeFragment timeFragment;
     public SummaryFragment summaryFragment;
 
-
+    public FloatingActionButton fab;
+    private ViewPager viewPager;
     public ArrayList<MyPackage> myPackageArrayList;
 
     public MyTime selectedTime;
@@ -62,6 +63,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_booking);
 
+        init();
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, 0 /* clientId */, this)
                 .addApi(Places.GEO_DATA_API)
@@ -70,10 +73,12 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         final ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
@@ -82,13 +87,21 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_trans_dot);
+        tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_trans_dot);
+        tabLayout.getTabAt(Constant.TAB_SUMMARY).setIcon(R.drawable.shape_trans_dot);
+        tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_trans_dot);
+        tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_trans_dot);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if(tab.getPosition()==Constant.TAB_SUMMARY){
-                    summaryFragment.setupView();
+                if (tab.getPosition() == Constant.TAB_SUMMARY) {
+                    setupDoneFab();
+                } else {
+                    setupNextFab();
                 }
+
             }
 
             @Override
@@ -120,7 +133,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         break;
 
                     case Constant.TAB_TIME:
-                        if (selectedTime!=null) {
+                        if (selectedTime != null) {
                             tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_greendot);
                         } else {
                             tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_reddot);
@@ -136,7 +149,33 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        setupNextFab();
+
+    }
+
+    private void setupDoneFab(){
+
+        if(summaryFragment.setupView()) {
+            fab.setImageResource(R.drawable.ic_done);
+            fab.setBackgroundTintList(getResources().getColorStateList(R.color.done_state_list));
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
+        else{
+            fab.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupNextFab(){
+
+        fab.setVisibility(View.VISIBLE);
+        fab.setImageResource(R.drawable.ic_arrow_forward_white_36dp);
+        fab.setBackgroundTintList(getResources().getColorStateList(R.color.normal_state_list));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,8 +203,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 }
             }
         });
-
-        init();
     }
 
     private void init() {

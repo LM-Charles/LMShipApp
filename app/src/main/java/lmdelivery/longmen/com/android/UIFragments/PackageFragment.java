@@ -11,13 +11,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -78,11 +78,20 @@ public class PackageFragment extends Fragment {
     }
 
     public boolean validateAllPackage(){
+
+        if(getActivity()== null || ((NewBookingActivity) getActivity()).myPackageArrayList==null){
+            return false;
+        }
+
         ArrayList<MyPackage> myPackages = ((NewBookingActivity) getActivity()).myPackageArrayList;
         boolean result = true;
         for(int i = 0; i < myPackages.size(); i++){
             MyPackage myPackage = myPackages.get(i);
             if(myPackage.isOwnBox() && (myPackage.getHeight().isEmpty() || myPackage.getLength().isEmpty() || myPackage.getWeight().isEmpty() || myPackage.getWidth().isEmpty())) {
+                myPackage.setShowValidation(true);
+                mAdapter.notifyDataSetChanged();
+                result = false;
+            }else if(!myPackage.isOwnBox() && myPackage.getWeight().isEmpty()){
                 myPackage.setShowValidation(true);
                 mAdapter.notifyDataSetChanged();
                 result = false;
@@ -103,7 +112,7 @@ public class PackageFragment extends Fragment {
             public final LinearLayout llLmBox;
             public final LinearLayout llOwnBox;
             public final RelativeLayout rlSmallBox, rlMedBox, rlBigBox;
-            public final Switch aSwitch;
+            public final CheckBox checkBox;
             public final RadioButton rbSmall, rbMed, rbBig;
             public final EditText etLength, etWidth, etHeight, etWeight;
             public final Spinner spinner;
@@ -120,7 +129,7 @@ public class PackageFragment extends Fragment {
                 rlMedBox = (RelativeLayout) view.findViewById(R.id.rl_med_box);
                 rlBigBox = (RelativeLayout) view.findViewById(R.id.rl_big_box);
                 
-                aSwitch = (Switch) view.findViewById(R.id.switch1);
+                checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 
                 rbSmall = (RadioButton) view.findViewById(R.id.rb_small_box);
                 rbMed = (RadioButton) view.findViewById(R.id.rb_med_box);
@@ -145,9 +154,13 @@ public class PackageFragment extends Fragment {
         }
 
         public void addPackage() {
-            ((NewBookingActivity)getActivity()).myPackageArrayList.add(new MyPackage());
-            notifyItemInserted(((NewBookingActivity)getActivity()).myPackageArrayList.size());
-            recyclerView.scrollToPosition(((NewBookingActivity)getActivity()).myPackageArrayList.size() - 1);
+            if(isAdded()) {
+                ((NewBookingActivity) getActivity()).myPackageArrayList.add(new MyPackage());
+                notifyItemInserted(((NewBookingActivity) getActivity()).myPackageArrayList.size());
+                //this is to notify first item to show the close icon
+                notifyItemChanged(0);
+                recyclerView.scrollToPosition(((NewBookingActivity) getActivity()).myPackageArrayList.size() - 1);
+            }
         }
 
         private void removePackage(int position){
@@ -156,6 +169,9 @@ public class PackageFragment extends Fragment {
             }else{
                 ((NewBookingActivity)getActivity()).myPackageArrayList.remove(position);
                 notifyItemRemoved(position);
+                notifyItemRangeChanged(position, ((NewBookingActivity) getActivity()).myPackageArrayList.size());
+                //this is to notify first item to hide the close icon
+                notifyItemChanged(0);
             }
         }
 
@@ -203,9 +219,9 @@ public class PackageFragment extends Fragment {
 
             //update view
             if(myPackage.isOwnBox()){
-                holder.aSwitch.setChecked(true);
+                holder.checkBox.setChecked(true);
             }else{
-                holder.aSwitch.setChecked(false);
+                holder.checkBox.setChecked(false);
             }
 
             holder.etHeight.setText(myPackage.getHeight());
@@ -243,6 +259,12 @@ public class PackageFragment extends Fragment {
                 showEditTextValidation(myPackage,holder);
             }
 
+            if(position==0 && ((NewBookingActivity)getActivity()).myPackageArrayList.size()==1){
+                holder.closeIcon.setVisibility(View.GONE);
+            }else {
+                holder.closeIcon.setVisibility(View.VISIBLE);
+            }
+
             holder.closeIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -250,7 +272,7 @@ public class PackageFragment extends Fragment {
                 }
             });
 
-            holder.aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {

@@ -54,31 +54,37 @@ public class SummaryFragment extends Fragment {
 
     }
 
-    public void setupView(){
+    public boolean setupView(){
+        boolean result = true;
         NewBookingActivity newBookingActivity = ((NewBookingActivity) getActivity());
         if (newBookingActivity.pickupFragment.saveAndValidate()) {
             tvPickup.setText(newBookingActivity.pickupAddr.buildFullAddress());
         } else {
             tvPickup.setText("Pick up address invalid");
+            result = false;
         }
 
         if (newBookingActivity.dropOffFragment.saveAndValidate()) {
             tvDropoff.setText(newBookingActivity.dropOffAddr.buildFullAddress());
         } else {
             tvDropoff.setText("Drop off address invalid");
+            result = false;
         }
 
         if(newBookingActivity.packageFragment.validateAllPackage()){
             tvPackage.setText(buildPackageString());
         }else{
             tvPackage.setText("Package info is invalid");
+            result = false;
         }
 
         if (newBookingActivity.selectedTime != null) {
             tvTime.setText(newBookingActivity.selectedTime.isToday() ? "Today" : "Tomorrow" + " " + getResources().getStringArray(R.array.time_interval_array)[newBookingActivity.selectedTime.getTimeCatergory()]);
         } else {
             tvTime.setText("Pickup time not selected");
+            result = false;
         }
+        return  result;
     }
 
     private String buildPackageString(){

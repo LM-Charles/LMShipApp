@@ -50,9 +50,9 @@
                 android:layout_height="50dp">
 
 
-                <Switch
+                <CheckBox
 
-                    android:id="@+id/switch1"
+                    android:id="@+id/checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/normal_padding"
-                    android:layout_toEndOf="@+id/switch1"
+                    android:layout_toEndOf="@+id/checkbox"
                     android:text="I have my own box" />
 
                 <TextView
