@@ -203,7 +203,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
     public boolean saveAndValidate() {
-        if (isAdded()) {
+        if (getActivity()!=null) {
             ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
             boolean cityValid = validatePickupCity();
             boolean postValid = validatePostalCode();
@@ -317,27 +317,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                         // Display the first 500 characters of the response string.
                         if (isAdded()) {
                             Log.e(TAG, "Response is: " + response.toString());
-                            try {
-                                JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
-                                String lat = location.getString("lat");
-                                String lng = location.getString("lng");
-                                if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
-                                    try {
-                                        Double dLat = Double.parseDouble(lat);
-                                        Double dLng = Double.parseDouble(lng);
-                                        LatLng latLng = new LatLng(dLat, dLng);
-                                        if (mMap != null && mapView != null) {
-                                            mapView.setVisibility(View.VISIBLE);
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                            mMap.addMarker(new MarkerOptions().position(latLng));
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+
 
                             try {
                                 JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
@@ -371,13 +351,36 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                                 }
 
                                 if (!Constant.citiesInVan.contains(city.toUpperCase())) {
-                                    Toast.makeText(getActivity(), getActivity().getString(R.string.can_only_pick_up_in_van), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getActivity().getString(R.string.can_only_pick_up_in_van), Toast.LENGTH_LONG).show();
                                 } else {
                                     etPostal.setText(post);
                                     etCity.setText(city);
                                     mAutocompleteView.setAdapter(null);
                                     mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
                                     mAutocompleteView.setAdapter(mAdapter);
+
+                                    //show map
+                                    try {
+                                        JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                                        String lat = location.getString("lat");
+                                        String lng = location.getString("lng");
+                                        if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
+                                            try {
+                                                Double dLat = Double.parseDouble(lat);
+                                                Double dLng = Double.parseDouble(lng);
+                                                LatLng latLng = new LatLng(dLat, dLng);
+                                                if (mMap != null && mapView != null) {
+                                                    mapView.setVisibility(View.VISIBLE);
+                                                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                                    mMap.addMarker(new MarkerOptions().position(latLng));
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

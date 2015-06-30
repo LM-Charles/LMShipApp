@@ -253,7 +253,7 @@ public class DestinationFragment extends Fragment {
 
 
     public boolean saveAndValidate() {
-        if(isAdded()) {
+        if(getActivity()!=null) {
             ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
             ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
             boolean cityValid = validateDropoffCity();
@@ -386,27 +386,7 @@ public class DestinationFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
                         Log.e(TAG, "Response is: " + response.toString());
-                        try{
-                            JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
-                            String lat = location.getString("lat");
-                            String lng = location.getString("lng");
-                            if(lat!=null && lng !=null && !lat.isEmpty() && !lng.isEmpty()){
-                                try{
-                                    Double dLat = Double.parseDouble(lat);
-                                    Double dLng = Double.parseDouble(lng);
-                                    LatLng latLng = new LatLng(dLat, dLng);
-                                    if(mMap!=null){
-                                        mapView.setVisibility(View.VISIBLE);
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                        mMap.addMarker(new MarkerOptions().position(latLng));
-                                    }
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            }
-                        }catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+
 
                         try {
                             JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
@@ -441,7 +421,7 @@ public class DestinationFragment extends Fragment {
                             }
 
                             if (!countryCode.equalsIgnoreCase("CN") && !countryCode.equalsIgnoreCase("CA")) {
-                                Toast.makeText(getActivity(), "We only support shipping to Canada or China for now", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "We only support shipping to Canada or China for now", Toast.LENGTH_LONG).show();
                             } else {
                                 if(countryCode.equalsIgnoreCase("CN")){
                                     spinner.setSelection(1,true);
@@ -454,6 +434,29 @@ public class DestinationFragment extends Fragment {
                                 mAutocompleteView.setAdapter(null);
                                 mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
                                 mAutocompleteView.setAdapter(mAdapter);
+
+                                //show map
+                                try{
+                                    JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                                    String lat = location.getString("lat");
+                                    String lng = location.getString("lng");
+                                    if(lat!=null && lng !=null && !lat.isEmpty() && !lng.isEmpty()){
+                                        try{
+                                            Double dLat = Double.parseDouble(lat);
+                                            Double dLng = Double.parseDouble(lng);
+                                            LatLng latLng = new LatLng(dLat, dLng);
+                                            if(mMap!=null){
+                                                mapView.setVisibility(View.VISIBLE);
+                                                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                                mMap.addMarker(new MarkerOptions().position(latLng));
+                                            }
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

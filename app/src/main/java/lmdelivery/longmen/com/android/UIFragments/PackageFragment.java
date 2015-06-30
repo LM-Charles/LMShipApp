@@ -78,7 +78,6 @@ public class PackageFragment extends Fragment {
     }
 
     public boolean validateAllPackage(){
-
         if(getActivity()== null || ((NewBookingActivity) getActivity()).myPackageArrayList==null){
             return false;
         }
@@ -336,8 +335,8 @@ public class PackageFragment extends Fragment {
                 public void afterTextChanged(Editable s) {
                     if(!holder.etHeight.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etHeight.getParent()).setErrorEnabled(false);
-                        myPackage.setHeight(holder.etHeight.getText().toString());
                     }
+                    myPackage.setHeight(holder.etHeight.getText().toString());
                 }
             });
 
@@ -352,8 +351,8 @@ public class PackageFragment extends Fragment {
                 public void afterTextChanged(Editable s) {
                     if(!holder.etLength.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etLength.getParent()).setErrorEnabled(false);
-                        myPackage.setLength(holder.etLength.getText().toString());
                     }
+                    myPackage.setLength(holder.etLength.getText().toString());
 
                 }
             });
@@ -369,8 +368,8 @@ public class PackageFragment extends Fragment {
                 public void afterTextChanged(Editable s) {
                     if(!holder.etWeight.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etWeight.getParent()).setErrorEnabled(false);
-                        myPackage.setWeight(holder.etWeight.getText().toString());
                     }
+                    myPackage.setWeight(holder.etWeight.getText().toString());
                 }
             });
 
@@ -385,8 +384,8 @@ public class PackageFragment extends Fragment {
                 public void afterTextChanged(Editable s) {
                     if(!holder.etWidth.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etWidth.getParent()).setErrorEnabled(false);
-                        myPackage.setWidth(holder.etWidth.getText().toString());
                     }
+                    myPackage.setWidth(holder.etWidth.getText().toString());
                 }
             });
 

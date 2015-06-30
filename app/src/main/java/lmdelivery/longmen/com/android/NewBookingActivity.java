@@ -3,6 +3,7 @@ package lmdelivery.longmen.com.android;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -74,7 +75,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         setSupportActionBar(toolbar);
 
 
-
         final ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -83,13 +83,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             setupViewPager(viewPager);
         }
 
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_trans_dot);
         tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_trans_dot);
-        tabLayout.getTabAt(Constant.TAB_SUMMARY).setIcon(R.drawable.shape_trans_dot);
         tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_trans_dot);
         tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_trans_dot);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -154,9 +152,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     }
 
-    private void setupDoneFab(){
+    private void setupDoneFab() {
 
-        if(summaryFragment.setupView()) {
+        if (summaryFragment.setupView()) {
             fab.setImageResource(R.drawable.ic_done);
             fab.setBackgroundTintList(getResources().getColorStateList(R.color.done_state_list));
             fab.setOnClickListener(new View.OnClickListener() {
@@ -165,13 +163,12 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
                 }
             });
-        }
-        else{
+        } else {
             fab.setVisibility(View.GONE);
         }
     }
 
-    private void setupNextFab(){
+    private void setupNextFab() {
 
         fab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_arrow_forward_white_36dp);
@@ -193,11 +190,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     if (packageFragment.validateAllPackage()) {
                         viewPager.setCurrentItem(Constant.TAB_TIME, true);
                     }
-                    for(int i = 0 ; i < myPackageArrayList.size(); i++){
-                        Logger.e(TAG,myPackageArrayList.get(i).toString());
+                    for (int i = 0; i < myPackageArrayList.size(); i++) {
+                        Logger.e(TAG, myPackageArrayList.get(i).toString());
                     }
                 } else if (currentTab == Constant.TAB_TIME) {
-                    if (selectedTime!=null) {
+                    if (selectedTime != null) {
                         viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
                     }
                 }
@@ -331,36 +328,36 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 Toast.LENGTH_SHORT).show();
     }
 
-    private List<String> validatePickup() {
-        ArrayList<String> errList = new ArrayList<>();
-
-        //validate street
-        String street = pickupAddr.getStreetName();
-        if (street.isEmpty()) {
-            errList.add(getString(R.string.err_street_empty));
-        }
-
-        //validate city
-        String city = pickupAddr.getCity();
-        if (city.isEmpty()) {
-            errList.add(getString(R.string.err_city_empty));
-        } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
-            errList.add(city + getString(R.string.err_not_in_van));
-        }
-
-        //validate postal
-        String zip = pickupAddr.getPostalCode();
-        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(zip);
-        if (zip.isEmpty())
-            errList.add(getString(R.string.err_post_empty));
-        else if (!matcher.matches())
-            errList.add(getString(R.string.err_post_wrong_format));
-
-        printErrList(errList);
-        return errList;
-    }
+//    private List<String> validatePickup() {
+//        ArrayList<String> errList = new ArrayList<>();
+//
+//        //validate street
+//        String street = pickupAddr.getStreetName();
+//        if (street.isEmpty()) {
+//            errList.add(getString(R.string.err_street_empty));
+//        }
+//
+//        //validate city
+//        String city = pickupAddr.getCity();
+//        if (city.isEmpty()) {
+//            errList.add(getString(R.string.err_city_empty));
+//        } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
+//            errList.add(city + getString(R.string.err_not_in_van));
+//        }
+//
+//        //validate postal
+//        String zip = pickupAddr.getPostalCode();
+//        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+//        Pattern pattern = Pattern.compile(regex);
+//        Matcher matcher = pattern.matcher(zip);
+//        if (zip.isEmpty())
+//            errList.add(getString(R.string.err_post_empty));
+//        else if (!matcher.matches())
+//            errList.add(getString(R.string.err_post_wrong_format));
+//
+//        printErrList(errList);
+//        return errList;
+//    }
 
     private void printErrList(ArrayList<String> errList) {
         String out = "";
@@ -371,20 +368,55 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
 
-    public void updatePickupAddress(String unitNumber, String streetName, String city, String post) {
-        pickupAddr.setUnitNumber(unitNumber);
-        pickupAddr.setStreetName(streetName);
-        pickupAddr.setPostalCode(post);
-        pickupAddr.setCity(city);
+    public boolean validatePickup() {
+        return pickupAddr != null && !pickupAddr.getCity().isEmpty() && !pickupAddr.getCountry().isEmpty() && !pickupAddr.getProvince().isEmpty()
+                && !pickupAddr.getStreetName().isEmpty() && validateCanadaPostalCode(pickupAddr.getPostalCode());
     }
 
-    public void updateDropOffAddress(String unitNumber, String streetName, String city, String province, String country, String post) {
-        dropOffAddr.setUnitNumber(unitNumber);
-        dropOffAddr.setStreetName(streetName);
-        dropOffAddr.setCity(city);
-        dropOffAddr.setPostalCode(post);
-        dropOffAddr.setProvince(province);
-        dropOffAddr.setCountry(country);
+    public boolean validateDropOff() {
+        return dropOffAddr != null && !dropOffAddr.getCity().isEmpty() && !dropOffAddr.getCountry().isEmpty() && !dropOffAddr.getProvince().isEmpty()
+                && !dropOffAddr.getStreetName().isEmpty() && validateCanadaChinaPostalCode(dropOffAddr.getPostalCode());
+    }
+
+    private boolean validateCanadaPostalCode(String zip) {
+        if (zip.isEmpty()) {
+            return false;
+        }
+
+        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(zip);
+
+        return matcher.matches();
+    }
+
+    private boolean validateCanadaChinaPostalCode(String zip) {
+        if (zip.isEmpty()) {
+            return false;
+        }
+
+        String cadRex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+        String chnRex = "^([0-9]){6}$";
+        Pattern pattern = Pattern.compile(cadRex, Pattern.CASE_INSENSITIVE);
+        Pattern pattern2 = Pattern.compile(chnRex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(zip);
+        Matcher matcher2 = pattern.matcher(zip);
+        return matcher.matches() || matcher2.matches();
+    }
+
+    public boolean validateAllPackage() {
+        ArrayList<MyPackage> myPackages = myPackageArrayList;
+        boolean result = true;
+        for (int i = 0; i < myPackages.size(); i++) {
+            MyPackage myPackage = myPackages.get(i);
+            if (myPackage.isOwnBox() && (myPackage.getHeight().isEmpty() || myPackage.getLength().isEmpty() || myPackage.getWeight().isEmpty() || myPackage.getWidth().isEmpty())) {
+                result = false;
+            } else if (!myPackage.isOwnBox() && myPackage.getWeight().isEmpty()) {
+                result = false;
+            }
+        }
+        return result;
     }
 
 }
