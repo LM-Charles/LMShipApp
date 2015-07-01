@@ -1,6 +1,8 @@
 package lmdelivery.longmen.com.android.UIFragments.bean;
 
-public class MyTime {
+import java.io.Serializable;
+
+public class MyTime implements Serializable{
 
     private String timeString;
     private boolean isToday;

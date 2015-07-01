@@ -260,7 +260,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             Matcher matcher = pattern.matcher(zip);
 
             if (!matcher.matches()) {
-                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_canada));
                 return false;
             } else {
                 ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);

@@ -11,6 +11,11 @@ import java.util.Set;
 public class Constant {
     public static final String GOOGLE_PLACE_API_SERVER_KEY = "AIzaSyCeiPMf730xLzLtE6OJ4wslNCvtSrpVPlA";
 
+    public static final String EXTRA_PICKUP = "EXTRA_PICKUP";
+    public static final String EXTRA_DROPOFF = "EXTRA_DROPOFF";
+    public static final String EXTRA_PACKAGE = "EXTRA_PACKAGE";
+    public static final String EXTRA_TIME = "EXTRA_TIME";
+
     public static final int FAB_ANIMTION_DURATION = 1000;
     public static final int MAX_CITY_LENGTH = 15;
     public static final int MAX_PROVINCE_LENGTH = 15;

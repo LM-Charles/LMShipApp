@@ -1,9 +1,11 @@
 package lmdelivery.longmen.com.android.UIFragments.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by rzhu on 6/22/2015.
  */
-public class MyAddress {
+public class MyAddress implements Serializable{
     private String fullAddress;
     private String streetName;
     private String unitNumber;

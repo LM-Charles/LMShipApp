@@ -43,6 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
+import lmdelivery.longmen.com.android.MyApplication;
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
@@ -253,7 +254,7 @@ public class DestinationFragment extends Fragment {
 
 
     public boolean saveAndValidate() {
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
             ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
             boolean cityValid = validateDropoffCity();
@@ -261,7 +262,7 @@ public class DestinationFragment extends Fragment {
             boolean streetValid = validateStreet();
             boolean provinceValid = validateProvince();
             return cityValid && postValid && streetValid && provinceValid;
-        }else
+        } else
             return false;
     }
 
@@ -279,7 +280,7 @@ public class DestinationFragment extends Fragment {
 
 
     private boolean validateStreet() {
-        if(isAdded()) {
+        if (isAdded()) {
             String street = mAutocompleteView.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(street);
             if (street.isEmpty()) {
@@ -289,13 +290,13 @@ public class DestinationFragment extends Fragment {
                 ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
                 return true;
             }
-        }else {
+        } else {
             return false;
         }
     }
 
     private boolean validateDropoffCity() {
-        if(isAdded()) {
+        if (isAdded()) {
             String city = etCity.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setCity(city);
             if (city.isEmpty()) {
@@ -310,7 +311,7 @@ public class DestinationFragment extends Fragment {
     }
 
     private boolean validatePostalCode() {
-        if(isAdded()) {
+        if (isAdded()) {
             String zip = etPostal.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(zip);
 
@@ -319,20 +320,26 @@ public class DestinationFragment extends Fragment {
                 return false;
             }
 
-            String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-
-            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            String cadRex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+            String chnRex = "^([0-9]){6}$";
+            Pattern pattern = Pattern.compile(cadRex, Pattern.CASE_INSENSITIVE);
+            Pattern pattern2 = Pattern.compile(chnRex, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(zip);
+            Matcher matcher2 = pattern2.matcher(zip);
 
-            if (!matcher.matches()) {
-                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format));
+            if (!matcher.matches() && spinner.getSelectedItem().equals("Canada")) {
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_canada));
                 return false;
-            } else {
+
+            } else if (!matcher2.matches() && spinner.getSelectedItem().equals("China")) {
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_canada));
+                return false;
+            }
+            else {
                 ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
                 return true;
             }
-        }
-        else
+        } else
             return false;
     }
 
@@ -421,12 +428,12 @@ public class DestinationFragment extends Fragment {
                             }
 
                             if (!countryCode.equalsIgnoreCase("CN") && !countryCode.equalsIgnoreCase("CA")) {
-                                Toast.makeText(getActivity(), "We only support shipping to Canada or China for now", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), MyApplication.getAppContext().getString(R.string.only_ship_to_canada_china), Toast.LENGTH_LONG).show();
                             } else {
-                                if(countryCode.equalsIgnoreCase("CN")){
-                                    spinner.setSelection(1,true);
-                                }else{
-                                    spinner.setSelection(0,true);
+                                if (countryCode.equalsIgnoreCase("CN")) {
+                                    spinner.setSelection(1, true);
+                                } else {
+                                    spinner.setSelection(0, true);
                                 }
                                 etPostal.setText(post);
                                 etCity.setText(city);
@@ -436,25 +443,25 @@ public class DestinationFragment extends Fragment {
                                 mAutocompleteView.setAdapter(mAdapter);
 
                                 //show map
-                                try{
+                                try {
                                     JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
                                     String lat = location.getString("lat");
                                     String lng = location.getString("lng");
-                                    if(lat!=null && lng !=null && !lat.isEmpty() && !lng.isEmpty()){
-                                        try{
+                                    if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
+                                        try {
                                             Double dLat = Double.parseDouble(lat);
                                             Double dLng = Double.parseDouble(lng);
                                             LatLng latLng = new LatLng(dLat, dLng);
-                                            if(mMap!=null){
+                                            if (mMap != null) {
                                                 mapView.setVisibility(View.VISIBLE);
                                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                                                 mMap.addMarker(new MarkerOptions().position(latLng));
                                             }
-                                        }catch (Exception e){
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                     }
-                                }catch (JSONException e) {
+                                } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }

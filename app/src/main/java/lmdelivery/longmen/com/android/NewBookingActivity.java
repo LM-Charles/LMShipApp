@@ -1,5 +1,7 @@
 package lmdelivery.longmen.com.android;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -53,6 +55,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public MyAddress pickupAddr;
     public MyAddress dropOffAddr;
     private Adapter adapter;
+
+    private Context context;
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
      * to the user's sign in state as well as the Google's APIs.
@@ -76,7 +80,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
 
         final ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        if(ab!=null)
+            ab.setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
@@ -160,7 +165,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Intent intent = new Intent(context, SelectProductActivity.class);
+                    intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
+                    intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
+                    intent.putExtra(Constant.EXTRA_TIME, selectedTime);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, myPackageArrayList);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             });
         } else {
@@ -203,6 +215,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     private void init() {
+        context = this;
         pickupAddr = new MyAddress();
         pickupAddr.setCountry("Canada");
         pickupAddr.setProvince("BC");
@@ -401,7 +414,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         Pattern pattern = Pattern.compile(cadRex, Pattern.CASE_INSENSITIVE);
         Pattern pattern2 = Pattern.compile(chnRex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(zip);
-        Matcher matcher2 = pattern.matcher(zip);
+        Matcher matcher2 = pattern2.matcher(zip);
         return matcher.matches() || matcher2.matches();
     }
 
