@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import java.util.List;
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
-import lmdelivery.longmen.com.android.util.Logger;
 
 /**
  * A fragment representing a list of Items.
@@ -61,13 +59,6 @@ public class TimeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_time_list, container, false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerview);
         setupRecyclerView(rv);
-
-//        // Set the adapter
-//        mListView = (ListView) view.findViewById(android.R.id.list);
-//        mListView.setAdapter(mAdapter);
-//
-//        // Set OnItemClickListener so we can be notified on item clicks
-//        mListView.setOnItemClickListener(this);
 
         return view;
     }
@@ -249,22 +240,6 @@ public class TimeFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mValues.size();
-        }
-
-        private void selectButton(View view, int startX, int startY, int position) {
-            Logger.e(TAG, "Selecting " + position);
-            if (null != mListener) {
-                mListener.onTimeSelected(mValues.get(position));
-            }
-            view.setSelected(true);
-
-
-            ViewAnimationUtils.createCircularReveal(view,
-                    startX,
-                    startY,
-                    0,
-                    view.getWidth()).start();
-
         }
     }
 

@@ -1,13 +1,12 @@
 package lmdelivery.longmen.com.android;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,10 +15,10 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import lmdelivery.longmen.com.android.UIFragments.RateItemFragment;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyAddress;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
 import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
-import lmdelivery.longmen.com.android.util.Logger;
 
 
 public class SelectProductActivity extends AppCompatActivity {
@@ -37,17 +36,17 @@ public class SelectProductActivity extends AppCompatActivity {
         MyAddress dropoff = (MyAddress) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
         MyTime time = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
 
-        Logger.e(TAG, pickup.getFullAddress());
-        Logger.e(TAG, dropoff.getFullAddress());
-        Logger.e(TAG, time.getTimeString());
-        Logger.e(TAG, packageList.size()+"");
+//        Logger.e(TAG, pickup.getFullAddress());
+//        Logger.e(TAG, dropoff.getFullAddress());
+//        Logger.e(TAG, time.getTimeString());
+//        Logger.e(TAG, packageList.size()+"");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
+        if(ab!=null)
+            ab.setDisplayHomeAsUpEnabled(true);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
@@ -60,9 +59,9 @@ public class SelectProductActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new TextFragment(), "Category 1");
-        adapter.addFragment(new TextFragment(), "Category 2");
-        adapter.addFragment(new TextFragment(), "Category 3");
+        adapter.addFragment(new RateItemFragment(), "Category 1");
+        adapter.addFragment(new RateItemFragment(), "Category 2");
+        adapter.addFragment(new RateItemFragment(), "Category 3");
         viewPager.setAdapter(adapter);
     }
 
