@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
             break;
             case R.id.action_settings:
-
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
             break;
         }
         return super.onOptionsItemSelected(item);

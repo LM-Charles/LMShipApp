@@ -20,8 +20,6 @@ public class MyPackage implements Parcelable{
     private boolean showValidation;
 
 
-
-
     public MyPackage() {
         this.length = "";
         this.width = "";

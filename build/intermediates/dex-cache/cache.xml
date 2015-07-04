@@ -2,18 +2,11 @@
 <items version="2" >
 
     <item
-        jar="F:\android\LMShipApp\app\build\intermediates\exploded-aar\jp.wasabeef\recyclerview-animators\1.2.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="55b967d31b15d92052a5ea2e407378b72d4764a7">
-        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\classes-4e92a67d7aa471890ff3a9384ae26a568acae8a8.jar" />
-    </item>
-    <item
-        jar="C:\Users\Kaiyu\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.6.0\a7537446a030da8eb0da4c71424d16c2589f6c4a\glide-3.6.0.jar"
+        jar="C:\Users\rzhu\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.6.0\a7537446a030da8eb0da4c71424d16c2589f6c4a\glide-3.6.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="a7537446a030da8eb0da4c71424d16c2589f6c4a">
-        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\glide-3.6.0-b3d258ff4a3c9f2c61e471d1c6cedb2ed81a8e8c.jar" />
+        <dex dex="C:\AndroidSamples\LMShipApp\app\build\intermediates\pre-dexed\debug\glide-3.6.0-07cc29727f105f36023250b9c28b45e0a3a73239.jar" />
     </item>
 
 </items>
