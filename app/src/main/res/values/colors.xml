@@ -34,5 +34,6 @@
 
     <color name="green_done">#00C853</color>
     <color name="red">#F44336</color>
+    <color name="teal">#009688</color>
 
 </resources>

@@ -1,23 +1,31 @@
 package lmdelivery.longmen.com.android.UIFragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,6 +33,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +48,7 @@ import lmdelivery.longmen.com.android.R;
  * {@link LoginFragment.OnLoginListener} interface
  * to handle interaction events.
  */
-public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class LoginFragment extends Fragment {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -48,6 +58,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private TextView mForgotPW;
     private View mProgressView;
     private LinearLayout mLoginFormView;
     private AppBarLayout appBarLayout;
@@ -68,20 +79,28 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
         loginActivity = (LoginActivity) getActivity();
 
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) root.findViewById(R.id.email);
-        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mForgotPW = (TextView) root.findViewById(R.id.tv_forgot_pw);
+        mForgotPW.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        mForgotPW.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    loginActivity.collapseToolbar();
-                } else {
-                    loginActivity.expandToolbar();
-                }
+            public void onClick(View v) {
+                showForgotPasswordDialog();
             }
         });
 
-        populateAutoComplete();
+        // Set up the login form.
+        mEmailView = (AutoCompleteTextView) root.findViewById(R.id.email);
+//        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    loginActivity.collapseToolbar();
+//                } else {
+//                    loginActivity.expandToolbar();
+//                }
+//            }
+//        });
+
 
         mPasswordView = (EditText) root.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -116,17 +135,13 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         return password.length() > 4;
     }
 
-    public void populateAutoComplete() {
-        //getLoaderManager().initLoader(0, null, ((LoginActivity)getActivity()).LoginFragment);
-    }
-
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+
         if (mAuthTask != null) {
             return;
         }
@@ -197,56 +212,15 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         mListener = null;
     }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+    public void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+        if (getActivity() != null) {
+            //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(getActivity(),
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
+            mEmailView.setAdapter(adapter);
         }
-
-        addEmailsToAutoComplete(emails);
     }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -315,6 +289,40 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     public interface OnLoginListener {
         // TODO: Update argument type and name
         public void onLoginClicked(Uri uri);
+    }
+
+
+    private void showForgotPasswordDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+
+        // Get the layout inflater
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_forgot_pw, null);
+        EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
+        Button resetBtn = (Button) view.findViewById(R.id.btn_reset);
+        Button contactBtn = (Button) view.findViewById(R.id.btn_contact);
+
+
+        resetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        contactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // Inflate and set the layout for the dialog
+        dialog.setContentView(view);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setTitle(getActivity().getString(R.string.forgot_password));
+        dialog.show();
     }
 
 }

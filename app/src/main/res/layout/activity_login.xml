@@ -34,9 +34,8 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="bottom"
-                app:tabMode="scrollable"
-                app:tabContentStart="72dp"/>
+                android:layout_gravity="bottom"/>
+
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -46,10 +45,6 @@
                 app:layout_collapseMode="parallax"/>
         </android.support.design.widget.CollapsingToolbarLayout>
 
-
-
-
-
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
@@ -57,6 +52,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
 </android.support.design.widget.CoordinatorLayout>

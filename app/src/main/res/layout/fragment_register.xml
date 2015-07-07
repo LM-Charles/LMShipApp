@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/activity_vertical_margin"
     tools:context="lmdelivery.longmen.com.android.UIFragments.RegisterFragment">
 
     <LinearLayout
@@ -9,34 +10,45 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <AutoCompleteTextView
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/prompt_email"
-        android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:singleLine="true" />
+        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/prompt_password"
-        android:imeActionId="@+id/login"
-        android:imeActionLabel="@string/action_sign_in_short"
-        android:imeOptions="actionUnspecified"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:singleLine="true" />
+            <AutoCompleteTextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
-    <Button
-        android:id="@+id/email_sign_in_button"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/action_sign_in"
-        android:textStyle="bold" />
+        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_password"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+
+        <Button
+            android:id="@+id/email_sign_in_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/action_sign_in"
+            android:textStyle="bold" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

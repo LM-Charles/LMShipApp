@@ -11,10 +11,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import java.util.List;
+
+import lmdelivery.longmen.com.android.LoginActivity;
 import lmdelivery.longmen.com.android.R;
 
 /**
@@ -69,6 +73,10 @@ public class RegisterFragment extends Fragment {
         mListener = null;
     }
 
+    private void populateAutoComplete() {
+        getActivity().getLoaderManager().initLoader(0, null, ((LoginActivity)getActivity()));
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -84,5 +92,10 @@ public class RegisterFragment extends Fragment {
         public void onRegisterClicked(Uri uri);
     }
 
+    public void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+//        mEmailView.setAdapter(adapter);
+    }
 
 }
