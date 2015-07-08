@@ -17,6 +17,7 @@ import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.TextUtils;
@@ -58,6 +59,8 @@ public class LoginFragment extends Fragment {
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private TextInputLayout tilPassWord;
+    private TextInputLayout tilEmail;
     private TextView mForgotPW;
     private View mProgressView;
     private LinearLayout mLoginFormView;
@@ -73,11 +76,18 @@ public class LoginFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public boolean hasFocus(){
+        return (mEmailView!=null && mPasswordView !=null) && (mEmailView.isFocused() || mPasswordView.isFocused());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_login, container, false);
 
         loginActivity = (LoginActivity) getActivity();
+
+        tilEmail = (TextInputLayout) root.findViewById(R.id.til_email);
+        tilPassWord = (TextInputLayout) root.findViewById(R.id.til_password);
 
         mForgotPW = (TextView) root.findViewById(R.id.tv_forgot_pw);
         mForgotPW.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -90,17 +100,6 @@ public class LoginFragment extends Fragment {
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) root.findViewById(R.id.email);
-//        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    loginActivity.collapseToolbar();
-//                } else {
-//                    loginActivity.expandToolbar();
-//                }
-//            }
-//        });
-
 
         mPasswordView = (EditText) root.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -121,6 +120,8 @@ public class LoginFragment extends Fragment {
                 attemptLogin();
             }
         });
+
+
         // Inflate the layout for this fragment
         return root;
     }
@@ -147,8 +148,8 @@ public class LoginFragment extends Fragment {
         }
 
         // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+        tilPassWord.setError(null);
+        tilEmail.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
@@ -159,18 +160,18 @@ public class LoginFragment extends Fragment {
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+            tilPassWord.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            tilEmail.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+            tilEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }

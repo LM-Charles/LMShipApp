@@ -68,4 +68,9 @@
     <string name="phone">Phone number</string>
     <string name="reset_password">RESET PASSWORD</string>
     <string name="contact_support">Contact Support</string>
+    <string name="verify_code">Verification Code</string>
+    <string name="verify">Verify</string>
+    <string name="save">Save</string>
+    <string name="verify_phone">Verify your phone number</string>
+    <string name="register">Register</string>
 </resources>

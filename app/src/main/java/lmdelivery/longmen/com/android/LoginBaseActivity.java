@@ -59,7 +59,7 @@ public class LoginBaseActivity extends AppCompatActivity{
             return;
         }
 
-        rootLayout = (ViewGroup) findViewById(R.id.viewpager);
+        rootLayout = (ViewGroup) findViewById(R.id.main_content);
         rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
 
         keyboardListenersAttached = true;

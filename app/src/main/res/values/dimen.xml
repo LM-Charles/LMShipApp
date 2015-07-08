@@ -3,4 +3,5 @@
     <dimen name="normal_padding">10dp</dimen>
     <dimen name="dot_size">10dp</dimen>
     <dimen name="card_title_height">70dp</dimen>
+    <dimen name="btn_font_size">18dp</dimen>
 </resources>

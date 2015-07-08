@@ -10,7 +10,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+        <LinearLayout
+            android:focusable="true" android:focusableInTouchMode="true"
+            android:layout_width="0px" android:layout_height="0px"/>
+
         <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+            android:id="@+id/til_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -21,10 +27,13 @@
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:nextFocusUp="@id/email"
+                android:nextFocusLeft="@id/email"/>
         </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
         <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+            android:id="@+id/til_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -41,13 +50,15 @@
                 android:singleLine="true" />
         </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
+
+
         <Button
             android:id="@+id/email_sign_in_button"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/action_sign_in"
+            android:text="@string/action_sign_in_short"
             android:textStyle="bold" />
 
         <TextView

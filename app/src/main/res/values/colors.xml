@@ -19,6 +19,8 @@
     <color name="colorPrimary">#673AB7</color>
     <color name="colorPrimaryDark">#512DA8</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorButtonNormal">#1565C0</color>
+    <color name="colorControlHighlight">#0D47A1</color>
 
     <color name="window_background">#eeeeee</color>
     <color name="white_text">#FFF5F5F5</color>

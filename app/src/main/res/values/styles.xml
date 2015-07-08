@@ -16,8 +16,8 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
-    <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
-        <item name="android:fontFamily">sans-serif-light</item>
+    <style name="RobotoButtonStyle" parent="android:Widget.Holo.Light.Button">
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="FragmentTitleTextViewStyle" parent="android:Widget.TextView">
@@ -80,5 +80,6 @@
         <item name="android:paddingTop">@dimen/card_margin</item>
         <item name="android:paddingBottom">@dimen/card_margin</item>
     </style>
+
 
 </resources>

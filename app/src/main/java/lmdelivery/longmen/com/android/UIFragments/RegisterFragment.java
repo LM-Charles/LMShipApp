@@ -8,6 +8,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class RegisterFragment extends Fragment {
 
     // UI references.
     private AutoCompleteTextView mEmailView;
+    private LoginActivity loginActivity;
     private EditText mPasswordView;
     private View mProgressView;
     private LinearLayout mLoginFormView;
@@ -41,12 +45,24 @@ public class RegisterFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View root = inflater.inflate(R.layout.fragment_register, container, false);
+
+        loginActivity = (LoginActivity) getActivity();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false);
+
+        // Set up the login form.
+        mEmailView = (AutoCompleteTextView) root.findViewById(R.id.email);
+
+        mPasswordView = (EditText) root.findViewById(R.id.password);
+
+        TextView link = (TextView) root.findViewById(R.id.link);
+        link.setText(Html.fromHtml("By Creating an account, you are agreeing to our" + "<br>"+
+                "<a href=\"http://zoroapp.com/EULA\">Terms and Conditions</a> "));
+        link.setMovementMethod(LinkMovementMethod.getInstance());
+        return root ;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -62,8 +78,7 @@ public class RegisterFragment extends Fragment {
         try {
             mListener = (OnRegisterListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnRegisterListener");
+            throw new ClassCastException(activity.toString()+ " must implement OnRegisterListener");
         }
     }
 
@@ -73,8 +88,9 @@ public class RegisterFragment extends Fragment {
         mListener = null;
     }
 
-    private void populateAutoComplete() {
-        getActivity().getLoaderManager().initLoader(0, null, ((LoginActivity)getActivity()));
+
+    public boolean hasFocus(){
+        return (mEmailView!=null && mPasswordView !=null) && (mEmailView.isFocused() || mPasswordView.isFocused());
     }
 
     /**

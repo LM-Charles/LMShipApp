@@ -1,6 +1,7 @@
 package lmdelivery.longmen.com.android;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
@@ -21,6 +22,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +68,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         rootLayout = (CoordinatorLayout) findViewById(R.id.main_content);
-       //collapsingToolbar.setTitle("龙门镖局");
+        //collapsingToolbar.setTitle("龙门镖局");
         loadBackdrop();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -84,14 +92,16 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         });
 
         populateAutoComplete();
-//        mProgressView = findViewById(R.id.login_progress);
 
+        //showVerifyPhoneNumberDialog();
+//        mProgressView = findViewById(R.id.login_progress);
     }
 
     @Override
     protected void onShowKeyboard(int keyboardHeight) {
         // do things when keyboard is shown
-        collapseToolbar();
+        Logger.e(TAG, "onShowKeyboard");
+        toggleToolbar();
     }
 
     @Override
@@ -101,14 +111,22 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        if(loginFragment == null)
+        if (loginFragment == null)
             loginFragment = new LoginFragment();
-        if(registerFragment == null)
+        if (registerFragment == null)
             registerFragment = new RegisterFragment();
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(registerFragment, "Register");
         adapter.addFragment(loginFragment, "Login");
         viewPager.setAdapter(adapter);
+    }
+
+    public void toggleToolbar() {
+        if (loginFragment != null && registerFragment != null && (loginFragment.hasFocus() || registerFragment.hasFocus())) {
+            collapseToolbar();
+        } else {
+            expandToolbar();
+        }
     }
 
     public void collapseToolbar() {
@@ -120,17 +138,19 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     }
 
     public void expandToolbar() {
+
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
         if (behavior != null) {
             behavior.setTopAndBottomOffset(0);
             behavior.onNestedPreScroll(rootLayout, appBarLayout, null, 0, 1, new int[2]);
         }
+
     }
 
     private void loadBackdrop() {
-//        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
-//        Glide.with(this).load(R.drawable.background).centerCrop().into(imageView);
+        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+        Glide.with(this).load(R.drawable.background).centerCrop().into(imageView);
     }
 
     @Override
@@ -141,7 +161,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
                 // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +" = ?", new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+                ContactsContract.Contacts.Data.MIMETYPE + " = ?", new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
 
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
@@ -169,7 +189,6 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }
-
 
 
     private interface ProfileQuery {
@@ -210,7 +229,6 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     }
 
 
-
     @Override
     public void onLoginClicked(Uri uri) {
 
@@ -221,6 +239,18 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logger.e(TAG, "onResume");
+        //expandToolbar();
+//        appBarLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                attachKeyboardListeners();
+//            }
+//        });
+    }
 
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
@@ -249,6 +279,41 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         public CharSequence getPageTitle(int position) {
             return mFragmentTitles.get(position);
         }
+    }
+
+    private void showVerifyPhoneNumberDialog() {
+        final Dialog dialog = new Dialog(this);
+
+        // Get the layout inflater
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_verify_phone, null);
+        EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
+        EditText etCode = (EditText) view.findViewById(R.id.et_code);
+
+        Button btnSave = (Button) view.findViewById(R.id.btn_save);
+        Button btnVerify = (Button) view.findViewById(R.id.btn_verify);
+
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // Inflate and set the layout for the dialog
+        dialog.setContentView(view);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setTitle(getString(R.string.verify_phone));
+        dialog.show();
     }
 }
 
