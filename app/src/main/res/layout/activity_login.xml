@@ -47,12 +47,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="bottom"
-            app:layout_scrollFlags="enterAlways"/>
+            android:layout_height="wrap_content"
+            android:background="@color/colorButtonNormal"
+            app:layout_scrollFlags="enterAlways"
+            app:tabTextColor="@color/white_text"
+            app:tabSelectedTextColor="@color/white_text"
+            app:tabIndicatorColor="@color/colorAccent"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"

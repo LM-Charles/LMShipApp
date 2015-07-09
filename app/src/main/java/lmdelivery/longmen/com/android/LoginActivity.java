@@ -68,7 +68,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         rootLayout = (CoordinatorLayout) findViewById(R.id.main_content);
-        //collapsingToolbar.setTitle("龙门镖局");
+        collapsingToolbar.setTitle("龙门镖局");
         loadBackdrop();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,6 +108,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     protected void onHideKeyboard() {
         // do things when keyboard is hidden
         //expandToolbar();
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -281,39 +282,6 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         }
     }
 
-    private void showVerifyPhoneNumberDialog() {
-        final Dialog dialog = new Dialog(this);
 
-        // Get the layout inflater
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_verify_phone, null);
-        EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
-        EditText etCode = (EditText) view.findViewById(R.id.et_code);
-
-        Button btnSave = (Button) view.findViewById(R.id.btn_save);
-        Button btnVerify = (Button) view.findViewById(R.id.btn_verify);
-
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        btnVerify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        // Inflate and set the layout for the dialog
-        dialog.setContentView(view);
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setTitle(getString(R.string.verify_phone));
-        dialog.show();
-    }
 }
 

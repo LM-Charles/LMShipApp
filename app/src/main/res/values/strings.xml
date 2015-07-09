@@ -73,4 +73,5 @@
     <string name="save">Save</string>
     <string name="verify_phone">Verify your phone number</string>
     <string name="register">Register</string>
+    <string name="err_connection">Cannot connect to server, please check you network or try again later</string>
 </resources>

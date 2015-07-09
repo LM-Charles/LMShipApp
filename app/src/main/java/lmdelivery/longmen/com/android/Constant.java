@@ -9,6 +9,7 @@ import java.util.Set;
  * Created by Kaiyu on 2015-06-10.
  */
 public class Constant {
+    public static final String URL = "http://lmshipservice-devo.elasticbeanstalk.com/rest/";
     public static final String GOOGLE_PLACE_API_SERVER_KEY = "AIzaSyCeiPMf730xLzLtE6OJ4wslNCvtSrpVPlA";
 
     public static final String EXTRA_PICKUP = "EXTRA_PICKUP";

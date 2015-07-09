@@ -43,7 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.MyApplication;
+import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
@@ -428,7 +428,7 @@ public class DestinationFragment extends Fragment {
                             }
 
                             if (!countryCode.equalsIgnoreCase("CN") && !countryCode.equalsIgnoreCase("CA")) {
-                                Toast.makeText(getActivity(), MyApplication.getAppContext().getString(R.string.only_ship_to_canada_china), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), AppController.getAppContext().getString(R.string.only_ship_to_canada_china), Toast.LENGTH_LONG).show();
                             } else {
                                 if (countryCode.equalsIgnoreCase("CN")) {
                                     spinner.setSelection(1, true);

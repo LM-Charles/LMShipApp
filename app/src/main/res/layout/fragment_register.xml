@@ -16,6 +16,7 @@
             android:layout_width="0px" android:layout_height="0px"/>
 
         <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+            android:id="@+id/til_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -32,6 +33,7 @@
         </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
         <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+            android:id="@+id/til_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

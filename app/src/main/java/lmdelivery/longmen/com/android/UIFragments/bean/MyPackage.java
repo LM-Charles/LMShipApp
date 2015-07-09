@@ -8,7 +8,7 @@ import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import lmdelivery.longmen.com.android.MyApplication;
+import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.R;
 public class MyPackage implements Parcelable{
     public static final int SMALL_BOX = 0;
@@ -32,20 +32,20 @@ public class MyPackage implements Parcelable{
 
     @Override public String toString(){
         if(isOwnBox){
-            Resources resources = MyApplication.getAppContext().getResources();
+            Resources resources = AppController.getAppContext().getResources();
             return resources.getString(R.string.length) + ": " + length + "  " + resources.getString(R.string.width) + ": " + width + "\n" +
                     resources.getString(R.string.height) + ": " + height + "  " + resources.getString(R.string.weight) + ": " + weight;
         }else{
             String strBoxSize = "";
             switch (boxSize){
                 case SMALL_BOX:
-                    strBoxSize = MyApplication.getAppContext().getString(R.string.small_box);
+                    strBoxSize = AppController.getAppContext().getString(R.string.small_box);
                     break;
                 case MED_BOX:
-                    strBoxSize = MyApplication.getAppContext().getString(R.string.med_box);
+                    strBoxSize = AppController.getAppContext().getString(R.string.med_box);
                     break;
                 case BIG_BOX:
-                    strBoxSize = MyApplication.getAppContext().getString(R.string.big_box);
+                    strBoxSize = AppController.getAppContext().getString(R.string.big_box);
                     break;
             }
             return "Longmen " + strBoxSize + " ($5)";

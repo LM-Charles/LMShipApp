@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin">
 
     <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
@@ -38,20 +38,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/save"/>
+        android:text="@string/save" />
 
     <Button
         android:id="@+id/btn_verify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/verify"/>
+        android:text="@string/verify"
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/tv_no_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textSize="18sp"
+        android:text="Didn't get the verification code?" />
 
     <Button
         android:id="@+id/btn_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/contact_support"/>
+        android:layout_marginTop="@dimen/normal_padding"
+        android:text="@string/contact_support" />
 
 </LinearLayout>
