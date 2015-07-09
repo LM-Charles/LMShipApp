@@ -6,6 +6,7 @@
     android:padding="@dimen/activity_vertical_margin">
 
     <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+        android:id="@+id/til_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,6 +19,43 @@
             android:maxLines="1"
             android:singleLine="true" />
     </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+        android:id="@+id/til_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/phone"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+        android:id="@+id/til_new_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/phone"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+    <Button
+        android:id="@+id/btn_get_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:text="@string/get_code"/>
 
     <Button
         android:id="@+id/btn_reset"

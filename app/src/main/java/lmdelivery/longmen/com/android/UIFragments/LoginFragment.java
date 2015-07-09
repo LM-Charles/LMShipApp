@@ -1,47 +1,41 @@
 package lmdelivery.longmen.com.android.UIFragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.DialogInterface;
-import android.content.Loader;
-import android.database.Cursor;
+import android.app.ProgressDialog;
 import android.graphics.Paint;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
+import lmdelivery.longmen.com.android.AppController;
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.LoginActivity;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,10 +45,9 @@ import lmdelivery.longmen.com.android.R;
  */
 public class LoginFragment extends Fragment {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
+
+    private static final java.lang.String TAG = LoginFragment.class.getSimpleName();
+    private JsonObjectRequest loginRequest;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -62,12 +55,6 @@ public class LoginFragment extends Fragment {
     private TextInputLayout tilPassWord;
     private TextInputLayout tilEmail;
     private TextView mForgotPW;
-    private View mProgressView;
-    private LinearLayout mLoginFormView;
-    private AppBarLayout appBarLayout;
-    private CollapsingToolbarLayout collapsingToolbar;
-    private CoordinatorLayout rootLayout;
-
     private LoginActivity loginActivity;
 
     private OnLoginListener mListener;
@@ -76,8 +63,8 @@ public class LoginFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public boolean hasFocus(){
-        return (mEmailView!=null && mPasswordView !=null) && (mEmailView.isFocused() || mPasswordView.isFocused());
+    public boolean hasFocus() {
+        return (mEmailView != null && mPasswordView != null) && (mEmailView.isFocused() || mPasswordView.isFocused());
     }
 
     @Override
@@ -143,7 +130,7 @@ public class LoginFragment extends Fragment {
      */
     public void attemptLogin() {
 
-        if (mAuthTask != null) {
+        if (loginRequest != null) {
             return;
         }
 
@@ -181,12 +168,47 @@ public class LoginFragment extends Fragment {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            loginActivity.showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            final ProgressDialog pd = new ProgressDialog(getActivity());
+            pd.setMessage("Loading");
+            pd.show();
+
+            JSONObject params = new JSONObject();
+            // JSONArray jsArray = new JSONArray();
+            try {
+                params.put("email", mEmailView.getText().toString());
+                params.put("password", mPasswordView.getText().toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            loginRequest = new JsonObjectRequest(Request.Method.PUT, Constant.URL + "user", params, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Logger.e(TAG, response.toString());
+                    pd.dismiss();
+                    loginRequest = null;
+                    //TODO: save user info
+                    loginActivity.finish();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    loginRequest = null;
+                    pd.dismiss();
+
+                    if (error != null)
+                        Logger.e(TAG, error.toString());
+
+                    if (getActivity() != null)
+                        Util.showMessageDialog(getString(R.string.err_connection), getActivity());
+
+                }
+            });
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(loginRequest, "login");
         }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -238,54 +260,6 @@ public class LoginFragment extends Fragment {
         public void OnRegisterInteraction(Uri uri);
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            loginActivity.showProgress(false);
-
-            if (success) {
-                loginActivity.finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            loginActivity.showProgress(false);
-        }
-    }
 
     public interface OnLoginListener {
         // TODO: Update argument type and name
@@ -299,10 +273,24 @@ public class LoginFragment extends Fragment {
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_forgot_pw, null);
-        EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
+        final EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
+        final EditText etCode = (EditText) view.findViewById(R.id.et_code);
+        final EditText etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
+
+        final TextInputLayout tilPhone = (TextInputLayout) view.findViewById(R.id.til_phone);
+        final TextInputLayout tilCode = (TextInputLayout) view.findViewById(R.id.til_code);
+        final TextInputLayout tilNewPassword = (TextInputLayout) view.findViewById(R.id.til_new_password);
+
         Button resetBtn = (Button) view.findViewById(R.id.btn_reset);
         Button contactBtn = (Button) view.findViewById(R.id.btn_contact);
+        Button getCodeBtn = (Button) view.findViewById(R.id.btn_get_code);
 
+        getCodeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override

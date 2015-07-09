@@ -6,6 +6,7 @@
     android:padding="@dimen/activity_vertical_margin">
 
     <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+        android:id="@+id/til_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,6 +21,7 @@
     </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
     <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+        android:id="@+id/til_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
