@@ -100,7 +100,6 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     @Override
     protected void onShowKeyboard(int keyboardHeight) {
         // do things when keyboard is shown
-        Logger.e(TAG, "onShowKeyboard");
         toggleToolbar();
     }
 

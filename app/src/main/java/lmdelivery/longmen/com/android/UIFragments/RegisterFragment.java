@@ -146,7 +146,11 @@ public class RegisterFragment extends Fragment {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password)|| password.length()<8) {
+            tilPassWord.setError(getString(R.string.error_password_too_short));
+            focusView = mPasswordView;
+            cancel = true;
+        }else if(!isPasswordValid(password)){
             tilPassWord.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -178,7 +182,6 @@ public class RegisterFragment extends Fragment {
             try {
                 params.put("email", mEmailView.getText().toString());
                 params.put("password", mPasswordView.getText().toString());
-                params.put("phone", "7788594684");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -215,8 +218,8 @@ public class RegisterFragment extends Fragment {
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        //contain both number and letter
+        return password.matches("^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$");
     }
 
     private boolean isPhoneValid(String phone) {

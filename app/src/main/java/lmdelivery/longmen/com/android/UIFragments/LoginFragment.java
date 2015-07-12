@@ -147,7 +147,7 @@ public class LoginFragment extends Fragment {
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            tilPassWord.setError(getString(R.string.error_invalid_password));
+            tilPassWord.setError(getString(R.string.error_password_too_short));
             focusView = mPasswordView;
             cancel = true;
         }
