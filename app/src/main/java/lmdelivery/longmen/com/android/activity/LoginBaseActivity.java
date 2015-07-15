@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android;
+package lmdelivery.longmen.com.android.activity;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 
+import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
 
 /**

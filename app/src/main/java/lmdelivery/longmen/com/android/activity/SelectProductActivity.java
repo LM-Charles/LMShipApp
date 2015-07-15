@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android;
+package lmdelivery.longmen.com.android.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -15,10 +15,12 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import lmdelivery.longmen.com.android.UIFragments.RateItemFragment;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyAddress;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
+import lmdelivery.longmen.com.android.Constant;
+import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.fragments.RateItemFragment;
+import lmdelivery.longmen.com.android.fragments.bean.MyAddress;
+import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
+import lmdelivery.longmen.com.android.fragments.bean.MyTime;
 
 
 public class SelectProductActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import lmdelivery.longmen.com.android.NewBookingActivity;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
+import lmdelivery.longmen.com.android.fragments.bean.MyTime;
 
 /**
  * A fragment representing a list of Items.

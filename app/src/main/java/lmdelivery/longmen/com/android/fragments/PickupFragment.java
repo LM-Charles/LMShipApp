@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -43,7 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.NewBookingActivity;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -142,8 +142,9 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             public void afterTextChanged(Editable s) {
                 if (!etCity.getText().toString().isEmpty()) {
                     ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).pickupAddr.setCity(etCity.getText().toString());
                 }
+                ((NewBookingActivity) getActivity()).pickupAddr.setCity(etCity.getText().toString());
+
             }
         });
 
@@ -160,8 +161,9 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             public void afterTextChanged(Editable s) {
                 if (!etPostal.getText().toString().isEmpty()) {
                     ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).pickupAddr.setPostalCode(etPostal.getText().toString());
                 }
+                ((NewBookingActivity) getActivity()).pickupAddr.setPostalCode(etPostal.getText().toString());
+
             }
         });
 
@@ -178,8 +180,9 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             public void afterTextChanged(Editable s) {
                 if (!etUnit.getText().toString().isEmpty()) {
                     ((TextInputLayout) etUnit.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
                 }
+                ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
+
             }
         });
 
@@ -196,14 +199,15 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             public void afterTextChanged(Editable s) {
                 if (!mAutocompleteView.getText().toString().isEmpty()) {
                     ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).pickupAddr.setStreetName(mAutocompleteView.getText().toString());
                 }
+                ((NewBookingActivity) getActivity()).pickupAddr.setStreetName(mAutocompleteView.getText().toString());
+
             }
         });
     }
 
     public boolean saveAndValidate() {
-        if (getActivity()!=null) {
+        if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
             boolean cityValid = validatePickupCity();
             boolean postValid = validatePostalCode();
@@ -226,7 +230,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
     private boolean validatePickupCity() {
-        if(isAdded()) {
+        if (isAdded()) {
             String city = etCity.getText().toString();
             ((NewBookingActivity) getActivity()).pickupAddr.setCity(city);
             if (city.isEmpty()) {
@@ -239,13 +243,12 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
                 return true;
             }
-        }
-        else
+        } else
             return false;
     }
 
     private boolean validatePostalCode() {
-        if(isAdded()) {
+        if (isAdded()) {
             String zip = etPostal.getText().toString();
             ((NewBookingActivity) getActivity()).pickupAddr.setPostalCode(zip);
 
@@ -266,7 +269,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
                 return true;
             }
-        }else{
+        } else {
             return false;
         }
     }
@@ -360,34 +363,25 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                                     mAutocompleteView.setAdapter(mAdapter);
 
                                     //show map
-                                    try {
-                                        JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
-                                        String lat = location.getString("lat");
-                                        String lng = location.getString("lng");
-                                        if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
-                                            try {
-                                                Double dLat = Double.parseDouble(lat);
-                                                Double dLng = Double.parseDouble(lng);
-                                                LatLng latLng = new LatLng(dLat, dLng);
-                                                if (mMap != null && mapView != null) {
-                                                    mapView.setVisibility(View.VISIBLE);
-                                                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                                    mMap.addMarker(new MarkerOptions().position(latLng));
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
+
+                                    JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                                    String lat = location.getString("lat");
+                                    String lng = location.getString("lng");
+                                    if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
+
+                                        Double dLat = Double.parseDouble(lat);
+                                        Double dLng = Double.parseDouble(lng);
+                                        LatLng latLng = new LatLng(dLat, dLng);
+                                        if (mMap != null && mapView != null) {
+                                            mapView.setVisibility(View.VISIBLE);
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                            mMap.addMarker(new MarkerOptions().position(latLng));
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
                         }
                     }
                 }, new Response.ErrorListener() {

@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.UIFragments.bean.RateItem;
+import lmdelivery.longmen.com.android.fragments.bean.RateItem;
 
 /**
  * A simple {@link Fragment} subclass.

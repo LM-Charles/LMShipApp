@@ -3,16 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_new_booking">Ship a package</string>
 
-    <string name="search_address">Street Address (Search)</string>
-    <string name="pickup_address">Pickup Address</string>
-    <string name="unit_number">Unit Number</string>
-    <string name="bc_canada"> BC Canada </string>
-    <string name="street_number">Street Number</string>
-    <string name="street_name">Street Name</string>
-    <string name="postal_code">Postal Code</string>
-    <string name="city">City</string>
     <string name="icon_check">\uf121</string>
     <string name="icon_home">\uf144</string>
     <string name="icon_close">\uf404</string>
@@ -21,35 +12,6 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tab_title_from">From</string>
-    <string name="tab_title_to">To</string>
-    <string name="tab_title_package">Package</string>
-    <string name="tab_title_time">Time</string>
-    <string name="tab_title_summary">Summary</string>
-    <string name="ship_to">Ship to</string>
-    <string name="province">Province</string>
-    <string name="ship_from">Ship from</string>
-    <string name="dash">-</string>
-    <string name="length">Length (cm)</string>
-    <string name="weight">Weight (lb)</string>
-    <string name="width">Width (cm)</string>
-    <string name="height">Height (cm)</string>
-    <string name="package_title">Package</string>
-    <string name="big_box">Big Box</string>
-    <string name="big_box_dimention">50 L X 50 W X 50 H (cm)</string>
-    <string name="med_box">Medium Box</string>
-    <string name="small_box">Small Box</string>
-    <string name="can_only_pick_up_in_van">We can only pick up address in Great Vancouver for now</string>
-    <string name="err_city_empty">City cannot be empty</string>
-    <string name="err_not_in_van">"We can only pickup in great vancouver area for now"</string>
-    <string name="err_post_empty">Postal Code cannot be empty</string>
-    <string name="err_post_wrong_format_canada">Canada Postal format:\nV6X 0A5</string>
-    <string name="err_post_wrong_format_china">China Postal format:\n518026</string>
-    <string name="err_street_empty">Street is empty</string>
-    <string name="required">Required</string>
-    <string name="free">Free</string>
-    <string name="five_bucks">$5 per box for any size</string>
-    <string name="only_ship_to_canada_china">We only support shipping to Canada or China for now</string>
 
 
     <string-array name="dropoff_country_array">
@@ -64,15 +26,17 @@
         <item>3pm - 6pm</item>
     </string-array>
     <string name="title_activity_select_product">SelectProductActivity</string>
-    <string name="forgot_password">Forgot Password</string>
-    <string name="phone">Phone number</string>
-    <string name="reset_password">RESET PASSWORD</string>
+
     <string name="contact_support">Contact Support</string>
-    <string name="verify_code">Verification Code</string>
+
     <string name="verify">Verify</string>
     <string name="save">Save</string>
-    <string name="verify_phone">Verify your phone number</string>
-    <string name="register">Register</string>
+
     <string name="err_connection">Cannot connect to server, please check you network or try again later</string>
-    <string name="get_code">GET VERIFICATION CODE</string>
+
+    <string name="loading">Loading</string>
+
+    <string name="no_shipping">Welcome!\nYou do not have any shipping yet, Please click the + button below to ship a new package</string>
+
+
 </resources>

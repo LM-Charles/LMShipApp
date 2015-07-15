@@ -12,5 +12,20 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
-    <string name="error_phone_too_short">This phone number is too short</string>\
+    <string name="error_phone_too_short">This phone number is too short</string>
+
+    <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
+
+    <string name="register_successful">Register Successfully</string>
+    <string name="new_password">New Password</string>
+    <string name="request_again">Request Again</string>
+    <string name="get_code">GET VERIFICATION CODE</string>
+
+    <string name="forgot_password">Forgot Password</string>
+    <string name="phone">Phone number</string>
+    <string name="reset_password">RESET PASSWORD</string>
+    <string name="verify_code">Verification Code</string>
+    <string name="verify_phone">Please verify your phone number</string>
+    <string name="register">Register</string>
+
 </resources>

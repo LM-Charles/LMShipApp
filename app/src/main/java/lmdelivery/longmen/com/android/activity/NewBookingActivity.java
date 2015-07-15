@@ -1,11 +1,10 @@
-package lmdelivery.longmen.com.android;
+package lmdelivery.longmen.com.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -27,14 +26,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lmdelivery.longmen.com.android.UIFragments.DestinationFragment;
-import lmdelivery.longmen.com.android.UIFragments.PackageFragment;
-import lmdelivery.longmen.com.android.UIFragments.PickupFragment;
-import lmdelivery.longmen.com.android.UIFragments.SummaryFragment;
-import lmdelivery.longmen.com.android.UIFragments.TimeFragment;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyAddress;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyTime;
+import lmdelivery.longmen.com.android.Constant;
+import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.fragments.DestinationFragment;
+import lmdelivery.longmen.com.android.fragments.PackageFragment;
+import lmdelivery.longmen.com.android.fragments.PickupFragment;
+import lmdelivery.longmen.com.android.fragments.SummaryFragment;
+import lmdelivery.longmen.com.android.fragments.TimeFragment;
+import lmdelivery.longmen.com.android.fragments.bean.MyAddress;
+import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
+import lmdelivery.longmen.com.android.fragments.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 
 

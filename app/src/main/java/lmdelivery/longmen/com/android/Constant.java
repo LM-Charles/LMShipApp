@@ -21,6 +21,11 @@ public class Constant {
     public static final int MAX_CITY_LENGTH = 15;
     public static final int MAX_PROVINCE_LENGTH = 15;
 
+    public static final String SHARE_USER_EMAIL = "SHARE_USER_EMAIL";
+    public static final String SHARE_USER_TOKEN = "SHARE_USER_TOKEN";
+    public static final String SHARE_USER_PHONE = "SHARE_USER_PHONE";
+    public static final String SHARE_USER_ID = "SHARE_USER_ID";
+
     public static final int TAB_FROM = 0;
     public static final int TAB_TO = 1;
     public static final int TAB_PACKAGE = 2;

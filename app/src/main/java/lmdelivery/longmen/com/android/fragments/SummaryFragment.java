@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.NewBookingActivity;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
+import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,7 +68,7 @@ public class SummaryFragment extends Fragment {
             tvPickup.setText(newBookingActivity.pickupAddr.buildFullAddress());
             cardFrom.setOnClickListener(null);
         } else {
-            tvPickup.setText("Pick up address invalid");
+            tvPickup.setText(getString(R.string.invalid_pickup));
             cardFrom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -82,7 +82,7 @@ public class SummaryFragment extends Fragment {
             tvDropoff.setText(newBookingActivity.dropOffAddr.buildFullAddress());
             cardTo.setOnClickListener(null);
         } else {
-            tvDropoff.setText("Drop off address invalid");
+            tvDropoff.setText(getString(R.string.invalid_dropoff));
             cardTo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,7 +96,7 @@ public class SummaryFragment extends Fragment {
             tvPackage.setText(buildPackageString());
             cardPackage.setOnClickListener(null);
         }else{
-            tvPackage.setText("Package info is invalid");
+            tvPackage.setText(getString(R.string.invalid_package));
             cardPackage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,10 +107,10 @@ public class SummaryFragment extends Fragment {
         }
 
         if (newBookingActivity.selectedTime != null) {
-            tvTime.setText(newBookingActivity.selectedTime.isToday() ? "Today" : "Tomorrow" + " " + getResources().getStringArray(R.array.time_interval_array)[newBookingActivity.selectedTime.getTimeCatergory()]);
+            tvTime.setText(newBookingActivity.selectedTime.isToday() ? getString(R.string.today) : getString(R.string.tomorrow) + " " + getResources().getStringArray(R.array.time_interval_array)[newBookingActivity.selectedTime.getTimeCatergory()]);
             cardTime.setOnClickListener(null);
         } else {
-            tvTime.setText("Pickup time not selected");
+            tvTime.setText(getString(R.string.no_pickup_time));
             cardTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -125,10 +125,11 @@ public class SummaryFragment extends Fragment {
     private String buildPackageString(){
         ArrayList<MyPackage> myPackageArrayList = ((NewBookingActivity) getActivity()).myPackageArrayList;
         String result = "";
-        for(int i = 0; i < myPackageArrayList.size(); i++){
+        int size = myPackageArrayList.size();
+        for(int i = 0; i < size; i++){
             if(!result.isEmpty())
                 result += "\n\n";
-            result += "Box " + (i+1) + ":\n" + myPackageArrayList.get(i).toString();
+            result += getString(R.string.box) + (i+1) + ":\n" + myPackageArrayList.get(i).toString();
         }
         return result;
     }
