@@ -1,5 +1,7 @@
 package lmdelivery.longmen.com.android.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,31 +14,48 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.fragments.RateItemFragment;
 import lmdelivery.longmen.com.android.fragments.bean.MyAddress;
 import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
 import lmdelivery.longmen.com.android.fragments.bean.MyTime;
+import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Util;
 
 
 public class SelectProductActivity extends AppCompatActivity {
 
     private static final java.lang.String TAG = SelectProductActivity.class.getName();
+    private JsonObjectRequest getRateRequest;
+    private MyAddress mPickupAddr;
+    private MyAddress mDropoffAddr;
+    private MyTime mTime;
+    private ArrayList<MyPackage> mPackageList;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_product);
-
+        context = this;
         Bundle bundle = getIntent().getExtras();
-        ArrayList<MyPackage> packageList = bundle.getParcelableArrayList(Constant.EXTRA_PACKAGE);
-        MyAddress pickup = (MyAddress) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
-        MyAddress dropoff = (MyAddress) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
-        MyTime time = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
+        mPackageList = bundle.getParcelableArrayList(Constant.EXTRA_PACKAGE);
+        mPickupAddr = (MyAddress) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
+        mDropoffAddr = (MyAddress) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
+        mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
 
 //        Logger.e(TAG, pickup.getFullAddress());
 //        Logger.e(TAG, dropoff.getFullAddress());
@@ -116,5 +135,56 @@ public class SelectProductActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitles.get(position);
         }
+    }
+
+    private void getRate(){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.loading));
+        pd.show();
+
+        JSONObject params = new JSONObject();
+        try {
+            JSONObject pickup = new JSONObject();
+            pickup.put("address", mPickupAddr.getStreetName());
+            pickup.put("city", mPickupAddr.getCity());
+            pickup.put("province", mPickupAddr.getProvince());
+            pickup.put("country", mPickupAddr.getCountry());
+            pickup.put("postal", mPickupAddr.getPostalCode());
+            pickup.put("residential", "");
+
+            JSONObject dropOff = new JSONObject();
+            pickup.put("address", mDropoffAddr.getStreetName());
+            pickup.put("city", mDropoffAddr.getCity());
+            pickup.put("province", mDropoffAddr.getProvince());
+            pickup.put("country", mDropoffAddr.getCountry());
+            pickup.put("postal", mDropoffAddr.getPostalCode());
+            pickup.put("residential", "");
+
+            params.put("fromAddress", pickup);
+            params.put("toAddress", dropOff);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        getRateRequest = new JsonObjectRequest(Request.Method.PUT, Constant.URL + "user", params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                getRateRequest = null;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getRateRequest = null;
+                pd.dismiss();
+                if (error != null)
+                    Logger.e(TAG, error.toString());
+
+                Util.showMessageDialog(getString(R.string.err_connection), context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(getRateRequest);
     }
 }

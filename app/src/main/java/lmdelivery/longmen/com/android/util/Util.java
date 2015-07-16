@@ -81,4 +81,5 @@ public class Util {
             Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
