@@ -8,8 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -98,6 +101,8 @@ public class RegisterFragment extends Fragment {
         link.setText(Html.fromHtml("By Creating an account, you are agreeing to our" + "<br>" +
                 "<a href=\"http://zoroapp.com/EULA\">Terms and Conditions</a> "));
         link.setMovementMethod(LinkMovementMethod.getInstance());
+
+        showVerifyPhoneNumberDialog();
         return root;
     }
 
@@ -146,7 +151,7 @@ public class RegisterFragment extends Fragment {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password)|| password.length()<8) {
+        if (password.length()<8) {
             tilPassWord.setError(getString(R.string.error_password_too_short));
             focusView = mPasswordView;
             cancel = true;
@@ -180,8 +185,9 @@ public class RegisterFragment extends Fragment {
             JSONObject params = new JSONObject();
             // JSONArray jsArray = new JSONArray();
             try {
-                params.put("email", mEmailView.getText().toString());
-                params.put("password", mPasswordView.getText().toString());
+                params.put("email", email);
+                params.put("password", password);
+                params.put("phone", "");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -219,7 +225,7 @@ public class RegisterFragment extends Fragment {
 
     private boolean isPasswordValid(String password) {
         //contain both number and letter
-        return password.matches("^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$");
+        return password.matches("^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9]+$");
     }
 
     private boolean isPhoneValid(String phone) {
@@ -257,6 +263,8 @@ public class RegisterFragment extends Fragment {
         final Button btnSave = (Button) view.findViewById(R.id.btn_save);
         final Button btnVerify = (Button) view.findViewById(R.id.btn_verify);
         final Button btnContact = (Button) view.findViewById(R.id.btn_contact);
+        final Button btnRequestAgain= (Button) view.findViewById(R.id.btn_request_again);
+
 
         final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
 
@@ -274,23 +282,33 @@ public class RegisterFragment extends Fragment {
                     pd.setMessage("Loading");
                     pd.show();
 
-                    JSONObject params = new JSONObject();
-                    try {
-                        params.put("phone", phone);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    JsonObjectRequest getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "user_id" + "/activation", params, new Response.Listener<JSONObject>() {
+                    JsonObjectRequest getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "13" + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Logger.e(TAG, response.toString());
                             pd.dismiss();
                             //TODO: save user phone number
                             //TODO: disable phone number editText
+                            etPhone.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                    btnContact.setVisibility(View.GONE);
+                                    btnVerify.setVisibility(View.GONE);
+                                    btnSave.setVisibility(View.VISIBLE);
+                                    etCode.setVisibility(View.GONE);
+                                    tvNoCode.setVisibility(View.GONE);
+                                }
+                            });
                             btnContact.setVisibility(View.VISIBLE);
                             btnVerify.setVisibility(View.VISIBLE);
                             btnSave.setVisibility(View.GONE);
+                            etCode.setVisibility(View.VISIBLE);
                             tvNoCode.setVisibility(View.VISIBLE);
                         }
                     }, new Response.ErrorListener() {
@@ -299,6 +317,60 @@ public class RegisterFragment extends Fragment {
                             if (error != null)
                                 Logger.e(TAG, error.toString());
                             pd.dismiss();
+
+//                            switch (error.networkResponse.statusCode) {
+//                                case HttpStatus.SC_BAD_REQUEST:
+//
+//                            }
+                            Util.showMessageDialog(getString(R.string.err_connection), getActivity());
+                        }
+                    });
+
+                    // Adding request to request queue
+                    AppController.getInstance().addToRequestQueue(getCodeRequest, "getActivationCode");
+                }
+            }
+        });
+
+        btnRequestAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String phone = etPhone.getText().toString();
+                if (phone.isEmpty()) {
+                    tilPhone.setError(getString(R.string.error_field_required));
+                } else if (isPhoneValid(phone)) {
+                    tilPhone.setError(getString(R.string.error_phone_too_short));
+                } else {
+                    final ProgressDialog pd = new ProgressDialog(getActivity());
+                    pd.setMessage("Loading");
+                    pd.show();
+
+                    JsonObjectRequest getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "13" + "/activation?phone=" + phone, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Logger.e(TAG, response.toString());
+                            pd.dismiss();
+
+                            try {
+                                Toast.makeText(getActivity(), response.getString("message"), Toast.LENGTH_LONG);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            //TODO: save user phone number
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error != null)
+                                Logger.e(TAG, error.toString());
+                            pd.dismiss();
+
+//                            switch (error.networkResponse.statusCode) {
+//                                case HttpStatus.SC_BAD_REQUEST:
+//
+//                            }
                             Util.showMessageDialog(getString(R.string.err_connection), getActivity());
                         }
                     });
@@ -329,7 +401,7 @@ public class RegisterFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    JsonObjectRequest activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "user_id" + "/activation", params, new Response.Listener<JSONObject>() {
+                    JsonObjectRequest activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "13" + "/activation/" + code, params, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Logger.e(TAG, response.toString());

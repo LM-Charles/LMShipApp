@@ -75,4 +75,6 @@
     <string name="register">Register</string>
     <string name="err_connection">Cannot connect to server, please check you network or try again later</string>
     <string name="get_code">GET VERIFICATION CODE</string>
+    <string name="do_not_get_code">Didn\'t get the verification code?</string>
+    <string name="request_again">Request Again</string>
 </resources>
