@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 
 import android.app.Activity;
@@ -37,7 +37,7 @@ import java.util.List;
 
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.LoginActivity;
+import lmdelivery.longmen.com.android.activity.LoginActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -56,11 +56,32 @@ public class RegisterFragment extends Fragment {
     private TextInputLayout tilEmail;
 
     private JsonObjectRequest registerRequest;
+    private JsonObjectRequest getCodeRequest;
+    private JsonObjectRequest activateAccountRequest;
+
 
     private OnRegisterListener mListener;
 
     public RegisterFragment() {
         // Required empty public constructor
+    }
+
+    public void cancelQueueRequest() {
+
+        if (registerRequest != null) {
+            registerRequest.cancel();
+            registerRequest = null;
+        }
+
+        if (getCodeRequest != null) {
+            getCodeRequest.cancel();
+            getCodeRequest = null;
+        }
+
+        if (activateAccountRequest != null) {
+            activateAccountRequest.cancel();
+            activateAccountRequest = null;
+        }
     }
 
     @Override
@@ -144,12 +165,17 @@ public class RegisterFragment extends Fragment {
         tilEmail.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        final String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
+        if (TextUtils.isEmpty(password)) {
+            tilPassWord.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
+            cancel = true;
+        }
         // Check for a valid password, if the user entered one.
         if (password.length()<8) {
             tilPassWord.setError(getString(R.string.error_password_too_short));
@@ -198,23 +224,32 @@ public class RegisterFragment extends Fragment {
                     Logger.e(TAG, response.toString());
                     pd.dismiss();
                     registerRequest = null;
-                    //TODO: save user info
-                    showVerifyPhoneNumberDialog();
+
+                    try {
+                        String id = response.getString("id");
+                        AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_EMAIL, email);
+                        AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_ID, id);
+                        Toast.makeText(getActivity(), getString(R.string.register_successful), Toast.LENGTH_LONG).show();
+                        showVerifyPhoneNumberDialog();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Util.showMessageDialog(getString(R.string.err_connection),getActivity());
+                    }
+
+
+
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if (error != null)
-                        Logger.e(TAG, error.toString());
-                        pd.dismiss();
-                    if (getActivity() != null)
-                        Util.showMessageDialog(getString(R.string.err_connection), getActivity());
+                    pd.dismiss();
+                    Util.handleVolleyError(error, getActivity());
                     registerRequest = null;
                 }
             });
 
             // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(registerRequest, "login");
+            AppController.getInstance().addToRequestQueue(registerRequest);
         }
     }
 
@@ -265,29 +300,41 @@ public class RegisterFragment extends Fragment {
         final Button btnContact = (Button) view.findViewById(R.id.btn_contact);
         final Button btnRequestAgain= (Button) view.findViewById(R.id.btn_request_again);
 
-
         final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
+
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.sendSupportEmail(getActivity());
+            }
+        });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(getCodeRequest!=null)
+                    return;
 
-                String phone = etPhone.getText().toString();
+                final String phone = etPhone.getText().toString();
                 if (phone.isEmpty()) {
                     tilPhone.setError(getString(R.string.error_field_required));
                 } else if (isPhoneValid(phone)) {
                     tilPhone.setError(getString(R.string.error_phone_too_short));
                 } else {
+
                     final ProgressDialog pd = new ProgressDialog(getActivity());
-                    pd.setMessage("Loading");
+                    pd.setMessage(getString(R.string.loading));
                     pd.show();
 
-                    JsonObjectRequest getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "13" + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
+                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "13" + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
+
                         @Override
                         public void onResponse(JSONObject response) {
+                            getCodeRequest = null;
                             Logger.e(TAG, response.toString());
                             pd.dismiss();
-                            //TODO: save user phone number
+                            AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone);
+                            Util.showMessageDialog(getString(R.string.verify_dialog_text), getActivity());
                             //TODO: disable phone number editText
                             etPhone.addTextChangedListener(new TextWatcher() {
                                 @Override
@@ -314,14 +361,8 @@ public class RegisterFragment extends Fragment {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (error != null)
-                                Logger.e(TAG, error.toString());
+                            getCodeRequest = null;
                             pd.dismiss();
-
-//                            switch (error.networkResponse.statusCode) {
-//                                case HttpStatus.SC_BAD_REQUEST:
-//
-//                            }
                             Util.showMessageDialog(getString(R.string.err_connection), getActivity());
                         }
                     });
@@ -367,16 +408,12 @@ public class RegisterFragment extends Fragment {
                                 Logger.e(TAG, error.toString());
                             pd.dismiss();
 
-//                            switch (error.networkResponse.statusCode) {
-//                                case HttpStatus.SC_BAD_REQUEST:
-//
-//                            }
-                            Util.showMessageDialog(getString(R.string.err_connection), getActivity());
+                            Util.handleVolleyError(error, getActivity());
                         }
                     });
 
                     // Adding request to request queue
-                    AppController.getInstance().addToRequestQueue(getCodeRequest, "getActivationCode");
+                    AppController.getInstance().addToRequestQueue(getCodeRequest);
                 }
             }
         });
@@ -386,12 +423,16 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                if(activateAccountRequest!=null){
+                    return;
+                }
+
                 String code = etCode.getText().toString();
                 if (code.isEmpty()) {
                     tilCode.setError(getString(R.string.error_field_required));
                 }  else {
                     final ProgressDialog pd = new ProgressDialog(getActivity());
-                    pd.setMessage("Loading");
+                    pd.setMessage(getString(R.string.loading));
                     pd.show();
 
                     JSONObject params = new JSONObject();
@@ -401,9 +442,11 @@ public class RegisterFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    JsonObjectRequest activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + "13" + "/activation/" + code, params, new Response.Listener<JSONObject>() {
+                    activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/activation", params, new Response.Listener<JSONObject>() {
+
                         @Override
                         public void onResponse(JSONObject response) {
+                            activateAccountRequest=null;
                             Logger.e(TAG, response.toString());
                             pd.dismiss();
                             //TODO: show activation success or fail message
@@ -412,16 +455,14 @@ public class RegisterFragment extends Fragment {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (error != null)
-                                Logger.e(TAG, error.toString());
+                            activateAccountRequest=null;
                             pd.dismiss();
-                            Util.showMessageDialog(getString(R.string.err_connection), getActivity());
+                            Util.handleVolleyError(error, getActivity());
                         }
                     });
 
                     // Adding request to request queue
                     AppController.getInstance().addToRequestQueue(activateAccountRequest, "activateAccount");
-
                 }
             }
         });

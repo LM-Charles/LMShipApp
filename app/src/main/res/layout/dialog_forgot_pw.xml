@@ -23,13 +23,14 @@
     <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
         android:id="@+id/til_code"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/et_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/phone"
+            android:hint="@string/verify_code"
             android:inputType="phone"
             android:maxLines="1"
             android:singleLine="true" />
@@ -44,8 +45,9 @@
             android:id="@+id/et_new_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/phone"
+            android:hint="@string/new_password"
             android:inputType="textPassword"
+            android:visibility="gone"
             android:maxLines="1"
             android:singleLine="true" />
     </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
@@ -55,13 +57,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:text="@string/get_code"/>
+        android:text="@string/get_code"/>
 
     <Button
         android:id="@+id/btn_reset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:visibility="gone"
         android:text="@string/reset_password"/>
 
     <Button

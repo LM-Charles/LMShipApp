@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.util.Logger;
 
 /**
@@ -143,7 +144,7 @@ public class PlaceAutocompleteAdapter extends ArrayAdapter<PlaceAutocompleteAdap
 
     /**
      * Submits an autocomplete query to the Places Geo Data Autocomplete API.
-     * Results are returned as {@link lmdelivery.longmen.com.android.NewBookingActivity}
+     * Results are returned as {@link NewBookingActivity}
      * objects to store the Place ID and description that the API returns.
      * Returns an empty list if no results were found.
      * Returns null if the API client is not available or the query did not complete

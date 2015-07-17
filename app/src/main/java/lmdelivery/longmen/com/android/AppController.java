@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -56,5 +57,12 @@ public class AppController extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+    public SharedPreferences getDefaultSharePreferences(){
+        return getDefaultSharePreferences();
+    }
+
+    public String getUserId(){
+        return getDefaultSharePreferences().getString(Constant.SHARE_USER_ID,"");
     }
 }

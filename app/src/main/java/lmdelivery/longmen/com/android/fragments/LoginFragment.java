@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -32,7 +32,7 @@ import java.util.List;
 
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.LoginActivity;
+import lmdelivery.longmen.com.android.activity.LoginActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -44,10 +44,11 @@ import lmdelivery.longmen.com.android.util.Util;
  * to handle interaction events.
  */
 public class LoginFragment extends Fragment {
-
-
     private static final java.lang.String TAG = LoginFragment.class.getSimpleName();
     private JsonObjectRequest loginRequest;
+    private JsonObjectRequest getResetCodeReq;
+    private JsonObjectRequest resetPasswordReq;
+
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -61,6 +62,25 @@ public class LoginFragment extends Fragment {
 
     public LoginFragment() {
         // Required empty public constructor
+    }
+
+    public void cancelQueueRequest() {
+
+        if (loginRequest != null) {
+            loginRequest.cancel();
+            loginRequest = null;
+        }
+
+        if (getResetCodeReq != null) {
+            getResetCodeReq.cancel();
+            getResetCodeReq = null;
+        }
+
+        if (resetPasswordReq != null) {
+            resetPasswordReq.cancel();
+            resetPasswordReq = null;
+        }
+
     }
 
     public boolean hasFocus() {
@@ -173,7 +193,6 @@ public class LoginFragment extends Fragment {
             pd.show();
 
             JSONObject params = new JSONObject();
-            // JSONArray jsArray = new JSONArray();
             try {
                 params.put("email", mEmailView.getText().toString());
                 params.put("password", mPasswordView.getText().toString());
@@ -195,20 +214,16 @@ public class LoginFragment extends Fragment {
                 public void onErrorResponse(VolleyError error) {
                     loginRequest = null;
                     pd.dismiss();
-
                     if (error != null)
                         Logger.e(TAG, error.toString());
 
                     if (getActivity() != null)
                         Util.showMessageDialog(getString(R.string.err_connection), getActivity());
-
                 }
             });
-
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(loginRequest, "login");
         }
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -224,8 +239,7 @@ public class LoginFragment extends Fragment {
         try {
             mListener = (OnLoginListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnLoginListener");
+            throw new ClassCastException(activity.toString() + " must implement OnLoginListener");
         }
     }
 
@@ -281,28 +295,103 @@ public class LoginFragment extends Fragment {
         final TextInputLayout tilCode = (TextInputLayout) view.findViewById(R.id.til_code);
         final TextInputLayout tilNewPassword = (TextInputLayout) view.findViewById(R.id.til_new_password);
 
-        Button resetBtn = (Button) view.findViewById(R.id.btn_reset);
-        Button contactBtn = (Button) view.findViewById(R.id.btn_contact);
-        Button getCodeBtn = (Button) view.findViewById(R.id.btn_get_code);
+        final Button resetBtn = (Button) view.findViewById(R.id.btn_reset);
+        final Button contactBtn = (Button) view.findViewById(R.id.btn_contact);
+        final Button getCodeBtn = (Button) view.findViewById(R.id.btn_get_code);
 
         getCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (getResetCodeReq != null)
+                    return;
 
+                final String phone = etPhone.getText().toString();
+
+                if (TextUtils.isEmpty(phone)) {
+                    tilPhone.setError(getString(R.string.error_field_required));
+                } else {
+                    final ProgressDialog pd = new ProgressDialog(getActivity());
+                    pd.setMessage(loginActivity.getString(R.string.loading));
+                    pd.show();
+
+                    getResetCodeReq = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword", new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Logger.e(TAG, response.toString());
+                            pd.dismiss();
+                            getResetCodeReq = null;
+                            Util.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
+
+                            tilCode.setVisibility(View.VISIBLE);
+                            tilNewPassword.setVisibility(View.VISIBLE);
+                            tilPhone.setVisibility(View.VISIBLE);
+                            getCodeBtn.setText(getString(R.string.request_again));
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            getResetCodeReq = null;
+                            pd.dismiss();
+                            Util.handleVolleyError(error, getActivity());
+                        }
+                    });
+
+                    // Adding request to request queue
+                    AppController.getInstance().addToRequestQueue(getResetCodeReq);
+                }
             }
         });
 
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (resetPasswordReq != null)
+                    return;
 
+                String newPassword = etNewPassword.getText().toString();
+                String code = etCode.getText().toString();
+
+                if (TextUtils.isEmpty(newPassword)) {
+                    tilPassWord.setError(getString(R.string.error_field_required));
+                }
+                // Check for a valid password, if the user entered one.
+                else if (!isPasswordValid(newPassword)) {
+                    tilPassWord.setError(getString(R.string.error_invalid_password));
+                } else if (TextUtils.isEmpty(code)) {
+                    tilCode.setError(getString(R.string.error_field_required));
+                } else {
+                    final ProgressDialog pd = new ProgressDialog(getActivity());
+                    pd.setMessage(loginActivity.getString(R.string.loading));
+                    pd.show();
+
+                    resetPasswordReq = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword/" + code + "&newPassword=" + newPassword,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Logger.e(TAG, response.toString());
+                                    pd.dismiss();
+                                    resetPasswordReq = null;
+
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            resetPasswordReq = null;
+                            pd.dismiss();
+                            Util.handleVolleyError(error, getActivity());
+                        }
+                    });
+
+                    // Adding request to request queue
+                    AppController.getInstance().addToRequestQueue(resetPasswordReq);
+                }
             }
         });
 
         contactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Util.sendSupportEmail(getActivity());
             }
         });
 
@@ -310,7 +399,8 @@ public class LoginFragment extends Fragment {
         dialog.setContentView(view);
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
-        dialog.setTitle(getActivity().getString(R.string.forgot_password));
+        dialog.setTitle(getActivity().getString(R.string.forgot_password)
+        );
         dialog.show();
     }
 

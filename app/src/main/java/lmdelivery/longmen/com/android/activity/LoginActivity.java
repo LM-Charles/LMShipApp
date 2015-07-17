@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android;
+package lmdelivery.longmen.com.android.activity;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -23,9 +23,9 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-import lmdelivery.longmen.com.android.UIFragments.LoginFragment;
-import lmdelivery.longmen.com.android.UIFragments.RegisterFragment;
-import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.fragments.LoginFragment;
+import lmdelivery.longmen.com.android.fragments.RegisterFragment;
 
 
 /**
@@ -33,15 +33,7 @@ import lmdelivery.longmen.com.android.util.Logger;
  */
 public class LoginActivity extends LoginBaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, LoginFragment.OnLoginListener, RegisterFragment.OnRegisterListener {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    private static final java.lang.String TAG = LoginBaseActivity.class.getName();
-
+    private static final java.lang.String TAG = LoginActivity.class.getName();
 
     // UI references.
     private AppBarLayout appBarLayout;
@@ -54,7 +46,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        attachKeyboardListeners();
+
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         rootLayout = (CoordinatorLayout) findViewById(R.id.main_content);
@@ -191,34 +183,6 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         int IS_PRIMARY = 1;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    public void showProgress(final boolean show) {
-
-//            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-//
-//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//                }
-//            });
-//
-//            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-//            mProgressView.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-//                }
-//            });
-
-    }
-
-
     @Override
     public void onLoginClicked(Uri uri) {
 
@@ -232,14 +196,20 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     @Override
     public void onResume() {
         super.onResume();
-        Logger.e(TAG, "onResume");
-        //expandToolbar();
-//        appBarLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                attachKeyboardListeners();
-//            }
-//        });
+        attachKeyboardListeners();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(loginFragment!=null){
+            loginFragment.cancelQueueRequest();
+        }
+        if(registerFragment!=null){
+            registerFragment.cancelQueueRequest();
+        }
     }
 
     static class Adapter extends FragmentPagerAdapter {

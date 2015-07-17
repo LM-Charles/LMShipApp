@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments.bean;
+package lmdelivery.longmen.com.android.fragments.bean;
 
 import java.io.Serializable;
 

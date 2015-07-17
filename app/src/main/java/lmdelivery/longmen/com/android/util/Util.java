@@ -1,10 +1,21 @@
 package lmdelivery.longmen.com.android.util;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.NetworkResponse;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import lmdelivery.longmen.com.android.R;
 
 /**
  * Created by Kaiyu on 2015-06-10.
@@ -16,13 +27,59 @@ public class Util {
     }
 
     public static void showMessageDialog(String message, Context context){
-        new AlertDialog.Builder(context)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        try {
+            new AlertDialog.Builder(context)
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+    public static String trimMessage(String json, String key){
+        String trimmedString = null;
+
+        try{
+            JSONObject obj = new JSONObject(json);
+            trimmedString = obj.getString(key);
+        } catch(JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return trimmedString;
+    }
+
+    public static void handleVolleyError(VolleyError error, Context context){
+        NetworkResponse response = error.networkResponse;
+        String message = null;
+        if(response != null && response.data != null){
+            message = trimMessage(new String(response.data), "message");
+            if(message!=null)
+                showMessageDialog(message, context);
+            else
+                showMessageDialog(context.getString(R.string.err_connection), context);
+        }
+        else
+            showMessageDialog(context.getString(R.string.err_connection), context);
+    }
+
+    public static void sendSupportEmail(Context context){
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+        i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+        try {
+            context.startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.AppController;
-import lmdelivery.longmen.com.android.NewBookingActivity;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -174,8 +174,9 @@ public class DestinationFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (!etProvince.getText().toString().isEmpty()) {
                     ((TextInputLayout) etProvince.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(etProvince.getText().toString());
                 }
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(etProvince.getText().toString());
+
             }
         });
 
@@ -192,8 +193,9 @@ public class DestinationFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (!etCity.getText().toString().isEmpty()) {
                     ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setCity(etCity.getText().toString());
                 }
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setCity(etCity.getText().toString());
+
             }
         });
 
@@ -210,8 +212,9 @@ public class DestinationFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (!etPostal.getText().toString().isEmpty()) {
                     ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(etPostal.getText().toString());
                 }
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(etPostal.getText().toString());
+
             }
         });
 
@@ -228,8 +231,9 @@ public class DestinationFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (!etUnit.getText().toString().isEmpty()) {
                     ((TextInputLayout) etUnit.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
                 }
+                ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
+
             }
         });
 
@@ -246,8 +250,9 @@ public class DestinationFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (!mAutocompleteView.getText().toString().isEmpty()) {
                     ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(mAutocompleteView.getText().toString());
                 }
+                    ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(mAutocompleteView.getText().toString());
+
             }
         });
     }
@@ -465,8 +470,6 @@ public class DestinationFragment extends Fragment {
                                     e.printStackTrace();
                                 }
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

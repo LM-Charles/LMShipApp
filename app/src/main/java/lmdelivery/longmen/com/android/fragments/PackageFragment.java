@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.UIFragments;
+package lmdelivery.longmen.com.android.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,9 +23,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
-import lmdelivery.longmen.com.android.NewBookingActivity;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.UIFragments.bean.MyPackage;
+import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
 import lmdelivery.longmen.com.android.widget.TypefaceTextView;
 
 

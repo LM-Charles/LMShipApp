@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_vertical_margin"
-    tools:context="lmdelivery.longmen.com.android.UIFragments.LoginFragment">
+    tools:context="lmdelivery.longmen.com.android.fragments.LoginFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
