@@ -34,9 +34,13 @@
 
     <string name="err_connection">Cannot connect to server, please check you network or try again later</string>
 
+
+
+
     <string name="loading">Loading</string>
 
     <string name="no_shipping">Welcome!\nYou do not have any shipping yet, Please click the + button below to ship a new package</string>
+    <string name="account_activated">Welcome to LM Delivery!</string>
 
 
 </resources>

@@ -8,11 +8,13 @@
     <string name="action_sign_in_short">Sign in</string>
 
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_password_too_short">This password is too short</string>
+    <string name="error_invalid_password">Password need to contain both number and letter</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
     <string name="error_phone_too_short">This phone number is too short</string>
+    <string name="error_phone_too_long" >This phone number is too long</string>
 
     <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
 
@@ -27,5 +29,6 @@
     <string name="verify_code">Verification Code</string>
     <string name="verify_phone">Please verify your phone number</string>
     <string name="register">Register</string>
+    <string name="do_not_get_code">Didn\'t get the verification code?</string>
 
 </resources>

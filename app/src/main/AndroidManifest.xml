@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name=".AppController"
@@ -29,15 +30,15 @@
         android:theme="@style/Theme.DesignDemo" >
 
         <!-- office -->
-         <meta-data
-         android:name="com.google.android.geo.API_KEY"
-         android:value="AIzaSyAzRmv6oViKZ-uQ5DJrJn64gHYQVyHfF0s" />
+         <!--<meta-data-->
+         <!--android:name="com.google.android.geo.API_KEY"-->
+         <!--android:value="AIzaSyAzRmv6oViKZ-uQ5DJrJn64gHYQVyHfF0s" />-->
 
 
         <!-- home -->
-        <!--<meta-data-->
-            <!--android:name="com.google.android.geo.API_KEY"-->
-            <!--android:value="AIzaSyAKJVxQ1njS_Ki_hgicuSLrTWpJTGLd1ao" />-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAKJVxQ1njS_Ki_hgicuSLrTWpJTGLd1ao" />
 
         <meta-data
             android:name="com.google.android.gms.version"

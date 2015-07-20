@@ -59,7 +59,7 @@ public class AppController extends Application {
         }
     }
     public SharedPreferences getDefaultSharePreferences(){
-        return getDefaultSharePreferences();
+        return getSharedPreferences(Constant.SHARE_NAME, MODE_PRIVATE);
     }
 
     public String getUserId(){

@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin">
 
-    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-        android:id="@+id/til_phone"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/et_phone"
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/phone"
-            android:inputType="phone"
-            android:maxLines="1"
-            android:singleLine="true" />
-    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+            android:text="+1"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="bottom"
+            android:textSize="18sp"/>
+
+        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+            android:id="@+id/til_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+    </LinearLayout>
+
+
 
     <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
         android:id="@+id/til_code"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/et_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/verify_code"
-            android:inputType="numberSigned"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"/>
+            <!--android:inputType="numberSigned"/>-->
     </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
     <Button
@@ -50,6 +66,14 @@
         android:text="@string/verify"
         android:visibility="gone" />
 
+    <Button
+        android:id="@+id/btn_request_again"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/request_again"
+        android:visibility="gone" />
+
 
     <TextView
         android:id="@+id/tv_no_code"
@@ -57,13 +81,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:textSize="18sp"
-        android:text="Didn't get the verification code?" />
+        android:text="@string/do_not_get_code"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btn_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_padding"
-        android:text="@string/contact_support" />
+        android:text="@string/contact_support"
+        android:visibility="gone"/>
 
 </LinearLayout>
