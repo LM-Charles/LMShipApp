@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.MyPackage;
 
 /**
  * A simple {@link Fragment} subclass.
