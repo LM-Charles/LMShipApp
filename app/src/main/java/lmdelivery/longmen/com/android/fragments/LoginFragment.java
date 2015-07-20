@@ -3,6 +3,8 @@ package lmdelivery.longmen.com.android.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -32,8 +35,8 @@ import java.util.List;
 
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.activity.LoginActivity;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.activity.LoginActivity;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -159,15 +162,19 @@ public class LoginFragment extends Fragment {
         tilEmail.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (password.length()< Constant.PASSWORD_MIN_LENGTH) {
             tilPassWord.setError(getString(R.string.error_password_too_short));
+            focusView = mPasswordView;
+            cancel = true;
+        }else if(!isPasswordValid(password)){
+            tilPassWord.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -189,36 +196,46 @@ public class LoginFragment extends Fragment {
             focusView.requestFocus();
         } else {
             final ProgressDialog pd = new ProgressDialog(getActivity());
-            pd.setMessage("Loading");
+            pd.setMessage(getString(R.string.loading));
             pd.show();
 
             JSONObject params = new JSONObject();
             try {
-                params.put("email", mEmailView.getText().toString());
-                params.put("password", mPasswordView.getText().toString());
+                params.put("email", email);
+                params.put("password", password);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            loginRequest = new JsonObjectRequest(Request.Method.PUT, Constant.URL + "user", params, new Response.Listener<JSONObject>() {
+            loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "login?email=" + email + "&password=" + password, params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Logger.e(TAG, response.toString());
                     pd.dismiss();
                     loginRequest = null;
-                    //TODO: save user info
-                    loginActivity.finish();
+                    try {
+                        String id = response.getString("id");
+                        String token = response.getString("apiToken");
+
+                        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constant.SHARE_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString(Constant.SHARE_USER_EMAIL, email);
+                        editor.putString(Constant.SHARE_USER_ID, id);
+                        editor.putString(Constant.SHARE_USER_TOKEN, token);
+                        editor.apply();
+                        Toast.makeText(getActivity(), "Login success", Toast.LENGTH_LONG).show();
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Util.showMessageDialog(getString(R.string.err_connection),getActivity());
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     loginRequest = null;
                     pd.dismiss();
-                    if (error != null)
-                        Logger.e(TAG, error.toString());
-
-                    if (getActivity() != null)
-                        Util.showMessageDialog(getString(R.string.err_connection), getActivity());
+                    Util.handleVolleyError(error,getActivity());
                 }
             });
             // Adding request to request queue

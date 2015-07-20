@@ -1,8 +1,6 @@
 package lmdelivery.longmen.com.android;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -20,7 +18,9 @@ public class Constant {
     public static final int FAB_ANIMTION_DURATION = 1000;
     public static final int MAX_CITY_LENGTH = 15;
     public static final int MAX_PROVINCE_LENGTH = 15;
+    public static final int PASSWORD_MIN_LENGTH = 8;
 
+    public static final String SHARE_NAME = "LMSHARE";
     public static final String SHARE_USER_EMAIL = "SHARE_USER_EMAIL";
     public static final String SHARE_USER_TOKEN = "SHARE_USER_TOKEN";
     public static final String SHARE_USER_PHONE = "SHARE_USER_PHONE";

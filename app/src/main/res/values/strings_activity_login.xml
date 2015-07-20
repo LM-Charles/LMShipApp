@@ -14,7 +14,7 @@
     <string name="error_field_required">This field is required</string>
 
     <string name="error_phone_too_short">This phone number is too short</string>
-
+    <string name="error_phone_too_long" >This phone number is too long</string>
 
     <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
 

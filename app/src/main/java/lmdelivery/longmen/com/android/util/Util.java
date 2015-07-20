@@ -1,10 +1,11 @@
 package lmdelivery.longmen.com.android.util;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.R;
 
 /**
@@ -79,6 +81,25 @@ public class Util {
             context.startActivity(Intent.createChooser(i, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static String getPhoneNumber(){
+        try {
+            TelephonyManager tMgr = (TelephonyManager) AppController.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+            String phone = tMgr.getLine1Number();
+            if(!TextUtils.isEmpty(phone)){
+                phone = phone.replaceAll("[^\\d]", "");
+                if(phone.length()>2 && phone.startsWith("1")){
+                    phone = phone.substring(1);
+                }
+                return phone;
+            }else {
+                return "";
+            }
+        }catch (Exception e){
+            return "";
         }
     }
 
