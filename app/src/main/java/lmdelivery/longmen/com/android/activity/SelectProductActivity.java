@@ -29,9 +29,9 @@ import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.fragments.RateItemFragment;
-import lmdelivery.longmen.com.android.fragments.bean.MyAddress;
-import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
-import lmdelivery.longmen.com.android.fragments.bean.MyTime;
+import lmdelivery.longmen.com.android.bean.MyAddress;
+import lmdelivery.longmen.com.android.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -40,6 +40,7 @@ public class SelectProductActivity extends AppCompatActivity {
 
     private static final java.lang.String TAG = SelectProductActivity.class.getName();
     private JsonObjectRequest getRateRequest;
+    private JsonObjectRequest bookShipRequest;
     private MyAddress mPickupAddr;
     private MyAddress mDropoffAddr;
     private MyTime mTime;
@@ -153,12 +154,12 @@ public class SelectProductActivity extends AppCompatActivity {
             pickup.put("residential", "");
 
             JSONObject dropOff = new JSONObject();
-            pickup.put("address", mDropoffAddr.getStreetName());
-            pickup.put("city", mDropoffAddr.getCity());
-            pickup.put("province", mDropoffAddr.getProvince());
-            pickup.put("country", mDropoffAddr.getCountry());
-            pickup.put("postal", mDropoffAddr.getPostalCode());
-            pickup.put("residential", "");
+            dropOff.put("address", mDropoffAddr.getStreetName());
+            dropOff.put("city", mDropoffAddr.getCity());
+            dropOff.put("province", mDropoffAddr.getProvince());
+            dropOff.put("country", mDropoffAddr.getCountry());
+            dropOff.put("postal", mDropoffAddr.getPostalCode());
+            dropOff.put("residential", "");
 
             params.put("fromAddress", pickup);
             params.put("toAddress", dropOff);
@@ -186,5 +187,51 @@ public class SelectProductActivity extends AppCompatActivity {
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(getRateRequest);
+    }
+
+    private void bookShipment(){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.loading));
+        pd.show();
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("userId", AppController.getInstance().getUserId());
+
+            params.put("fromAddress", mPickupAddr.getStreetName());
+            params.put("fromCity", mPickupAddr.getCity());
+            params.put("fromProvince", mPickupAddr.getProvince());
+            params.put("fromCountry", mPickupAddr.getCountry());
+            params.put("fromPostal", mPickupAddr.getPostalCode());
+
+            params.put("toAddress", mDropoffAddr.getStreetName());
+            params.put("toCity", mDropoffAddr.getCity());
+            params.put("toProvince", mDropoffAddr.getProvince());
+            params.put("toCountry", mDropoffAddr.getCountry());
+            params.put("toPostal", mDropoffAddr.getPostalCode());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "order?token=" + "userToken", params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                bookShipRequest = null;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                bookShipRequest = null;
+                pd.dismiss();
+                if (error != null)
+                    Logger.e(TAG, error.toString());
+
+                Util.showMessageDialog(getString(R.string.err_connection), context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(bookShipRequest);
     }
 }

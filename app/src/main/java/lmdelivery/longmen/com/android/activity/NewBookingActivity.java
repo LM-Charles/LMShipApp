@@ -33,9 +33,9 @@ import lmdelivery.longmen.com.android.fragments.PackageFragment;
 import lmdelivery.longmen.com.android.fragments.PickupFragment;
 import lmdelivery.longmen.com.android.fragments.SummaryFragment;
 import lmdelivery.longmen.com.android.fragments.TimeFragment;
-import lmdelivery.longmen.com.android.fragments.bean.MyAddress;
-import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
-import lmdelivery.longmen.com.android.fragments.bean.MyTime;
+import lmdelivery.longmen.com.android.bean.MyAddress;
+import lmdelivery.longmen.com.android.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 
 

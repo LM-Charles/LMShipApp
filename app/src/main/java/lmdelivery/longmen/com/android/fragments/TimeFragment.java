@@ -17,7 +17,7 @@ import java.util.List;
 
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.fragments.bean.MyTime;
+import lmdelivery.longmen.com.android.bean.MyTime;
 
 /**
  * A fragment representing a list of Items.

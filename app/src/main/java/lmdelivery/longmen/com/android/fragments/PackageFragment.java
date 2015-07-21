@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.fragments.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.MyPackage;
 import lmdelivery.longmen.com.android.widget.TypefaceTextView;
 
 

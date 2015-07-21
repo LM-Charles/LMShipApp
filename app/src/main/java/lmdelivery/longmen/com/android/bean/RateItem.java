@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.fragments.bean;
+package lmdelivery.longmen.com.android.bean;
 
 /**
  * Created by rzhu on 6/30/2015.
