@@ -142,8 +142,7 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.matches("^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9]+$");
     }
 
     /**
@@ -168,13 +167,8 @@ public class LoginFragment extends Fragment {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (password.length()< Constant.PASSWORD_MIN_LENGTH) {
-            tilPassWord.setError(getString(R.string.error_password_too_short));
-            focusView = mPasswordView;
-            cancel = true;
-        }else if(!isPasswordValid(password)){
-            tilPassWord.setError(getString(R.string.error_invalid_password));
+        if (TextUtils.isEmpty(password)) {
+            tilPassWord.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -307,6 +301,8 @@ public class LoginFragment extends Fragment {
         final EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
         final EditText etCode = (EditText) view.findViewById(R.id.et_code);
         final EditText etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
+        final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
+
 
         final TextInputLayout tilPhone = (TextInputLayout) view.findViewById(R.id.til_phone);
         final TextInputLayout tilCode = (TextInputLayout) view.findViewById(R.id.til_code);
@@ -315,6 +311,13 @@ public class LoginFragment extends Fragment {
         final Button resetBtn = (Button) view.findViewById(R.id.btn_reset);
         final Button contactBtn = (Button) view.findViewById(R.id.btn_contact);
         final Button getCodeBtn = (Button) view.findViewById(R.id.btn_get_code);
+
+        contactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.sendSupportEmail(getActivity());
+            }
+        });
 
         getCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -343,6 +346,9 @@ public class LoginFragment extends Fragment {
                             tilNewPassword.setVisibility(View.VISIBLE);
                             tilPhone.setVisibility(View.VISIBLE);
                             getCodeBtn.setText(getString(R.string.request_again));
+                            resetBtn.setVisibility(View.VISIBLE);
+                            contactBtn.setVisibility(View.VISIBLE);
+                            tvNoCode.setVisibility(View.VISIBLE);
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -369,11 +375,13 @@ public class LoginFragment extends Fragment {
                 String code = etCode.getText().toString();
 
                 if (TextUtils.isEmpty(newPassword)) {
-                    tilPassWord.setError(getString(R.string.error_field_required));
+                    tilNewPassword.setError(getString(R.string.error_field_required));
+                }else if(newPassword.length()<Constant.PASSWORD_MIN_LENGTH){
+                    tilNewPassword.setError(getString(R.string.error_password_too_short));
                 }
                 // Check for a valid password, if the user entered one.
                 else if (!isPasswordValid(newPassword)) {
-                    tilPassWord.setError(getString(R.string.error_invalid_password));
+                    tilNewPassword.setError(getString(R.string.error_invalid_password));
                 } else if (TextUtils.isEmpty(code)) {
                     tilCode.setError(getString(R.string.error_field_required));
                 } else {
@@ -419,6 +427,14 @@ public class LoginFragment extends Fragment {
         dialog.setTitle(getActivity().getString(R.string.forgot_password)
         );
         dialog.show();
+        etPhone.post(new Runnable() {
+            @Override
+            public void run() {
+                String phoneNumber = Util.getPhoneNumber();
+                if (!TextUtils.isEmpty(phoneNumber))
+                    etPhone.setText(phoneNumber);
+            }
+        });
     }
 
 }

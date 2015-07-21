@@ -127,7 +127,6 @@ public class RegisterFragment extends Fragment {
                 "<a href=\"http://zoroapp.com/EULA\">Terms and Conditions</a> "));
         link.setMovementMethod(LinkMovementMethod.getInstance());
 
-        showVerifyPhoneNumberDialog();
         return root;
     }
 
