@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Kaiyu\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jar="C:\Users\rzhu\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\gson-2.3.1-e90d2364b6e4bcd9ef4919bf601b276cdadac0a5.jar" />
+        <dex dex="C:\AndroidSamples\LMShipApp\app\build\intermediates\pre-dexed\debug\gson-2.3.1-45ec998730d2c39ef1aafb44cc7678678cd0de7c.jar" />
     </item>
 
 </items>

@@ -14,6 +14,17 @@ public class MyPackage implements Parcelable{
     public static final int SMALL_BOX = 0;
     public static final int MED_BOX = 1;
     public static final int BIG_BOX = 2;
+
+    public static final String SMALL_HEIGHT = "10";
+    public static final String SMALL_WIDTH = "10";
+    public static final String SMALL_LENGTH = "10";
+    public static final String MED_HEIGHT = "10";
+    public static final String MED_WIDTH = "10";
+    public static final String MED_LENGTH = "10";
+    public static final String BIG_HEIGHT = "10";
+    public static final String BIG_WIDTH = "10";
+    public static final String BIG_LENGTH = "10";
+
     private String length, width, height, weight;
     private int boxSize;
     private boolean isOwnBox;

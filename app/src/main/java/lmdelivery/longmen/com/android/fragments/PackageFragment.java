@@ -1,5 +1,6 @@
 package lmdelivery.longmen.com.android.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -21,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
@@ -34,6 +36,7 @@ public class PackageFragment extends Fragment {
     private static final java.lang.String TAG = PackageFragment.class.toString();
     private PackageRecyclerViewAdapter mAdapter;
     private RecyclerView recyclerView;
+    private ArrayList<MyPackage> myPackageArrayList;
 
     public static PackageFragment newInstance() {
         PackageFragment fragment = new PackageFragment();
@@ -66,23 +69,25 @@ public class PackageFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        mAdapter = new PackageRecyclerViewAdapter();
+        myPackageArrayList = ((NewBookingActivity)getActivity()).myPackageArrayList;
+        mAdapter = new PackageRecyclerViewAdapter(getActivity(), myPackageArrayList, recyclerView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setItemAnimator(new SlideInLeftAnimator());
     }
 
     public boolean validateAllPackage(){
-        if(getActivity()== null || ((NewBookingActivity) getActivity()).myPackageArrayList==null){
+        if(getActivity()== null || myPackageArrayList==null){
             return false;
         }
 
-        ArrayList<MyPackage> myPackages = ((NewBookingActivity) getActivity()).myPackageArrayList;
+        ArrayList<MyPackage> myPackages = myPackageArrayList;
         boolean result = true;
         for(int i = 0; i < myPackages.size(); i++){
             MyPackage myPackage = myPackages.get(i);
@@ -99,10 +104,11 @@ public class PackageFragment extends Fragment {
         return result;
     }
 
-    private class PackageRecyclerViewAdapter extends RecyclerView.Adapter<PackageRecyclerViewAdapter.ViewHolder> {
+    static private class PackageRecyclerViewAdapter extends RecyclerView.Adapter<PackageRecyclerViewAdapter.ViewHolder> {
 
-
-
+        private Context context;
+        private List<MyPackage> myPackageArrayList;
+        private RecyclerView recyclerView;
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView date;
@@ -115,6 +121,7 @@ public class PackageFragment extends Fragment {
             public final RadioButton rbSmall, rbMed, rbBig;
             public final EditText etLength, etWidth, etHeight, etWeight;
             public final Spinner spinner;
+
 
             public ViewHolder(View view) {
                 super(view);
@@ -149,26 +156,24 @@ public class PackageFragment extends Fragment {
         }
 
         public MyPackage getValueAt(int position) {
-            return ((NewBookingActivity)getActivity()).myPackageArrayList.get(position);
+            return myPackageArrayList.get(position);
         }
 
         public void addPackage() {
-            if(isAdded()) {
-                ((NewBookingActivity) getActivity()).myPackageArrayList.add(new MyPackage());
-                notifyItemInserted(((NewBookingActivity) getActivity()).myPackageArrayList.size());
+                myPackageArrayList.add(new MyPackage());
+                notifyItemInserted(myPackageArrayList.size());
                 //this is to notify first item to show the close icon
                 notifyItemChanged(0);
-                recyclerView.scrollToPosition(((NewBookingActivity) getActivity()).myPackageArrayList.size() - 1);
-            }
+                recyclerView.scrollToPosition(myPackageArrayList.size() - 1);
         }
 
         private void removePackage(int position){
-            if(((NewBookingActivity)getActivity()).myPackageArrayList.size()==1) {
+            if(((NewBookingActivity) context).myPackageArrayList.size()==1) {
                 //TODO: add a toast
             }else{
-                ((NewBookingActivity)getActivity()).myPackageArrayList.remove(position);
+                myPackageArrayList.remove(position);
                 notifyItemRemoved(position);
-                notifyItemRangeChanged(position, ((NewBookingActivity) getActivity()).myPackageArrayList.size());
+                notifyItemRangeChanged(position, myPackageArrayList.size());
                 //this is to notify first item to hide the close icon
                 notifyItemChanged(0);
             }
@@ -181,29 +186,32 @@ public class PackageFragment extends Fragment {
                 String length = viewHolder.etLength.getText().toString();
                 String width = viewHolder.etWidth.getText().toString();
                 if(height.isEmpty())
-                    ((TextInputLayout)viewHolder.etHeight.getParent()).setError(getString(R.string.required));
+                    ((TextInputLayout)viewHolder.etHeight.getParent()).setError(context.getString(R.string.required));
                 else
                     ((TextInputLayout)viewHolder.etHeight.getParent()).setErrorEnabled(false);
 
                 if(length.isEmpty())
-                    ((TextInputLayout)viewHolder.etLength.getParent()).setError(getString(R.string.required));
+                    ((TextInputLayout)viewHolder.etLength.getParent()).setError(context.getString(R.string.required));
                 else
                     ((TextInputLayout)viewHolder.etLength.getParent()).setErrorEnabled(false);
 
                 if(width.isEmpty())
-                    ((TextInputLayout)viewHolder.etWidth.getParent()).setError(getString(R.string.required));
+                    ((TextInputLayout)viewHolder.etWidth.getParent()).setError(context.getString(R.string.required));
                 else
                     ((TextInputLayout)viewHolder.etWidth.getParent()).setErrorEnabled(false);
 
             }
 
             if(weight.isEmpty())
-                ((TextInputLayout)viewHolder.etWeight.getParent()).setError(getString(R.string.required));
+                ((TextInputLayout)viewHolder.etWeight.getParent()).setError(context.getString(R.string.required));
             else
                 ((TextInputLayout)viewHolder.etWeight.getParent()).setErrorEnabled(false);
         }
 
-        public PackageRecyclerViewAdapter() {
+        public PackageRecyclerViewAdapter(Context context, ArrayList<MyPackage> myPackages, RecyclerView recyclerView) {
+            this.context = context;
+            this.myPackageArrayList = myPackages;
+            this.recyclerView = recyclerView;
         }
 
         @Override
@@ -214,7 +222,7 @@ public class PackageFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder,final int position) {
-            final MyPackage myPackage = ((NewBookingActivity)getActivity()).myPackageArrayList.get(position);
+            final MyPackage myPackage = myPackageArrayList.get(position);
 
             //update view
             if(myPackage.isOwnBox()){
@@ -245,11 +253,11 @@ public class PackageFragment extends Fragment {
             }
 
             if (myPackage.isOwnBox()) {
-                holder.price.setText(getActivity().getString(R.string.free));
+                holder.price.setText(context.getString(R.string.free));
                 holder.llOwnBox.setVisibility(View.VISIBLE);
                 holder.llLmBox.setVisibility(View.GONE);
             } else {
-                holder.price.setText(getActivity().getString(R.string.five_bucks));
+                holder.price.setText(context.getString(R.string.five_bucks));
                 holder.llOwnBox.setVisibility(View.GONE);
                 holder.llLmBox.setVisibility(View.VISIBLE);
             }
@@ -258,7 +266,7 @@ public class PackageFragment extends Fragment {
                 showEditTextValidation(myPackage,holder);
             }
 
-            if(position==0 && ((NewBookingActivity)getActivity()).myPackageArrayList.size()==1){
+            if(position==0 && myPackageArrayList.size()==1){
                 holder.closeIcon.setVisibility(View.GONE);
             }else {
                 holder.closeIcon.setVisibility(View.VISIBLE);
@@ -276,11 +284,11 @@ public class PackageFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         myPackage.setIsOwnBox(true);
-                        holder.price.setText(getActivity().getString(R.string.free));
+                        holder.price.setText(context.getString(R.string.free));
                         holder.llOwnBox.setVisibility(View.VISIBLE);
                         holder.llLmBox.setVisibility(View.GONE);
                     } else {
-                        holder.price.setText(getActivity().getString(R.string.five_bucks));
+                        holder.price.setText(context.getString(R.string.five_bucks));
                         myPackage.setIsOwnBox(false);
                         holder.llOwnBox.setVisibility(View.GONE);
                         holder.llLmBox.setVisibility(View.VISIBLE);
@@ -393,7 +401,7 @@ public class PackageFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return ((NewBookingActivity)getActivity()).myPackageArrayList.size();
+            return myPackageArrayList.size();
         }
     }
 

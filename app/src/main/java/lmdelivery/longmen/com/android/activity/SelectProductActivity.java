@@ -39,7 +39,7 @@ import lmdelivery.longmen.com.android.util.Util;
 public class SelectProductActivity extends AppCompatActivity {
 
     private static final java.lang.String TAG = SelectProductActivity.class.getName();
-    private JsonObjectRequest getRateRequest;
+
     private JsonObjectRequest bookShipRequest;
     private MyAddress mPickupAddr;
     private MyAddress mDropoffAddr;
@@ -138,57 +138,6 @@ public class SelectProductActivity extends AppCompatActivity {
         }
     }
 
-    private void getRate(){
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage(getString(R.string.loading));
-        pd.show();
-
-        JSONObject params = new JSONObject();
-        try {
-            JSONObject pickup = new JSONObject();
-            pickup.put("address", mPickupAddr.getStreetName());
-            pickup.put("city", mPickupAddr.getCity());
-            pickup.put("province", mPickupAddr.getProvince());
-            pickup.put("country", mPickupAddr.getCountry());
-            pickup.put("postal", mPickupAddr.getPostalCode());
-            pickup.put("residential", "");
-
-            JSONObject dropOff = new JSONObject();
-            dropOff.put("address", mDropoffAddr.getStreetName());
-            dropOff.put("city", mDropoffAddr.getCity());
-            dropOff.put("province", mDropoffAddr.getProvince());
-            dropOff.put("country", mDropoffAddr.getCountry());
-            dropOff.put("postal", mDropoffAddr.getPostalCode());
-            dropOff.put("residential", "");
-
-            params.put("fromAddress", pickup);
-            params.put("toAddress", dropOff);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        getRateRequest = new JsonObjectRequest(Request.Method.PUT, Constant.URL + "user", params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.e(TAG, response.toString());
-                pd.dismiss();
-                getRateRequest = null;
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                getRateRequest = null;
-                pd.dismiss();
-                if (error != null)
-                    Logger.e(TAG, error.toString());
-
-                Util.showMessageDialog(getString(R.string.err_connection), context);
-            }
-        });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(getRateRequest);
-    }
-
     private void bookShipment(){
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.loading));
@@ -225,10 +174,7 @@ public class SelectProductActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 bookShipRequest = null;
                 pd.dismiss();
-                if (error != null)
-                    Logger.e(TAG, error.toString());
-
-                Util.showMessageDialog(getString(R.string.err_connection), context);
+                Util.handleVolleyError(error, context);
             }
         });
         // Adding request to request queue

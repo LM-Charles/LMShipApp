@@ -50,7 +50,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorButtonNormal"
+            android:background="@color/colorPrimary"
             app:layout_scrollFlags="enterAlways"
             app:tabTextColor="@color/white_text"
             app:tabSelectedTextColor="@color/white_text"

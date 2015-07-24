@@ -63,6 +63,18 @@ public class AppController extends Application {
     }
 
     public String getUserId(){
-        return getDefaultSharePreferences().getString(Constant.SHARE_USER_ID,"");
+        return getDefaultSharePreferences().getString(Constant.SHARE_USER_ID, "");
+    }
+
+    public String getUserToken(){
+        return getDefaultSharePreferences().getString(Constant.SHARE_USER_TOKEN,"");
+    }
+
+    public String getUserPhone(){
+        return getDefaultSharePreferences().getString(Constant.SHARE_USER_PHONE,"");
+    }
+
+    public String getUserEmail(){
+        return getDefaultSharePreferences().getString(Constant.SHARE_USER_EMAIL,"");
     }
 }

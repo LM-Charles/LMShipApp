@@ -30,15 +30,15 @@
         android:theme="@style/Theme.DesignDemo" >
 
         <!-- office -->
-         <!--<meta-data-->
-         <!--android:name="com.google.android.geo.API_KEY"-->
-         <!--android:value="AIzaSyAzRmv6oViKZ-uQ5DJrJn64gHYQVyHfF0s" />-->
+         <meta-data
+         android:name="com.google.android.geo.API_KEY"
+         android:value="AIzaSyAzRmv6oViKZ-uQ5DJrJn64gHYQVyHfF0s" />
 
 
         <!-- home -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAKJVxQ1njS_Ki_hgicuSLrTWpJTGLd1ao" />
+        <!--<meta-data-->
+            <!--android:name="com.google.android.geo.API_KEY"-->
+            <!--android:value="AIzaSyAKJVxQ1njS_Ki_hgicuSLrTWpJTGLd1ao" />-->
 
         <meta-data
             android:name="com.google.android.gms.version"

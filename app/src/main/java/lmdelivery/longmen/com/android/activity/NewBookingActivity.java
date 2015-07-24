@@ -1,5 +1,6 @@
 package lmdelivery.longmen.com.android.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,15 +18,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.fragments.DestinationFragment;
@@ -37,16 +47,21 @@ import lmdelivery.longmen.com.android.bean.MyAddress;
 import lmdelivery.longmen.com.android.bean.MyPackage;
 import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Util;
 
 
 public class NewBookingActivity extends AppCompatActivity implements TimeFragment.OnTimeSelectedListener, GoogleApiClient.OnConnectionFailedListener {
     private static final java.lang.String TAG = NewBookingActivity.class.getName();
+    private JsonObjectRequest getRateRequest;
+    private JsonObjectRequest bookShipRequest;
+
     private TabLayout tabLayout;
     public PickupFragment pickupFragment;
     public DestinationFragment dropOffFragment;
     public PackageFragment packageFragment;
     public TimeFragment timeFragment;
     public SummaryFragment summaryFragment;
+
 
     public FloatingActionButton fab;
     private ViewPager viewPager;
@@ -166,14 +181,15 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SelectProductActivity.class);
-                    intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
-                    intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
-                    intent.putExtra(Constant.EXTRA_TIME, selectedTime);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, myPackageArrayList);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+//                    Intent intent = new Intent(context, SelectProductActivity.class);
+//                    intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
+//                    intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
+//                    intent.putExtra(Constant.EXTRA_TIME, selectedTime);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, myPackageArrayList);
+//                    intent.putExtras(bundle);
+//                    startActivity(intent);
+
                 }
             });
         } else {
@@ -433,4 +449,136 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         return result;
     }
 
+    private void getRate(){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.loading));
+        pd.show();
+
+        JSONObject params = new JSONObject();
+        try {
+            JSONObject pickup = new JSONObject();
+            pickup.put("address", pickupAddr.getStreetName());
+            pickup.put("city", pickupAddr.getCity());
+            pickup.put("province", pickupAddr.getProvince());
+            pickup.put("country", pickupAddr.getCountry());
+            pickup.put("postal", pickupAddr.getPostalCode());
+            pickup.put("residential", true);
+
+            JSONObject dropOff = new JSONObject();
+            dropOff.put("address", dropOffAddr.getStreetName());
+            dropOff.put("city", dropOffAddr.getCity());
+            dropOff.put("province", dropOffAddr.getProvince());
+            dropOff.put("country", dropOffAddr.getCountry());
+            dropOff.put("postal", dropOffAddr.getPostalCode());
+            dropOff.put("residential", true);
+
+            params.put("fromAddress", pickup);
+            params.put("toAddress", dropOff);
+
+            params.put("shipments", buildBoxJson());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "rate/", params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.d(TAG, response.toString());
+                pd.dismiss();
+                getRateRequest = null;
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getRateRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error,context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(getRateRequest);
+    }
+
+    private JSONArray buildBoxJson(){
+        JSONArray shipments = new JSONArray();
+
+        for(MyPackage myPackage : myPackageArrayList){
+            try {
+                JSONObject shipment = new JSONObject();
+                if(myPackage.isOwnBox()){
+                    shipment.put("height", myPackage.getHeight());
+                    shipment.put("width", myPackage.getWidth());
+                    shipment.put("length", myPackage.getLength());
+                    shipment.put("weight", myPackage.getWeight());
+                }else{
+                    switch (myPackage.getBoxSize()){
+                        case MyPackage.BIG_BOX:
+                            shipment.put("height", MyPackage.BIG_HEIGHT);
+                            shipment.put("width", MyPackage.BIG_WIDTH);
+                            shipment.put("length", MyPackage.BIG_LENGTH);
+                            break;
+                        case MyPackage.MED_BOX:
+                            shipment.put("height", MyPackage.MED_HEIGHT);
+                            shipment.put("width", MyPackage.MED_WIDTH);
+                            shipment.put("length", MyPackage.MED_LENGTH);
+                            break;
+                        case MyPackage.SMALL_BOX:
+                            shipment.put("height", MyPackage.SMALL_HEIGHT);
+                            shipment.put("width", MyPackage.SMALL_WIDTH);
+                            shipment.put("length", MyPackage.SMALL_LENGTH);
+                            break;
+                    }
+                    shipment.put("weight", myPackage.getWeight());
+                }
+                shipments.put(shipment);
+            }catch (Exception e){
+
+            }
+        }
+        return shipments;
+    }
+
+    private void bookShipment(){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.loading));
+        pd.show();
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("userId", AppController.getInstance().getUserId());
+
+            params.put("fromAddress", pickupAddr.getStreetName());
+            params.put("fromCity", pickupAddr.getCity());
+            params.put("fromProvince", pickupAddr.getProvince());
+            params.put("fromCountry", pickupAddr.getCountry());
+            params.put("fromPostal", pickupAddr.getPostalCode());
+
+            params.put("toAddress", dropOffAddr.getStreetName());
+            params.put("toCity", dropOffAddr.getCity());
+            params.put("toProvince", dropOffAddr.getProvince());
+            params.put("toCountry", dropOffAddr.getCountry());
+            params.put("toPostal", dropOffAddr.getPostalCode());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "order?token=" + AppController.getInstance().getUserToken(), params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                bookShipRequest = null;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                bookShipRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error,context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(bookShipRequest);
+    }
 }

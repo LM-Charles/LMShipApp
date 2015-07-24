@@ -181,11 +181,11 @@ public class RegisterFragment extends Fragment {
             cancel = true;
         }
         // Check for a valid password, if the user entered one.
-        if (password.length()< Constant.PASSWORD_MIN_LENGTH) {
+        if (password.length() < Constant.PASSWORD_MIN_LENGTH) {
             tilPassWord.setError(getString(R.string.error_password_too_short));
             focusView = mPasswordView;
             cancel = true;
-        }else if(!isPasswordValid(password)){
+        } else if (!isPasswordValid(password)) {
             tilPassWord.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -238,9 +238,9 @@ public class RegisterFragment extends Fragment {
                         editor.apply();
                         Toast.makeText(getActivity(), getString(R.string.register_successful), Toast.LENGTH_LONG).show();
                         showVerifyPhoneNumberDialog();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        Util.showMessageDialog(getString(R.string.err_connection),getActivity());
+                        Util.showMessageDialog(getString(R.string.err_connection), getActivity());
                     }
 
                 }
@@ -303,7 +303,7 @@ public class RegisterFragment extends Fragment {
         final Button btnSave = (Button) view.findViewById(R.id.btn_save);
         final Button btnVerify = (Button) view.findViewById(R.id.btn_verify);
         final Button btnContact = (Button) view.findViewById(R.id.btn_contact);
-        final Button btnRequestAgain= (Button) view.findViewById(R.id.btn_request_again);
+        final Button btnRequestAgain = (Button) view.findViewById(R.id.btn_request_again);
 
         final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
 
@@ -317,19 +317,17 @@ public class RegisterFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getCodeRequest!=null)
+                if (getCodeRequest != null)
                     return;
 
                 final String phone = etPhone.getText().toString();
                 if (phone.isEmpty()) {
                     tilPhone.setError(getString(R.string.error_field_required));
-                } else if (phone.length()<10) {
+                } else if (phone.length() < 10) {
                     tilPhone.setError(getString(R.string.error_phone_too_short));
-                } else if (phone.length()>10) {
+                } else if (phone.length() > 10) {
                     tilPhone.setError(getString(R.string.error_phone_too_long));
-                }
-                else {
-
+                } else {
                     final ProgressDialog pd = new ProgressDialog(getActivity());
                     pd.setMessage(getString(R.string.loading));
                     pd.show();
@@ -346,12 +344,10 @@ public class RegisterFragment extends Fragment {
 
                             etPhone.addTextChangedListener(new TextWatcher() {
                                 @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                }
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
                                 @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                }
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
                                 @Override
                                 public void afterTextChanged(Editable s) {
@@ -388,8 +384,7 @@ public class RegisterFragment extends Fragment {
         btnRequestAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendGetCodeRequest(etPhone,tilPhone);
-
+                sendGetCodeRequest(etPhone, tilPhone);
             }
         });
 
@@ -397,8 +392,7 @@ public class RegisterFragment extends Fragment {
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            sendActivateAccountRequest(etCode,tilCode);
-
+                sendActivateAccountRequest(etCode, tilCode);
             }
         });
 
@@ -427,19 +421,18 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private void sendGetCodeRequest(EditText etPhone, TextInputLayout tilPhone){
-        if(getCodeRequest!=null)
+    private void sendGetCodeRequest(EditText etPhone, TextInputLayout tilPhone) {
+        if (getCodeRequest != null)
             return;
 
         final String phone = etPhone.getText().toString();
         if (phone.isEmpty()) {
             tilPhone.setError(getString(R.string.error_field_required));
-        } else if (phone.length()<10) {
+        } else if (phone.length() < 10) {
             tilPhone.setError(getString(R.string.error_phone_too_short));
-        } else if (phone.length()>10) {
+        } else if (phone.length() > 10) {
             tilPhone.setError(getString(R.string.error_phone_too_long));
-        }
-        else {
+        } else {
 
             final ProgressDialog pd = new ProgressDialog(getActivity());
             pd.setMessage(getString(R.string.loading));
@@ -453,7 +446,7 @@ public class RegisterFragment extends Fragment {
                     Logger.e(TAG, response.toString());
                     pd.dismiss();
                     AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-                    Util.showMessageDialog(getString(R.string.verify_dialog_text,phone), getActivity());
+                    Util.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -469,15 +462,15 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private void sendActivateAccountRequest(EditText etCode, TextInputLayout tilCode){
-        if(activateAccountRequest!=null){
+    private void sendActivateAccountRequest(EditText etCode, TextInputLayout tilCode) {
+        if (activateAccountRequest != null) {
             return;
         }
 
         String code = etCode.getText().toString().trim();
         if (code.isEmpty()) {
             tilCode.setError(getString(R.string.error_field_required));
-        }  else {
+        } else {
             final ProgressDialog pd = new ProgressDialog(getActivity());
             pd.setMessage(getString(R.string.loading));
             pd.show();
@@ -486,7 +479,7 @@ public class RegisterFragment extends Fragment {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    activateAccountRequest=null;
+                    activateAccountRequest = null;
                     Logger.e(TAG, response.toString());
                     pd.dismiss();
                     showVerifySuccessDialog();
@@ -495,8 +488,8 @@ public class RegisterFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Logger.e(TAG,error.toString());
-                    activateAccountRequest=null;
+                    Logger.e(TAG, error.toString());
+                    activateAccountRequest = null;
                     pd.dismiss();
                     Util.handleVolleyError(error, getActivity());
                 }
