@@ -29,8 +29,8 @@ import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.fragments.RateItemFragment;
-import lmdelivery.longmen.com.android.bean.MyAddress;
-import lmdelivery.longmen.com.android.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.Address;
+import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -41,10 +41,10 @@ public class SelectProductActivity extends AppCompatActivity {
     private static final java.lang.String TAG = SelectProductActivity.class.getName();
 
     private JsonObjectRequest bookShipRequest;
-    private MyAddress mPickupAddr;
-    private MyAddress mDropoffAddr;
+    private Address mPickupAddr;
+    private Address mDropoffAddr;
     private MyTime mTime;
-    private ArrayList<MyPackage> mPackageList;
+    private ArrayList<Package> mPackageList;
     private Context context;
 
     @Override
@@ -54,8 +54,8 @@ public class SelectProductActivity extends AppCompatActivity {
         context = this;
         Bundle bundle = getIntent().getExtras();
         mPackageList = bundle.getParcelableArrayList(Constant.EXTRA_PACKAGE);
-        mPickupAddr = (MyAddress) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
-        mDropoffAddr = (MyAddress) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
+        mPickupAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
+        mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
         mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
 
 //        Logger.e(TAG, pickup.getFullAddress());

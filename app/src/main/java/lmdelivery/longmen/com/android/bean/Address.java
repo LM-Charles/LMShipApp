@@ -1,21 +1,33 @@
 package lmdelivery.longmen.com.android.bean;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.io.Serializable;
 
 /**
  * Created by rzhu on 6/22/2015.
  */
-public class MyAddress implements Serializable{
+@Table(name = "Addresses")
+public class Address extends Model implements Serializable {
+    @Column(name = "FullAddress")
     private String fullAddress;
+    @Column(name = "StreetName")
     private String streetName;
+    @Column(name = "UnitNumber")
     private String unitNumber;
+    @Column(name = "PostalCode")
     private String postalCode;
+    @Column(name = "City")
     private String city;
+    @Column(name = "Country")
     private String country;
+    @Column(name = "Province")
     private String province;
 
 
-    public MyAddress() {
+    public Address() {
         fullAddress="";
         streetName="";
         unitNumber="";

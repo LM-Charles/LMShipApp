@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +30,7 @@ import java.util.List;
 
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.bean.Shipment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -68,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        CardView cardView = (CardView) findViewById(R.id.welcome_card);
+//        CardView cardView = (CardView) findViewById(R.id.welcome_card);
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         RecyclerView rv = (RecyclerView) findViewById(R.id.recyclerview);
 
-        rv.setVisibility(View.GONE);
+//        rv.setVisibility(View.GONE);
         setupRecyclerView(rv);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -91,12 +91,12 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        ArrayList<RateItem> rateItems = new ArrayList<>();
+        ArrayList<Shipment> shipItems = new ArrayList<>();
 //        for(int i = 0; i < 10; i++){
 //            RateItem item = new RateItem("1","http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
 //            rateItems.add(item);
 //        }
-        recyclerView.setAdapter(new DeliveryItemRecyclerViewAdapter(rateItems));
+        recyclerView.setAdapter(new ShipItemRecyclerViewAdapter(shipItems, context));
     }
 
 
@@ -140,12 +140,18 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private class DeliveryItemRecyclerViewAdapter extends RecyclerView.Adapter<DeliveryItemRecyclerViewAdapter.ViewHolder> {
+    static private class ShipItemRecyclerViewAdapter extends RecyclerView.Adapter<ShipItemRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
+        private Context context;
         private int mBackground;
-        private List<RateItem> mValues;
+        private List<Shipment> mValues;
         private int selectedPosition;
+
+        public ShipItemRecyclerViewAdapter(ArrayList<Shipment> items, Context context) {
+            mValues = items;
+            this.context = context;
+        }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public String mBoundString;
@@ -171,13 +177,11 @@ public class MainActivity extends AppCompatActivity {
 //            }
         }
 
-        public RateItem getValueAt(int position) {
+        public Shipment getValueAt(int position) {
             return mValues.get(position);
         }
 
-        public DeliveryItemRecyclerViewAdapter(List<RateItem> items) {
-            mValues = items;
-        }
+
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

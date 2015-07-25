@@ -2,7 +2,6 @@ package lmdelivery.longmen.com.android.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -43,8 +42,8 @@ import lmdelivery.longmen.com.android.fragments.PackageFragment;
 import lmdelivery.longmen.com.android.fragments.PickupFragment;
 import lmdelivery.longmen.com.android.fragments.SummaryFragment;
 import lmdelivery.longmen.com.android.fragments.TimeFragment;
-import lmdelivery.longmen.com.android.bean.MyAddress;
-import lmdelivery.longmen.com.android.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.Address;
+import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -65,11 +64,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     public FloatingActionButton fab;
     private ViewPager viewPager;
-    public ArrayList<MyPackage> myPackageArrayList;
+    public ArrayList<Package> packageArrayList;
 
     public MyTime selectedTime;
-    public MyAddress pickupAddr;
-    public MyAddress dropOffAddr;
+    public Address pickupAddr;
+    public Address dropOffAddr;
     private Adapter adapter;
 
     private Context context;
@@ -219,8 +218,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     if (packageFragment.validateAllPackage()) {
                         viewPager.setCurrentItem(Constant.TAB_TIME, true);
                     }
-                    for (int i = 0; i < myPackageArrayList.size(); i++) {
-                        Logger.e(TAG, myPackageArrayList.get(i).toString());
+                    for (int i = 0; i < packageArrayList.size(); i++) {
+                        Logger.e(TAG, packageArrayList.get(i).toString());
                     }
                 } else if (currentTab == Constant.TAB_TIME) {
                     if (selectedTime != null) {
@@ -233,12 +232,12 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private void init() {
         context = this;
-        pickupAddr = new MyAddress();
+        pickupAddr = new Address();
         pickupAddr.setCountry("Canada");
         pickupAddr.setProvince("BC");
-        dropOffAddr = new MyAddress();
-        myPackageArrayList = new ArrayList<>();
-        myPackageArrayList.add(new MyPackage());
+        dropOffAddr = new Address();
+        packageArrayList = new ArrayList<>();
+        packageArrayList.add(new Package());
     }
 
     public void scrollTo(int tabPosition) {
@@ -436,13 +435,13 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     public boolean validateAllPackage() {
-        ArrayList<MyPackage> myPackages = myPackageArrayList;
+        ArrayList<Package> aPackages = packageArrayList;
         boolean result = true;
-        for (int i = 0; i < myPackages.size(); i++) {
-            MyPackage myPackage = myPackages.get(i);
-            if (myPackage.isOwnBox() && (myPackage.getHeight().isEmpty() || myPackage.getLength().isEmpty() || myPackage.getWeight().isEmpty() || myPackage.getWidth().isEmpty())) {
+        for (int i = 0; i < aPackages.size(); i++) {
+            Package aPackage = aPackages.get(i);
+            if (aPackage.isOwnBox() && (aPackage.getHeight().isEmpty() || aPackage.getLength().isEmpty() || aPackage.getWeight().isEmpty() || aPackage.getWidth().isEmpty())) {
                 result = false;
-            } else if (!myPackage.isOwnBox() && myPackage.getWeight().isEmpty()) {
+            } else if (!aPackage.isOwnBox() && aPackage.getWeight().isEmpty()) {
                 result = false;
             }
         }
@@ -503,33 +502,33 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private JSONArray buildBoxJson(){
         JSONArray shipments = new JSONArray();
 
-        for(MyPackage myPackage : myPackageArrayList){
+        for(Package aPackage : packageArrayList){
             try {
                 JSONObject shipment = new JSONObject();
-                if(myPackage.isOwnBox()){
-                    shipment.put("height", myPackage.getHeight());
-                    shipment.put("width", myPackage.getWidth());
-                    shipment.put("length", myPackage.getLength());
-                    shipment.put("weight", myPackage.getWeight());
+                if(aPackage.isOwnBox()){
+                    shipment.put("height", aPackage.getHeight());
+                    shipment.put("width", aPackage.getWidth());
+                    shipment.put("length", aPackage.getLength());
+                    shipment.put("weight", aPackage.getWeight());
                 }else{
-                    switch (myPackage.getBoxSize()){
-                        case MyPackage.BIG_BOX:
-                            shipment.put("height", MyPackage.BIG_HEIGHT);
-                            shipment.put("width", MyPackage.BIG_WIDTH);
-                            shipment.put("length", MyPackage.BIG_LENGTH);
+                    switch (aPackage.getBoxSize()){
+                        case Package.BIG_BOX:
+                            shipment.put("height", Package.BIG_HEIGHT);
+                            shipment.put("width", Package.BIG_WIDTH);
+                            shipment.put("length", Package.BIG_LENGTH);
                             break;
-                        case MyPackage.MED_BOX:
-                            shipment.put("height", MyPackage.MED_HEIGHT);
-                            shipment.put("width", MyPackage.MED_WIDTH);
-                            shipment.put("length", MyPackage.MED_LENGTH);
+                        case Package.MED_BOX:
+                            shipment.put("height", Package.MED_HEIGHT);
+                            shipment.put("width", Package.MED_WIDTH);
+                            shipment.put("length", Package.MED_LENGTH);
                             break;
-                        case MyPackage.SMALL_BOX:
-                            shipment.put("height", MyPackage.SMALL_HEIGHT);
-                            shipment.put("width", MyPackage.SMALL_WIDTH);
-                            shipment.put("length", MyPackage.SMALL_LENGTH);
+                        case Package.SMALL_BOX:
+                            shipment.put("height", Package.SMALL_HEIGHT);
+                            shipment.put("width", Package.SMALL_WIDTH);
+                            shipment.put("length", Package.SMALL_LENGTH);
                             break;
                     }
-                    shipment.put("weight", myPackage.getWeight());
+                    shipment.put("weight", aPackage.getWeight());
                 }
                 shipments.put(shipment);
             }catch (Exception e){

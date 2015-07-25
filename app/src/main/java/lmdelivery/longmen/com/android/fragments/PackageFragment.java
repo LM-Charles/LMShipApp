@@ -27,7 +27,7 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.widget.TypefaceTextView;
 
 
@@ -36,7 +36,7 @@ public class PackageFragment extends Fragment {
     private static final java.lang.String TAG = PackageFragment.class.toString();
     private PackageRecyclerViewAdapter mAdapter;
     private RecyclerView recyclerView;
-    private ArrayList<MyPackage> myPackageArrayList;
+    private ArrayList<Package> packageArrayList;
 
     public static PackageFragment newInstance() {
         PackageFragment fragment = new PackageFragment();
@@ -76,27 +76,27 @@ public class PackageFragment extends Fragment {
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        myPackageArrayList = ((NewBookingActivity)getActivity()).myPackageArrayList;
-        mAdapter = new PackageRecyclerViewAdapter(getActivity(), myPackageArrayList, recyclerView);
+        packageArrayList = ((NewBookingActivity)getActivity()).packageArrayList;
+        mAdapter = new PackageRecyclerViewAdapter(getActivity(), packageArrayList, recyclerView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setItemAnimator(new SlideInLeftAnimator());
     }
 
     public boolean validateAllPackage(){
-        if(getActivity()== null || myPackageArrayList==null){
+        if(getActivity()== null || packageArrayList ==null){
             return false;
         }
 
-        ArrayList<MyPackage> myPackages = myPackageArrayList;
+        ArrayList<Package> aPackages = packageArrayList;
         boolean result = true;
-        for(int i = 0; i < myPackages.size(); i++){
-            MyPackage myPackage = myPackages.get(i);
-            if(myPackage.isOwnBox() && (myPackage.getHeight().isEmpty() || myPackage.getLength().isEmpty() || myPackage.getWeight().isEmpty() || myPackage.getWidth().isEmpty())) {
-                myPackage.setShowValidation(true);
+        for(int i = 0; i < aPackages.size(); i++){
+            Package aPackage = aPackages.get(i);
+            if(aPackage.isOwnBox() && (aPackage.getHeight().isEmpty() || aPackage.getLength().isEmpty() || aPackage.getWeight().isEmpty() || aPackage.getWidth().isEmpty())) {
+                aPackage.setShowValidation(true);
                 mAdapter.notifyDataSetChanged();
                 result = false;
-            }else if(!myPackage.isOwnBox() && myPackage.getWeight().isEmpty()){
-                myPackage.setShowValidation(true);
+            }else if(!aPackage.isOwnBox() && aPackage.getWeight().isEmpty()){
+                aPackage.setShowValidation(true);
                 mAdapter.notifyDataSetChanged();
                 result = false;
             }
@@ -107,7 +107,7 @@ public class PackageFragment extends Fragment {
     static private class PackageRecyclerViewAdapter extends RecyclerView.Adapter<PackageRecyclerViewAdapter.ViewHolder> {
 
         private Context context;
-        private List<MyPackage> myPackageArrayList;
+        private List<Package> packageArrayList;
         private RecyclerView recyclerView;
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
@@ -155,33 +155,33 @@ public class PackageFragment extends Fragment {
 //            }
         }
 
-        public MyPackage getValueAt(int position) {
-            return myPackageArrayList.get(position);
+        public Package getValueAt(int position) {
+            return packageArrayList.get(position);
         }
 
         public void addPackage() {
-                myPackageArrayList.add(new MyPackage());
-                notifyItemInserted(myPackageArrayList.size());
+                packageArrayList.add(new Package());
+                notifyItemInserted(packageArrayList.size());
                 //this is to notify first item to show the close icon
                 notifyItemChanged(0);
-                recyclerView.scrollToPosition(myPackageArrayList.size() - 1);
+                recyclerView.scrollToPosition(packageArrayList.size() - 1);
         }
 
         private void removePackage(int position){
-            if(((NewBookingActivity) context).myPackageArrayList.size()==1) {
+            if(((NewBookingActivity) context).packageArrayList.size()==1) {
                 //TODO: add a toast
             }else{
-                myPackageArrayList.remove(position);
+                packageArrayList.remove(position);
                 notifyItemRemoved(position);
-                notifyItemRangeChanged(position, myPackageArrayList.size());
+                notifyItemRangeChanged(position, packageArrayList.size());
                 //this is to notify first item to hide the close icon
                 notifyItemChanged(0);
             }
         }
 
-        private void showEditTextValidation(MyPackage myPackage, PackageRecyclerViewAdapter.ViewHolder viewHolder){
+        private void showEditTextValidation(Package aPackage, PackageRecyclerViewAdapter.ViewHolder viewHolder){
             String weight = viewHolder.etWeight.getText().toString();
-            if(myPackage.isOwnBox()){
+            if(aPackage.isOwnBox()){
                 String height = viewHolder.etHeight.getText().toString();
                 String length = viewHolder.etLength.getText().toString();
                 String width = viewHolder.etWidth.getText().toString();
@@ -208,9 +208,9 @@ public class PackageFragment extends Fragment {
                 ((TextInputLayout)viewHolder.etWeight.getParent()).setErrorEnabled(false);
         }
 
-        public PackageRecyclerViewAdapter(Context context, ArrayList<MyPackage> myPackages, RecyclerView recyclerView) {
+        public PackageRecyclerViewAdapter(Context context, ArrayList<Package> aPackages, RecyclerView recyclerView) {
             this.context = context;
-            this.myPackageArrayList = myPackages;
+            this.packageArrayList = aPackages;
             this.recyclerView = recyclerView;
         }
 
@@ -222,37 +222,37 @@ public class PackageFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder,final int position) {
-            final MyPackage myPackage = myPackageArrayList.get(position);
+            final Package aPackage = packageArrayList.get(position);
 
             //update view
-            if(myPackage.isOwnBox()){
+            if(aPackage.isOwnBox()){
                 holder.checkBox.setChecked(true);
             }else{
                 holder.checkBox.setChecked(false);
             }
 
-            holder.etHeight.setText(myPackage.getHeight());
-            holder.etLength.setText(myPackage.getLength());
-            holder.etWeight.setText(myPackage.getWeight());
-            holder.etWidth.setText(myPackage.getWidth());
+            holder.etHeight.setText(aPackage.getHeight());
+            holder.etLength.setText(aPackage.getLength());
+            holder.etWeight.setText(aPackage.getWeight());
+            holder.etWidth.setText(aPackage.getWidth());
             holder.rbSmall.setChecked(false);
             holder.rbMed.setChecked(false);
             holder.rbBig.setChecked(false);
 
 
-            switch (myPackage.getBoxSize()){
-                case MyPackage.BIG_BOX:
+            switch (aPackage.getBoxSize()){
+                case Package.BIG_BOX:
                     holder.rbBig.setChecked(true);
                     break;
-                case MyPackage.MED_BOX:
+                case Package.MED_BOX:
                     holder.rbMed.setChecked(true);
                     break;
-                case MyPackage.SMALL_BOX:
+                case Package.SMALL_BOX:
                     holder.rbSmall.setChecked(true);
                     break;
             }
 
-            if (myPackage.isOwnBox()) {
+            if (aPackage.isOwnBox()) {
                 holder.price.setText(context.getString(R.string.free));
                 holder.llOwnBox.setVisibility(View.VISIBLE);
                 holder.llLmBox.setVisibility(View.GONE);
@@ -262,11 +262,11 @@ public class PackageFragment extends Fragment {
                 holder.llLmBox.setVisibility(View.VISIBLE);
             }
 
-            if(myPackage.isShowValidation()){
-                showEditTextValidation(myPackage,holder);
+            if(aPackage.isShowValidation()){
+                showEditTextValidation(aPackage,holder);
             }
 
-            if(position==0 && myPackageArrayList.size()==1){
+            if(position==0 && packageArrayList.size()==1){
                 holder.closeIcon.setVisibility(View.GONE);
             }else {
                 holder.closeIcon.setVisibility(View.VISIBLE);
@@ -283,13 +283,13 @@ public class PackageFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        myPackage.setIsOwnBox(true);
+                        aPackage.setIsOwnBox(true);
                         holder.price.setText(context.getString(R.string.free));
                         holder.llOwnBox.setVisibility(View.VISIBLE);
                         holder.llLmBox.setVisibility(View.GONE);
                     } else {
                         holder.price.setText(context.getString(R.string.five_bucks));
-                        myPackage.setIsOwnBox(false);
+                        aPackage.setIsOwnBox(false);
                         holder.llOwnBox.setVisibility(View.GONE);
                         holder.llLmBox.setVisibility(View.VISIBLE);
                     }
@@ -303,7 +303,7 @@ public class PackageFragment extends Fragment {
             holder.rlBigBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myPackage.setBoxSize(MyPackage.BIG_BOX);
+                    aPackage.setBoxSize(Package.BIG_BOX);
                     holder.rbBig.setChecked(true);
                     holder.rbMed.setChecked(false);
                     holder.rbSmall.setChecked(false);
@@ -313,7 +313,7 @@ public class PackageFragment extends Fragment {
             holder.rlMedBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myPackage.setBoxSize(MyPackage.MED_BOX);
+                    aPackage.setBoxSize(Package.MED_BOX);
                     holder.rbBig.setChecked(false);
                     holder.rbMed.setChecked(true);
                     holder.rbSmall.setChecked(false);
@@ -323,7 +323,7 @@ public class PackageFragment extends Fragment {
             holder.rlSmallBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myPackage.setBoxSize(MyPackage.SMALL_BOX);
+                    aPackage.setBoxSize(Package.SMALL_BOX);
                     holder.rbBig.setChecked(false);
                     holder.rbMed.setChecked(false);
                     holder.rbSmall.setChecked(true);
@@ -344,7 +344,7 @@ public class PackageFragment extends Fragment {
                     if(!holder.etHeight.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etHeight.getParent()).setErrorEnabled(false);
                     }
-                    myPackage.setHeight(holder.etHeight.getText().toString());
+                    aPackage.setHeight(holder.etHeight.getText().toString());
                 }
             });
 
@@ -360,7 +360,7 @@ public class PackageFragment extends Fragment {
                     if(!holder.etLength.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etLength.getParent()).setErrorEnabled(false);
                     }
-                    myPackage.setLength(holder.etLength.getText().toString());
+                    aPackage.setLength(holder.etLength.getText().toString());
 
                 }
             });
@@ -377,7 +377,7 @@ public class PackageFragment extends Fragment {
                     if(!holder.etWeight.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etWeight.getParent()).setErrorEnabled(false);
                     }
-                    myPackage.setWeight(holder.etWeight.getText().toString());
+                    aPackage.setWeight(holder.etWeight.getText().toString());
                 }
             });
 
@@ -393,7 +393,7 @@ public class PackageFragment extends Fragment {
                     if(!holder.etWidth.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etWidth.getParent()).setErrorEnabled(false);
                     }
-                    myPackage.setWidth(holder.etWidth.getText().toString());
+                    aPackage.setWidth(holder.etWidth.getText().toString());
                 }
             });
 
@@ -401,7 +401,7 @@ public class PackageFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return myPackageArrayList.size();
+            return packageArrayList.size();
         }
     }
 

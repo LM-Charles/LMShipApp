@@ -1,12 +1,18 @@
 package lmdelivery.longmen.com.android.bean;
 
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.io.Serializable;
-
+@Table(name = "MyTime")
 public class MyTime implements Serializable{
-
+    @Column(name = "TimeString")
     private String timeString;
+    @Column(name = "IsToday")
     private boolean isToday;
+    @Column(name = "TimeCatergory")
     private int timeCatergory;
+
     private static final int TIME_0 = 0;// 9am-11am,
     private static final int TIME_1 = 1;
     private static final int TIME_2 = 2;

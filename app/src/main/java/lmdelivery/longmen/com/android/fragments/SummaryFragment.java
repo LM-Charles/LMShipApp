@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.MyPackage;
+import lmdelivery.longmen.com.android.bean.Package;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -123,13 +123,13 @@ public class SummaryFragment extends Fragment {
     }
 
     private String buildPackageString(){
-        ArrayList<MyPackage> myPackageArrayList = ((NewBookingActivity) getActivity()).myPackageArrayList;
+        ArrayList<Package> packageArrayList = ((NewBookingActivity) getActivity()).packageArrayList;
         String result = "";
-        int size = myPackageArrayList.size();
+        int size = packageArrayList.size();
         for(int i = 0; i < size; i++){
             if(!result.isEmpty())
                 result += "\n\n";
-            result += getString(R.string.box) + (i+1) + ":\n" + myPackageArrayList.get(i).toString();
+            result += getString(R.string.box) + (i+1) + ":\n" + packageArrayList.get(i).toString();
         }
         return result;
     }

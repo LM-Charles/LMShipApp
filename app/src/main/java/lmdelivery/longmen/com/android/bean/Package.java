@@ -8,9 +8,14 @@ import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.R;
-public class MyPackage implements Parcelable{
+@Table(name = "Packages")
+public class Package extends Model implements Parcelable{
     public static final int SMALL_BOX = 0;
     public static final int MED_BOX = 1;
     public static final int BIG_BOX = 2;
@@ -25,13 +30,22 @@ public class MyPackage implements Parcelable{
     public static final String BIG_WIDTH = "10";
     public static final String BIG_LENGTH = "10";
 
-    private String length, width, height, weight;
+    @Column(name = "Length")
+    private String length;
+    @Column(name = "Width")
+    private String width;
+    @Column(name = "Height")
+    private String height;
+    @Column(name = "Weight")
+    private String weight;
+    @Column(name = "Weight")
     private int boxSize;
+    @Column(name = "isOwnBox")
     private boolean isOwnBox;
     private boolean showValidation;
 
 
-    public MyPackage() {
+    public Package() {
         this.length = "";
         this.width = "";
         this.height = "";
@@ -143,7 +157,7 @@ public class MyPackage implements Parcelable{
             dest.writeInt(0);
     }
 
-    public MyPackage(Parcel in) {
+    public Package(Parcel in) {
         boxSize = in.readInt();
         length = in.readString();
         width = in.readString();
@@ -153,15 +167,15 @@ public class MyPackage implements Parcelable{
         showValidation = in.readInt()!=0;
     }
 
-    public static final Parcelable.Creator<MyPackage> CREATOR = new Parcelable.Creator<MyPackage>()
+    public static final Parcelable.Creator<Package> CREATOR = new Parcelable.Creator<Package>()
     {
-        public MyPackage createFromParcel(Parcel in)
+        public Package createFromParcel(Parcel in)
         {
-            return new MyPackage(in);
+            return new Package(in);
         }
-        public MyPackage[] newArray(int size)
+        public Package[] newArray(int size)
         {
-            return new MyPackage[size];
+            return new Package[size];
         }
     };
 }

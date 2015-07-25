@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.activeandroid.ActiveAndroid;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -12,7 +13,7 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by Kaiyu on 2015-06-25.
  */
-public class AppController extends Application {
+public class AppController extends com.activeandroid.app.Application {
 
     private static Context context;
     public static final String TAG = AppController.class.getSimpleName();
@@ -23,6 +24,7 @@ public class AppController extends Application {
     public void onCreate(){
         super.onCreate();
         AppController.context = getApplicationContext();
+        ActiveAndroid.initialize(this);
         mInstance = this;
     }
 
