@@ -21,7 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -29,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.RateItem;
 import lmdelivery.longmen.com.android.bean.Shipment;
 
 
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private Context context;
-
+    private  RecyclerView recyclerView;
+    private ShipItemRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
 //        CardView cardView = (CardView) findViewById(R.id.welcome_card);
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-        RecyclerView rv = (RecyclerView) findViewById(R.id.recyclerview);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
 //        rv.setVisibility(View.GONE);
-        setupRecyclerView(rv);
+        setupRecyclerView();
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -81,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
+                        ArrayList<Shipment> shipItems = new ArrayList<>();
+                        for(int i = 0; i < 10; i++){
+                            shipItems.add(Shipment.newFakeShipmentInstance());
+                        }
+                        adapter.updateValues(shipItems);
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, 2000);
@@ -88,15 +95,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void setupRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         ArrayList<Shipment> shipItems = new ArrayList<>();
+        Shipment empty = Shipment.newEmptyShipmentInstance();
+        shipItems.add(empty);
 //        for(int i = 0; i < 10; i++){
 //            RateItem item = new RateItem("1","http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
 //            rateItems.add(item);
 //        }
-        recyclerView.setAdapter(new ShipItemRecyclerViewAdapter(shipItems, context));
+        adapter = new ShipItemRecyclerViewAdapter(shipItems, context);
+        recyclerView.setAdapter(adapter);
     }
 
 
@@ -147,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
         private int mBackground;
         private List<Shipment> mValues;
         private int selectedPosition;
+        private static final int TYPE_EMPTY = 0;
+        private static final int TYPE_SHIPMENT = 1;
 
         public ShipItemRecyclerViewAdapter(ArrayList<Shipment> items, Context context) {
             mValues = items;
@@ -156,58 +168,76 @@ public class MainActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public String mBoundString;
 
-            public final View mView;
-            public final TextView date;
-            public final TextView type;
-            public final TextView price;
+            public final LinearLayout mView;
+            public final TextView title;
+            public final TextView status;
+            public final TextView btnTrack;
             public final ImageView icon;
 
             public ViewHolder(View view) {
                 super(view);
-                mView = view;
-                type = (TextView) view.findViewById(R.id.tv_carrier_type);
-                date = (TextView) view.findViewById(R.id.tv_est_date);
-                price = (TextView) view.findViewById(R.id.price);
-                icon = (ImageView) view.findViewById(R.id.logo);
+                mView = (LinearLayout) view.findViewById(R.id.ll_card);;
+                title = (TextView) view.findViewById(R.id.tv_title);
+                status = (TextView) view.findViewById(R.id.tv_status);
+                btnTrack = (TextView) view.findViewById(R.id.btn_track);
+                icon = (ImageView) view.findViewById(R.id.iv_ship_icon);
             }
 
-//            @Override
-//            public String toString() {
-//                return super.toString() + " '" + time.getText();
-//            }
         }
 
         public Shipment getValueAt(int position) {
             return mValues.get(position);
         }
 
+        public void updateValues(ArrayList<Shipment> shipments){
+            mValues = shipments;
+            notifyDataSetChanged();
+        }
 
+        @Override
+        public int getItemViewType(int position) {
+            if(mValues.get(position).isEmpty)
+                return TYPE_EMPTY;
+            else
+                return TYPE_SHIPMENT;
+        }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rate_item_layout, parent, false);
+            View view;
+            if(viewType==TYPE_EMPTY)
+                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_no_shipment, parent, false);
+            else
+                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ship_item, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.price.setText(mValues.get(position).getEstimatePrice());
-            holder.date.setText(mValues.get(position).getEstimatedDeliveryDate());
-            holder.type.setText(mValues.get(position).getServiceName());
-            Glide.with(context)
-                    .load(mValues.get(position).getServiceIcon())
-                    .centerCrop()
-                            //.placeholder(R.drawable.loading_spinner)
-                    .crossFade()
-                    .into(holder.icon);
 
+            if (getItemViewType(position) == TYPE_SHIPMENT) {
+                holder.title.setText(mValues.get(position).nickName);
+                holder.status.setText(mValues.get(position).status);
+                holder.btnTrack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "track btn clicked", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Glide.with(context)
+                        .load(mValues.get(position).serviceIconUrl)
+                        .centerCrop()
+                                //.placeholder(R.drawable.loading_spinner)
+                        .crossFade()
+                        .into(holder.icon);
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "view clicked", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
         @Override

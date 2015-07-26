@@ -32,7 +32,16 @@ public class Shipment extends Model {
     @Column(name = "Status")
     public String status;
 
+    @Column(name = "ServiceIconURL")
+    public String serviceIconUrl;
 
+    @Column(name = "Type")
+    public String type;
+
+    @Column(name = "NickName")
+    public String nickName;
+
+    public boolean isEmpty;
 
     public Shipment(String courierServiceId, Address pickup, Address dropoff, MyTime time) {
         super();
@@ -40,6 +49,31 @@ public class Shipment extends Model {
         this.dropoffAddr = dropoff;
         this.time = time;
         this.courierServiceId = courierServiceId;
+        isEmpty = false;
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * empty shipment
+     *
+     * @return A new instance of fragment RateItemFragment.
+     */
+    public static Shipment newEmptyShipmentInstance() {
+        Shipment shipment = new Shipment();
+        shipment.isEmpty = true;
+        return shipment;
+    }
+
+    public static Shipment newFakeShipmentInstance() {
+        Shipment shipment = new Shipment();
+        shipment.nickName = "Books";
+        shipment.serviceIconUrl = "https://pbs.twimg.com/profile_images/605379702564331521/1Nq_eDu4.jpg";
+        shipment.status = "Delivered";
+        return shipment;
+    }
+
+    public Shipment(){
+
     }
 
 }

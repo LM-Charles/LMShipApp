@@ -1,11 +1,9 @@
 package lmdelivery.longmen.com.android;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.activeandroid.ActiveAndroid;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -24,7 +22,6 @@ public class AppController extends com.activeandroid.app.Application {
     public void onCreate(){
         super.onCreate();
         AppController.context = getApplicationContext();
-        ActiveAndroid.initialize(this);
         mInstance = this;
     }
 

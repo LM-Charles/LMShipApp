@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\rzhu\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jar="C:\Users\Kaiyu\.gradle\caches\modules-2\files-2.1\com.michaelpardo\activeandroid\3.1.0-SNAPSHOT\4ab7b0182975bc57c49efc5e0b3baa4a10e4ec08\activeandroid-3.1.0-SNAPSHOT.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="C:\AndroidSamples\LMShipApp\app\build\intermediates\pre-dexed\debug\gson-2.3.1-45ec998730d2c39ef1aafb44cc7678678cd0de7c.jar" />
+        sha1="4ab7b0182975bc57c49efc5e0b3baa4a10e4ec08">
+        <dex dex="F:\android\LMShipApp\app\build\intermediates\pre-dexed\debug\activeandroid-3.1.0-SNAPSHOT-858a5399cf46ab97021f3fbbd91665c9927cf82b.jar" />
     </item>
 
 </items>

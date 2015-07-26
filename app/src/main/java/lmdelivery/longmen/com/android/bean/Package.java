@@ -38,7 +38,7 @@ public class Package extends Model implements Parcelable{
     private String height;
     @Column(name = "Weight")
     private String weight;
-    @Column(name = "Weight")
+    @Column(name = "BoxSize")
     private int boxSize;
     @Column(name = "isOwnBox")
     private boolean isOwnBox;

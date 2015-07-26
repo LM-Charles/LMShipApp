@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,42 +28,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/welcome_card"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <lmdelivery.longmen.com.android.widget.TypefaceTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/welcome_icon_background"
-                    android:gravity="center"
-                    android:padding="@dimen/activity_vertical_margin"
-                    android:text="@string/icon_gift"
-                    android:textColor="@color/welcome_icon_color"
-                    android:textSize="76sp"
-                    geekui:customTypeface="fonts/fontawesome.ttf" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/welcome_text_background"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/activity_vertical_margin"
-                    android:text="@string/no_shipping"
-                    android:textColor="@color/white_text"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/activity_main_swipe_refresh_layout"
