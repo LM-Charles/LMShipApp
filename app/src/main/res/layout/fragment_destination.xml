@@ -38,6 +38,42 @@
                         android:orientation="horizontal">
 
                         <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/et_receiver_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/receiver_name"
+                                android:inputType="textPersonName"
+                                android:textSize="@dimen/edit_text_font_size"
+                                tools:text="sender name" />
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/et_receiver_phone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/receiver_phone"
+                                android:inputType="phone"
+                                android:textSize="@dimen/edit_text_font_size"
+                                tools:text="sender phone" />
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                             android:id="@+id/til_unit"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

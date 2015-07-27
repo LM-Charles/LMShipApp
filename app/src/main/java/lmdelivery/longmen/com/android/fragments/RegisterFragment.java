@@ -181,7 +181,7 @@ public class RegisterFragment extends Fragment {
         }
         // Check for a valid password, if the user entered one.
         if (password.length() < Constant.PASSWORD_MIN_LENGTH) {
-            tilPassWord.setError(getString(R.string.error_password_too_short));
+            tilPassWord.setError(getString(R.string.error_password_too_short, Constant.PASSWORD_MIN_LENGTH));
             focusView = mPasswordView;
             cancel = true;
         } else if (!isPasswordValid(password)) {

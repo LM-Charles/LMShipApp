@@ -12,8 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,14 +35,15 @@ import java.util.regex.Pattern;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.bean.Address;
+import lmdelivery.longmen.com.android.bean.MyTime;
+import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.fragments.DestinationFragment;
+import lmdelivery.longmen.com.android.fragments.InsuranceFragment;
 import lmdelivery.longmen.com.android.fragments.PackageFragment;
 import lmdelivery.longmen.com.android.fragments.PickupFragment;
 import lmdelivery.longmen.com.android.fragments.SummaryFragment;
 import lmdelivery.longmen.com.android.fragments.TimeFragment;
-import lmdelivery.longmen.com.android.bean.Address;
-import lmdelivery.longmen.com.android.bean.Package;
-import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -58,6 +57,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public PickupFragment pickupFragment;
     public DestinationFragment dropOffFragment;
     public PackageFragment packageFragment;
+    public InsuranceFragment insuranceFragment;
     public TimeFragment timeFragment;
     public SummaryFragment summaryFragment;
 
@@ -110,6 +110,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_trans_dot);
         tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_trans_dot);
         tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_trans_dot);
+        tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_trans_dot);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -157,7 +158,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                             tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_reddot);
                         }
                         break;
-
                 }
             }
 
@@ -212,7 +212,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 } else if (currentTab == Constant.TAB_TO) {
                     if (dropOffFragment.saveAndValidate()) {
                         viewPager.setCurrentItem(Constant.TAB_PACKAGE, true);
-
                     }
                 } else if (currentTab == Constant.TAB_PACKAGE) {
                     if (packageFragment.validateAllPackage()) {
@@ -223,8 +222,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     }
                 } else if (currentTab == Constant.TAB_TIME) {
                     if (selectedTime != null) {
-                        viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
+                        viewPager.setCurrentItem(Constant.TAB_INSURANCE, true);
                     }
+                } else if (currentTab == Constant.TAB_INSURANCE) {
+                    viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
                 }
             }
         });
@@ -244,27 +245,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         tabLayout.getTabAt(tabPosition).select();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_booking, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new Adapter(getSupportFragmentManager());
@@ -277,6 +257,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             packageFragment = PackageFragment.newInstance();
         if (timeFragment == null)
             timeFragment = TimeFragment.newInstance();
+        if(insuranceFragment == null)
+            insuranceFragment = new InsuranceFragment();
         if (summaryFragment == null)
             summaryFragment = SummaryFragment.newInstance();
 
@@ -284,22 +266,23 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         adapter.addFragment(dropOffFragment, getString(R.string.tab_title_to));
         adapter.addFragment(packageFragment, getString(R.string.tab_title_package));
         adapter.addFragment(timeFragment, getString(R.string.tab_title_time));
+        adapter.addFragment(insuranceFragment, getString(R.string.tab_title_insurance));
         adapter.addFragment(summaryFragment, getString(R.string.tab_title_summary));
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        });
 
     }
 

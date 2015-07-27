@@ -64,7 +64,7 @@ public class DestinationFragment extends Fragment {
 
     private AutoCompleteTextView mAutocompleteView;
 
-    private EditText etUnit, etPostal, etCity, etProvince;
+    private EditText etUnit, etPostal, etCity, etProvince, etName, etPhone;
     private Spinner spinner;
 
     private static View rootView;
@@ -127,6 +127,8 @@ public class DestinationFragment extends Fragment {
             etCity = (EditText) rootView.findViewById(R.id.et_to_city);
             etUnit = (EditText) rootView.findViewById(R.id.et_to_unit);
             etProvince = (EditText) rootView.findViewById(R.id.et_to_province);
+            etName = (EditText) rootView.findViewById(R.id.et_receiver_name);
+            etPhone = (EditText) rootView.findViewById(R.id.et_receiver_phone);
             mapView = (FrameLayout) rootView.findViewById(R.id.map_view);
 
             // Register a listener that receives callbacks when a suggestion has been selected
@@ -139,7 +141,7 @@ public class DestinationFragment extends Fragment {
             filterTypes.add(Place.TYPE_STREET_ADDRESS);
             mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_CANADA, null);//AutocompleteFilter.create(filterTypes));
             mAutocompleteView.setAdapter(mAdapter);
-            setUpTextLinsener();
+            setUpTextListener();
             setUpMapIfNeeded();
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
@@ -160,7 +162,44 @@ public class DestinationFragment extends Fragment {
         }
     }
 
-    private void setUpTextLinsener() {
+    private void setUpTextListener() {
+
+        etPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!etPhone.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
+                }
+                ((NewBookingActivity) getActivity()).pickupAddr.setPhone(etPhone.getText().toString());
+            }
+        });
+
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!etName.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
+                }
+                ((NewBookingActivity) getActivity()).pickupAddr.setName(etName.getText().toString());
+            }
+        });
+
         etProvince.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -262,11 +301,38 @@ public class DestinationFragment extends Fragment {
         if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
             ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
-            boolean cityValid = validateDropoffCity();
-            boolean postValid = validatePostalCode();
-            boolean streetValid = validateStreet();
-            boolean provinceValid = validateProvince();
-            return cityValid && postValid && streetValid && provinceValid;
+
+            return validateDropoffCity() && validatePostalCode() && validateStreet() && validateName() && validatePhone() && validateProvince();
+        } else
+            return false;
+    }
+
+    private boolean validateName() {
+        if (isAdded()) {
+            String name = etName.getText().toString();
+            ((NewBookingActivity) getActivity()).dropOffAddr.setName(name);
+            if (name.isEmpty()) {
+                ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
+                return false;
+            }  else {
+                ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
+                return true;
+            }
+        } else
+            return false;
+    }
+
+    private boolean validatePhone() {
+        if (isAdded()) {
+            String phone = etPhone.getText().toString();
+            ((NewBookingActivity) getActivity()).dropOffAddr.setPhone(phone);
+            if (phone.isEmpty()) {
+                ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
+                return false;
+            }  else {
+                ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
+                return true;
+            }
         } else
             return false;
     }

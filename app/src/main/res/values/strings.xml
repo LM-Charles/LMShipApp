@@ -39,6 +39,10 @@
     <string name="no_shipping">Welcome!\nPlease click the + button below to ship a new package</string>
     <string name="account_activated">Welcome to LM Delivery!</string>
     <string name="track_package">Track Package</string>
+    <string name="send_name">Sender\'s name</string>
+    <string name="sender_phone">Sender\'s Phone Number</string>
+    <string name="receiver_phone">Receiver\'s Phone number</string>
+    <string name="receiver_name">Receiver\'s name</string>
 
 
 </resources>

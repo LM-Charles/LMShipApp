@@ -34,7 +34,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashSet;
@@ -43,8 +42,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
@@ -63,7 +62,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
 
     private AutoCompleteTextView mAutocompleteView;
     private static View rootView;
-    private EditText etUnit, etPostal, etCity;
+    private EditText etUnit, etPostal, etCity, etName, etPhone;
     private GoogleMap mMap;
     private FrameLayout mapView;
 
@@ -97,6 +96,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             if (parent != null)
                 parent.removeView(rootView);
         }
+
         try {
             rootView = inflater.inflate(R.layout.fragment_pickup, container, false);
             // Retrieve the AutoCompleteTextView that will display Place suggestions.
@@ -104,6 +104,8 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             etPostal = (EditText) rootView.findViewById(R.id.et_postal);
             etCity = (EditText) rootView.findViewById(R.id.et_city);
             etUnit = (EditText) rootView.findViewById(R.id.et_unit);
+            etName = (EditText) rootView.findViewById(R.id.et_sender_name);
+            etPhone = (EditText) rootView.findViewById(R.id.et_sender_phone);
             mapView = (FrameLayout) rootView.findViewById(R.id.map_view);
 
             // Register a listener that receives callbacks when a suggestion has been selected
@@ -116,7 +118,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_GREATER_VANCOUVER, null);//AutocompleteFilter.create(filterTypes));
             mAutocompleteView.setAdapter(mAdapter);
 
-            setUpTextLinstener();
+            setUpTextListener();
             setUpMapIfNeeded();
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
@@ -128,7 +130,44 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
 
-    private void setUpTextLinstener() {
+    private void setUpTextListener() {
+        etPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!etPhone.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
+                }
+                ((NewBookingActivity) getActivity()).pickupAddr.setPhone(etPhone.getText().toString());
+            }
+        });
+
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!etName.getText().toString().isEmpty()) {
+                    ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
+                }
+                ((NewBookingActivity) getActivity()).pickupAddr.setName(etName.getText().toString());
+            }
+        });
+
+
         etCity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -144,7 +183,6 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                     ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
                 }
                 ((NewBookingActivity) getActivity()).pickupAddr.setCity(etCity.getText().toString());
-
             }
         });
 
@@ -209,12 +247,39 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     public boolean saveAndValidate() {
         if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
-            boolean cityValid = validatePickupCity();
-            boolean postValid = validatePostalCode();
-            boolean streetValid = validateStreet();
-            return cityValid && postValid && streetValid;
+            return validatePickupCity() && validatePostalCode() && validateStreet() && validateName() && validatePhone();
         }
         return false;
+    }
+
+    private boolean validateName() {
+        if (isAdded()) {
+            String name = etName.getText().toString();
+            ((NewBookingActivity) getActivity()).pickupAddr.setName(name);
+            if (name.isEmpty()) {
+                ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
+                return false;
+            }  else {
+                ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
+                return true;
+            }
+        } else
+            return false;
+    }
+
+    private boolean validatePhone() {
+        if (isAdded()) {
+            String phone = etPhone.getText().toString();
+            ((NewBookingActivity) getActivity()).pickupAddr.setPhone(phone);
+            if (phone.isEmpty()) {
+                ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
+                return false;
+            }  else {
+                ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
+                return true;
+            }
+        } else
+            return false;
     }
 
     private boolean validateStreet() {

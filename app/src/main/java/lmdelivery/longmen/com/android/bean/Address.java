@@ -25,11 +25,17 @@ public class Address extends Model implements Serializable {
     private String country;
     @Column(name = "Province")
     private String province;
-
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Phone")
+    private String phone;
 
     public Address() {
+        name="";
+        phone="";
         fullAddress="";
         streetName="";
+
         unitNumber="";
         postalCode="";
         city="";
@@ -44,6 +50,22 @@ public class Address extends Model implements Serializable {
         }
         result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + country;
         return result;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getFullAddress() {

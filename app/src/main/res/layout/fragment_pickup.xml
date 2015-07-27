@@ -1,7 +1,7 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -33,12 +33,12 @@
                     android:padding="@dimen/card_margin">
 
                     <TextView
-                        android:textSize="@dimen/card_title_font_size"
-                        android:textColor="@color/window_background"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif"
-                        android:text="@string/ship_from" />
+                        android:text="@string/ship_from"
+                        android:textColor="@color/window_background"
+                        android:textSize="@dimen/card_title_font_size" />
 
                     <TextView
                         style="@style/CardSubTitle"
@@ -54,6 +54,42 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="@dimen/normal_padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/et_sender_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/send_name"
+                                android:inputType="textPersonName"
+                                android:textSize="@dimen/edit_text_font_size"
+                                tools:text="sender name" />
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+
+                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/et_sender_phone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/sender_phone"
+                                android:inputType="phone"
+                                android:textSize="@dimen/edit_text_font_size"
+                                tools:text="sender phone" />
+                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -142,9 +178,9 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_gravity="bottom"
                             android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
                             android:text="@string/bc_canada"
                             android:textSize="@dimen/edit_text_font_size" />
                     </LinearLayout>
@@ -172,10 +208,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:visibility="gone">
+
                         <include
+                            layout="@layout/fragment_lite_map"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            layout="@layout/fragment_lite_map" />
+                            android:layout_height="match_parent" />
                     </FrameLayout>
 
                 </LinearLayout>

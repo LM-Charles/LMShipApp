@@ -377,7 +377,7 @@ public class LoginFragment extends Fragment {
                 if (TextUtils.isEmpty(newPassword)) {
                     tilNewPassword.setError(getString(R.string.error_field_required));
                 }else if(newPassword.length()<Constant.PASSWORD_MIN_LENGTH){
-                    tilNewPassword.setError(getString(R.string.error_password_too_short));
+                    tilNewPassword.setError(getString(R.string.error_password_too_short, Constant.PASSWORD_MIN_LENGTH));
                 }
                 // Check for a valid password, if the user entered one.
                 else if (!isPasswordValid(newPassword)) {
