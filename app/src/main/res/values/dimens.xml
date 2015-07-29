@@ -29,5 +29,5 @@
     <dimen name="status_corner_radius">2dp</dimen>
     <dimen name="setting_item_height">65dp</dimen>
     <dimen name="setting_text_width">120dp</dimen>
-    <dimen name="edit_text_height">60dp</dimen>
+    <dimen name="edit_text_height">83dp</dimen>
 </resources>

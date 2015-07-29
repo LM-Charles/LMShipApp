@@ -93,12 +93,12 @@
         <item name="android:layout_width">@dimen/label_icon_width</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/label_icon_font_size</item>
-        <item name="android:layout_marginEnd">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginBottom">4dp</item>
         <item name="android:gravity">center</item>
     </style>
 
 
-    <dimen name="label_font_size">18sp</dimen>
+    <dimen name="label_font_size">32sp</dimen>
     <dimen name="label_icon_font_size">22sp</dimen>
-    <dimen name="label_icon_width">40dp</dimen>
+    <dimen name="label_icon_width">60dp</dimen>
 </resources>

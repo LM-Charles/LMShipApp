@@ -5,15 +5,6 @@
     android:layout_height="match_parent"
     tools:context="lmdelivery.longmen.com.android.fragments.PickupFragment">
 
-
-    <!--<android.support.v7.widget.CardView-->
-        <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
-        <!--android:layout_marginStart="@dimen/normal_padding"-->
-        <!--android:layout_marginBottom="@dimen/activity_vertical_margin"-->
-        <!--android:layout_marginEnd="@dimen/normal_padding"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/normal_padding">
+                android:paddingStart="@dimen/normal_padding"
+                android:paddingEnd="@dimen/normal_padding">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -59,9 +51,11 @@
                         android:text="@string/icon_user"
                         geekui:customTypeface="fonts/fontawesome.ttf" />
 
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
 
                         <EditText
                             android:id="@+id/et_sender_name"
@@ -71,14 +65,14 @@
                             android:inputType="textPersonName"
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="sender name" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </android.support.design.widget.TextInputLayout>
 
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/edit_text_height"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -87,9 +81,9 @@
                         android:text="@string/icon_phone"
                         geekui:customTypeface="fonts/fontawesome.ttf" />
 
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
                         <EditText
                             android:id="@+id/et_sender_phone"
@@ -99,13 +93,14 @@
                             android:inputType="phone"
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="sender phone" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/edit_text_height"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <lmdelivery.longmen.com.android.widget.TypefaceTextView
@@ -114,9 +109,9 @@
                         geekui:customTypeface="fonts/fontawesome.ttf" />
 
 
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal">
 
                         <AutoCompleteTextView
@@ -128,20 +123,20 @@
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="address" />
 
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/edit_text_height"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/label_icon_width">
 
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
                         <EditText
                             android:id="@+id/et_unit"
@@ -151,20 +146,21 @@
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="unit" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/edit_text_height"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:paddingStart="@dimen/label_icon_width">
 
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1">
 
                         <EditText
@@ -175,12 +171,12 @@
                             android:inputType="textCapWords"
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="city" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </android.support.design.widget.TextInputLayout>
 
 
-                    <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1">
 
                         <EditText
@@ -190,13 +186,11 @@
                             android:hint="@string/postal_code"
                             android:textSize="@dimen/edit_text_font_size"
                             tools:text="postal" />
-                    </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
+                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:text="@string/bc_canada"
                         android:textSize="@dimen/edit_text_font_size" />
@@ -217,7 +211,5 @@
             </LinearLayout>
 
         </LinearLayout>
-
-    <!--</android.support.v7.widget.CardView>-->
 
 </android.support.v4.widget.NestedScrollView>
