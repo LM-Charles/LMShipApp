@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private Context context;
-    private  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private ShipItemRecyclerViewAdapter adapter;
 
     @Override
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         ArrayList<Shipment> shipItems = new ArrayList<>();
-                        for(int i = 0; i < 10; i++){
+                        for (int i = 0; i < 10; i++) {
                             shipItems.add(Shipment.newFakeShipmentInstance());
                         }
                         adapter.updateValues(shipItems);
@@ -109,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -128,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
-            break;
+                break;
             case R.id.action_settings:
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
-            break;
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -176,7 +174,8 @@ public class MainActivity extends AppCompatActivity {
 
             public ViewHolder(View view) {
                 super(view);
-                mView = (LinearLayout) view.findViewById(R.id.ll_card);;
+                mView = (LinearLayout) view.findViewById(R.id.ll_card);
+                ;
                 title = (TextView) view.findViewById(R.id.tv_title);
                 status = (TextView) view.findViewById(R.id.tv_status);
                 btnTrack = (TextView) view.findViewById(R.id.btn_track);
@@ -189,14 +188,14 @@ public class MainActivity extends AppCompatActivity {
             return mValues.get(position);
         }
 
-        public void updateValues(ArrayList<Shipment> shipments){
+        public void updateValues(ArrayList<Shipment> shipments) {
             mValues = shipments;
             notifyDataSetChanged();
         }
 
         @Override
         public int getItemViewType(int position) {
-            if(mValues.get(position).isEmpty)
+            if (mValues.get(position).isEmpty)
                 return TYPE_EMPTY;
             else
                 return TYPE_SHIPMENT;
@@ -205,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
-            if(viewType==TYPE_EMPTY)
-                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_no_shipment, parent, false);
+            if (viewType == TYPE_EMPTY)
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_no_shipment, parent, false);
             else
-                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ship_item, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ship_item, parent, false);
             return new ViewHolder(view);
         }
 

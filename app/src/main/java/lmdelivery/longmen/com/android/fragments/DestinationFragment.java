@@ -214,7 +214,7 @@ public class DestinationFragment extends Fragment {
                 if (!etProvince.getText().toString().isEmpty()) {
                     ((TextInputLayout) etProvince.getParent()).setErrorEnabled(false);
                 }
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(etProvince.getText().toString());
+                ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(etProvince.getText().toString());
 
             }
         });
@@ -233,7 +233,7 @@ public class DestinationFragment extends Fragment {
                 if (!etCity.getText().toString().isEmpty()) {
                     ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
                 }
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setCity(etCity.getText().toString());
+                ((NewBookingActivity) getActivity()).dropOffAddr.setCity(etCity.getText().toString());
 
             }
         });
@@ -252,7 +252,7 @@ public class DestinationFragment extends Fragment {
                 if (!etPostal.getText().toString().isEmpty()) {
                     ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
                 }
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(etPostal.getText().toString());
+                ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(etPostal.getText().toString());
 
             }
         });
@@ -290,19 +290,24 @@ public class DestinationFragment extends Fragment {
                 if (!mAutocompleteView.getText().toString().isEmpty()) {
                     ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
                 }
-                    ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(mAutocompleteView.getText().toString());
+                ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(mAutocompleteView.getText().toString());
 
             }
         });
     }
 
-
     public boolean saveAndValidate() {
         if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
             ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(spinner.getSelectedItem().toString());
+            boolean validateDropoffCity = validateDropoffCity();
+            boolean validatePostalCode = validatePostalCode();
+            boolean validateStreet = validateStreet();
+            boolean validateName = validateName();
+            boolean validatePhone = validatePhone();
+            boolean validateProvince = validateProvince();
 
-            return validateDropoffCity() && validatePostalCode() && validateStreet() && validateName() && validatePhone() && validateProvince();
+            return validateDropoffCity && validatePostalCode && validateStreet && validateName && validatePhone && validateProvince;
         } else
             return false;
     }
@@ -314,7 +319,7 @@ public class DestinationFragment extends Fragment {
             if (name.isEmpty()) {
                 ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
                 return false;
-            }  else {
+            } else {
                 ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
                 return true;
             }
@@ -329,7 +334,7 @@ public class DestinationFragment extends Fragment {
             if (phone.isEmpty()) {
                 ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
                 return false;
-            }  else {
+            } else {
                 ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
                 return true;
             }
@@ -405,8 +410,7 @@ public class DestinationFragment extends Fragment {
             } else if (!matcher2.matches() && spinner.getSelectedItem().equals("China")) {
                 ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_canada));
                 return false;
-            }
-            else {
+            } else {
                 ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
                 return true;
             }

@@ -3,207 +3,186 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="lmdelivery.longmen.com.android.fragments.DestinationFragment">
 
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_to"
+    <!--<android.support.v7.widget.CardView-->
+    <!--android:id="@+id/card_to"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
+    <!--android:layout_marginStart="@dimen/normal_padding"-->
+    <!--android:layout_marginBottom="@dimen/activity_vertical_margin"-->
+    <!--android:layout_marginEnd="@dimen/normal_padding">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/CardTitle"
+            android:padding="@dimen/card_margin"
+            android:text="@string/ship_to"
+            android:textColor="@color/destination_card_title_background" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/normal_padding"
+            android:paddingEnd="@dimen/normal_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="@dimen/edit_text_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
-                    style="@style/CardTitle"
-                    android:background="@color/destination_card_title_background"
-                    android:padding="@dimen/card_margin"
-                    android:text="@string/ship_to" />
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/LabelIcon"
+                    android:text="@string/icon_user"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
 
-                <LinearLayout
+                <EditText
+                    android:id="@+id/et_receiver_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/normal_padding">
+                    android:inputType="textPersonName"
+                    android:hint="@string/receiver_name"
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="sender name" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+            </LinearLayout>
 
-                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                            <EditText
-                                android:id="@+id/et_receiver_name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/receiver_name"
-                                android:inputType="textPersonName"
-                                android:textSize="@dimen/edit_text_font_size"
-                                tools:text="sender name" />
-                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <EditText
-                                android:id="@+id/et_receiver_phone"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/receiver_phone"
-                                android:inputType="phone"
-                                android:textSize="@dimen/edit_text_font_size"
-                                tools:text="sender phone" />
-                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                            android:id="@+id/til_unit"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <EditText
-                                android:id="@+id/et_to_unit"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/unit_number"
-                                android:textSize="@dimen/edit_text_font_size"
-                                tools:text="unit" />
-                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                            android:id="@+id/til_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="3"
-                            android:orientation="horizontal">
-
-                            <AutoCompleteTextView
-                                android:id="@+id/to_autocomplete_places"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/search_address"
-                                android:textSize="@dimen/edit_text_font_size"
-                                tools:text="address" />
-
-                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-                    </LinearLayout>
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/LabelIcon"
+                    android:text="@string/icon_phone"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/et_receiver_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/receiver_phone"
+                    android:inputType="phone"
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="sender phone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/LabelIcon"
+                    android:text="@string/icon_address"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
 
 
-                        <lmdelivery.longmen.com.android.widget.TypefaceTextView
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/icon_check"
-                            android:textSize="@dimen/check_icon_size"
-                            android:visibility="gone"
-                            geekui:customTypeface="fonts/ionicons.ttf" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <EditText
-                                android:id="@+id/et_to_city"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/city"
-                                android:textSize="@dimen/edit_text_font_size"
-                                tools:text="city" />
-                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <EditText
-                                android:id="@+id/et_to_province"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/province"
-                                android:textSize="@dimen/edit_text_font_size"
-                                tools:text="province" />
-                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-                        <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <EditText
-                                android:id="@+id/et_to_postal"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/postal_code"
-                                android:textSize="@dimen/edit_text_font_size"
-                                tools:text="postal" />
-                        </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
-
-
-
-
-                    </LinearLayout>
-
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_marginTop="@dimen/normal_padding"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <FrameLayout
-                        android:id="@+id/map_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:visibility="gone">
-                        <include
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            layout="@layout/fragment_lite_map" />
-                    </FrameLayout>
-
-                </LinearLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/to_autocomplete_places"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/search_address"
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="address" />
 
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_height"
+                android:gravity="center_vertical"
+                android:layout_marginStart="@dimen/label_icon_width"
+                android:orientation="horizontal">
 
 
+                <EditText
+                    android:id="@+id/et_to_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/unit_number"
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="unit" />
+
+            </LinearLayout>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_height"
+                android:layout_marginStart="@dimen/label_icon_width"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+
+                <EditText
+                    android:id="@+id/et_to_city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/city"
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="city" />
+
+
+                <EditText
+                    android:id="@+id/et_to_province"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/province"
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="province" />
+
+
+                <EditText
+                    android:id="@+id/et_to_postal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/postal_code"
+                    android:textSize="@dimen/edit_text_font_size"
+                    tools:text="postal" />
+
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/label_icon_width"
+                android:layout_marginTop="@dimen/normal_padding" />
+
+            <FrameLayout
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:visibility="gone">
+
+                <include
+                    layout="@layout/fragment_lite_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <!--</android.support.v7.widget.CardView>-->
 
 
 </android.support.v4.widget.NestedScrollView>

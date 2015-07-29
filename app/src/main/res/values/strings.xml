@@ -10,8 +10,21 @@
     <string name="icon_box">\uf3ec</string>
     <string name="icon_gift">\uf06b</string>
 
+    <!--font Awesome-->
+    <string name="icon_user">\uf007</string>
+    <string name="icon_email">\uf003</string>
+    <string name="icon_address">\uf041</string>
+    <string name="icon_phone">\uf095</string>
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="category_array">
+        <item>Cosmetic</item>
+        <item>Milk powder</item>
+        <item>Luxury</item>
+        <item>Other</item>
+    </string-array>
 
 
     <string-array name="dropoff_country_array">
@@ -43,6 +56,12 @@
     <string name="sender_phone">Sender\'s Phone Number</string>
     <string name="receiver_phone">Receiver\'s Phone number</string>
     <string name="receiver_name">Receiver\'s name</string>
+    <string name="est_value">Estimate Value</string>
+    <string name="insurance_value">Insurance Value</string>
+    <string name="insurance_price">Insurance Price</string>
+    <string name="buy_insurance">Buy Insurance</string>
+    <string name="dollar_sign">$</string>
+    <string name="zero_CAD">0 CAD</string>
 
 
 </resources>

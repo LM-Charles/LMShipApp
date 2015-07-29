@@ -30,8 +30,8 @@ public class Constant {
     public static final int TAB_TO = 1;
     public static final int TAB_PACKAGE = 2;
     public static final int TAB_TIME = 3;
-    public static final int TAB_SUMMARY = 4;
-    public static final int TAB_INSURANCE = 5;
+    public static final int TAB_INSURANCE = 4;
+    public static final int TAB_SUMMARY = 5;
 
     public static final Set<String> citiesInVan = new HashSet<>();
 

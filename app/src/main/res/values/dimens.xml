@@ -27,4 +27,7 @@
     <dimen name="box_item_height">54dp</dimen>
     <dimen name="ship_item_height">160dp</dimen>
     <dimen name="status_corner_radius">2dp</dimen>
+    <dimen name="setting_item_height">65dp</dimen>
+    <dimen name="setting_text_width">120dp</dimen>
+    <dimen name="edit_text_height">60dp</dimen>
 </resources>
