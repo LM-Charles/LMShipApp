@@ -16,11 +16,17 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#673AB7</color>
-    <color name="colorPrimaryDark">#512DA8</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorPrimary">#673AB7</color>-->
+    <!--<color name="colorPrimaryDark">#512DA8</color>-->
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <!--<color name="colorButtonNormal">@color/colorPrimary</color>-->
+    <!--<color name="colorControlHighlight">#7E57C2</color>-->
+
+    <color name="colorPrimary">#FF5722</color>
+    <color name="colorPrimaryDark">#E64A19</color>
+    <color name="colorAccent">#FF5722</color>
     <color name="colorButtonNormal">@color/colorPrimary</color>
-    <color name="colorControlHighlight">#7E57C2</color>
+    <color name="colorControlHighlight">#D84315</color>
 
     <color name="window_background">#eeeeee</color>
     <color name="white_text">#FFF5F5F5</color>
@@ -42,5 +48,6 @@
     <color name="gift_icon_color">#72aef3</color>
     <color name="welcome_text_background">#ec6392</color>
     <color name="welcome_icon_color">#96baf8</color>
+    <color name="yellow">#FFEB3B</color>
 
 </resources>

@@ -30,4 +30,5 @@
     <dimen name="setting_item_height">65dp</dimen>
     <dimen name="setting_text_width">120dp</dimen>
     <dimen name="edit_text_height">83dp</dimen>
+    <dimen name="map_snapshot_height">140dp</dimen>
 </resources>

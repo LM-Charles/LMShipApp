@@ -131,7 +131,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         if (pickupFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_greendot);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_reddot);
+                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_yellowdot);
                         }
                         break;
 
@@ -139,7 +139,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         if (dropOffFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_reddot);
+                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_yellowdot);
                         }
                         break;
 
@@ -147,7 +147,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         if (packageFragment.validateAllPackage()) {
                             tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_greendot);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_reddot);
+                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_yellowdot);
                         }
                         break;
 
@@ -155,7 +155,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         if (selectedTime != null) {
                             tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_greendot);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_reddot);
+                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_yellowdot);
                         }
                         break;
                 }

@@ -20,12 +20,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
+                    android:textColor="@color/teal"
                     android:text="@string/ship_from"
-                    android:textColor="@color/pickup_card_title_background"
                     android:textSize="@dimen/card_title_font_size" />
 
                 <TextView
-                    style="@style/CardSubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/teal"
                     android:layout_marginTop="@dimen/normal_padding"
                     android:fontFamily="sans-serif"
                     android:text="We will pick up your packages from this address"
@@ -199,7 +201,8 @@
                 <FrameLayout
                     android:id="@+id/map_view"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="@dimen/map_snapshot_height"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:visibility="gone">
 
                     <include
