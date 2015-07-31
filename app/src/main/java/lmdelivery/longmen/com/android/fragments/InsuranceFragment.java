@@ -26,7 +26,7 @@ public class InsuranceFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
 
         spinner = (Spinner) rootView.findViewById(R.id.spinner_package_type);
-        // Create an ArrayAdapter using the string array and a default spinner layout
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.category_array, R.layout.spinner_item);
 
         // Specify the layout to use when the list of choices appears

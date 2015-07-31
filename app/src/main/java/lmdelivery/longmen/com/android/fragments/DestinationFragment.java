@@ -112,13 +112,12 @@ public class DestinationFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_destination, container, false);
 
             spinner = (Spinner) rootView.findViewById(R.id.spinner);
-            // Create an ArrayAdapter using the string array and a default spinner layout
+
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dropoff_country_array, R.layout.spinner_item);
 
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            // Apply the adapter to the spinner
             spinner.setAdapter(adapter);
 
             // Retrieve the AutoCompleteTextView that will display Place suggestions.

@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -120,7 +121,7 @@ public class PackageFragment extends Fragment {
             public final CheckBox checkBox;
             public final RadioButton rbSmall, rbMed, rbBig;
             public final EditText etLength, etWidth, etHeight, etWeight;
-            public final Spinner spinner;
+            public final Spinner distanceSpinner, weightSpinner;
 
 
             public ViewHolder(View view) {
@@ -146,7 +147,8 @@ public class PackageFragment extends Fragment {
                 etHeight = (EditText) view.findViewById(R.id.et_height);
                 etWeight = (EditText) view.findViewById(R.id.et_weight);
 
-                spinner = (Spinner) view.findViewById(R.id.spinner_package_type);
+                distanceSpinner = (Spinner) view.findViewById(R.id.spinner_distance_unit);
+                weightSpinner = (Spinner) view.findViewById(R.id.spinner_weight_unit);
             }
 
 //            @Override
@@ -239,6 +241,13 @@ public class PackageFragment extends Fragment {
             holder.rbMed.setChecked(false);
             holder.rbBig.setChecked(false);
 
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.distance_unit, R.layout.spinner_item);
+            adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+            holder.distanceSpinner.setAdapter(adapter);
+
+            ArrayAdapter<CharSequence> weightAdapter = ArrayAdapter.createFromResource(context, R.array.weight_unit, R.layout.spinner_item);
+            weightAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+            holder.weightSpinner.setAdapter(weightAdapter);
 
             switch (aPackage.getBoxSize()){
                 case Package.BIG_BOX:
@@ -396,7 +405,6 @@ public class PackageFragment extends Fragment {
                     aPackage.setWidth(holder.etWidth.getText().toString());
                 }
             });
-
         }
 
         @Override

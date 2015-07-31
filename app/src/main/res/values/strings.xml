@@ -19,6 +19,16 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string-array name="distance_unit">
+        <item>cm</item>
+        <item>inch</item>
+    </string-array>
+
+    <string-array name="weight_unit">
+        <item>lb</item>
+        <item>kg</item>
+    </string-array>
+
     <string-array name="category_array">
         <item>Cosmetic</item>
         <item>Milk powder</item>
