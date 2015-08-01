@@ -91,12 +91,11 @@
         <item name="android:layout_width">@dimen/label_icon_width</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/label_icon_font_size</item>
-        <item name="android:textColor">@color/teal</item>
-        <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">7dp</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
 
-    <dimen name="label_icon_font_size">28sp</dimen>
-    <dimen name="label_icon_width">60dp</dimen>
+    <dimen name="label_icon_font_size">22sp</dimen>
+    <dimen name="label_icon_width">56dp</dimen>
 </resources>

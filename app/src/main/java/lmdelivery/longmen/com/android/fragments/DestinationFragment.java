@@ -177,7 +177,7 @@ public class DestinationFragment extends Fragment {
                 if (!etPhone.getText().toString().isEmpty()) {
                     ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
                 }
-                ((NewBookingActivity) getActivity()).pickupAddr.setPhone(etPhone.getText().toString());
+                ((NewBookingActivity) getActivity()).dropOffAddr.setPhone(etPhone.getText().toString());
             }
         });
 
@@ -195,7 +195,7 @@ public class DestinationFragment extends Fragment {
                 if (!etName.getText().toString().isEmpty()) {
                     ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
                 }
-                ((NewBookingActivity) getActivity()).pickupAddr.setName(etName.getText().toString());
+                ((NewBookingActivity) getActivity()).dropOffAddr.setName(etName.getText().toString());
             }
         });
 

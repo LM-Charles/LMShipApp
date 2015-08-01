@@ -22,21 +22,21 @@
     <!--<color name="colorButtonNormal">@color/colorPrimary</color>-->
     <!--<color name="colorControlHighlight">#7E57C2</color>-->
 
-    <color name="colorPrimary">#FF5722</color>
-    <color name="colorPrimaryDark">#E64A19</color>
-    <color name="colorAccent">#FF5722</color>
+    <color name="colorPrimary">#F44336</color>
+    <color name="colorPrimaryDark">#D32F2F</color>
+    <color name="colorAccent">#F44336</color>
     <color name="colorButtonNormal">@color/colorPrimary</color>
     <color name="colorControlHighlight">#D84315</color>
 
     <color name="window_background">#eeeeee</color>
     <color name="white_text">#FFF5F5F5</color>
     <color name="card_background">#37474F</color>
-    <color name="pickup_card_title_background">#01579B</color>
-    <color name="destination_card_title_background">#2E7D32</color>
+    <color name="pickup_card_title_background">#3F51B5</color>
+    <color name="destination_card_title_background">#303F9F</color>
 
-    <color name="time_selected">#FF7043</color>
-    <color name="time_ripple">#DD2C00</color>
-    <color name="package_item_title_background">#5E35B1</color>
+    <color name="time_selected">#9C27B0</color>
+    <color name="time_ripple">#7B1FA2</color>
+    <color name="package_item_title_background">#512DA8</color>
     <color name="light_gray">#BDBDBD</color>
     <color name="default_text_color">#737373</color>
 

@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -84,6 +85,7 @@ public class PackageFragment extends Fragment {
     }
 
     public boolean validateAllPackage(){
+
         if(getActivity()== null || packageArrayList ==null){
             return false;
         }
@@ -201,7 +203,6 @@ public class PackageFragment extends Fragment {
                     ((TextInputLayout)viewHolder.etWidth.getParent()).setError(context.getString(R.string.required));
                 else
                     ((TextInputLayout)viewHolder.etWidth.getParent()).setErrorEnabled(false);
-
             }
 
             if(weight.isEmpty())
@@ -225,7 +226,6 @@ public class PackageFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder,final int position) {
             final Package aPackage = packageArrayList.get(position);
-
             //update view
             if(aPackage.isOwnBox()){
                 holder.checkBox.setChecked(true);
@@ -243,10 +243,31 @@ public class PackageFragment extends Fragment {
 
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.distance_unit, R.layout.spinner_item);
             adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+            holder.distanceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    aPackage.setDistanceUnit(holder.distanceSpinner.getSelectedItem().toString().equalsIgnoreCase("cm") ? Package.CM : Package.INCH);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
             holder.distanceSpinner.setAdapter(adapter);
 
             ArrayAdapter<CharSequence> weightAdapter = ArrayAdapter.createFromResource(context, R.array.weight_unit, R.layout.spinner_item);
             weightAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+            holder.weightSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    aPackage.setWeightUnit(holder.weightSpinner.getSelectedItem().toString().equalsIgnoreCase("lb") ? Package.LB : Package.KG);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
             holder.weightSpinner.setAdapter(weightAdapter);
 
             switch (aPackage.getBoxSize()){
@@ -350,10 +371,13 @@ public class PackageFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if(!holder.etHeight.getText().toString().isEmpty()) {
+                    String height = holder.etHeight.getText().toString();
+
+                    if(!height.isEmpty()) {
                         ((TextInputLayout) holder.etHeight.getParent()).setErrorEnabled(false);
                     }
-                    aPackage.setHeight(holder.etHeight.getText().toString());
+
+                    aPackage.setHeight(height);
                 }
             });
 
@@ -411,6 +435,26 @@ public class PackageFragment extends Fragment {
         public int getItemCount() {
             return packageArrayList.size();
         }
+    }
+
+    private String toCM(String number, String unit){
+
+        if(unit.equalsIgnoreCase("inch")){
+            int value = Integer.parseInt(number);
+            number = String.valueOf((int) (value * 2.54));
+        }
+
+        return number;
+    }
+
+    private String toKG(String number, String unit){
+
+        if(unit.equalsIgnoreCase("lb")){
+            int value = Integer.parseInt(number);
+            number = String.valueOf((int) (value * 0.453592));
+        }
+
+        return number;
     }
 
 }

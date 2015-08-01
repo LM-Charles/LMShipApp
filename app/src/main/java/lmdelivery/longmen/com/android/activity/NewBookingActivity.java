@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -72,6 +73,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private Adapter adapter;
 
     private Context context;
+
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
      * to the user's sign in state as well as the Google's APIs.
@@ -158,6 +160,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                             tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_yellowdot);
                         }
                         break;
+
+                    case Constant.TAB_INSURANCE:
+                        tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_greendot);
+
+                        break;
                 }
             }
 
@@ -180,14 +187,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(context, SelectProductActivity.class);
-//                    intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
-//                    intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
-//                    intent.putExtra(Constant.EXTRA_TIME, selectedTime);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, myPackageArrayList);
-//                    intent.putExtras(bundle);
-//                    startActivity(intent);
+                    Intent intent = new Intent(context, SelectProductActivity.class);
+                    intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
+                    intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
+                    intent.putExtra(Constant.EXTRA_TIME, selectedTime);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
 
                 }
             });

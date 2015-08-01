@@ -21,8 +21,6 @@
         android:src="@drawable/ic_add"
         app:elevation="6dp"
         app:borderWidth="0dp"
-        app:pressedTranslationZ="12dp"
-        app:backgroundTint="@color/add_state_list"
-        />
+        app:pressedTranslationZ="12dp"/>
 
 </FrameLayout>

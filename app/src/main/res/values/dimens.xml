@@ -14,7 +14,7 @@
     <dimen name="summary_card_title_font_size">16sp</dimen>
     <dimen name="title_font_size">26sp</dimen>
     <dimen name="sub_title_font_size">16sp</dimen>
-    <dimen name="edit_text_font_size">16sp</dimen>
+    <dimen name="edit_text_font_size">14sp</dimen>
     <dimen name="check_icon_size">18sp</dimen>
     <dimen name="edit_text_margin_bot">6dp</dimen>
     <dimen name="big_box_icon_size">30sp</dimen>
@@ -31,4 +31,5 @@
     <dimen name="setting_text_width">120dp</dimen>
     <dimen name="edit_text_height">83dp</dimen>
     <dimen name="map_snapshot_height">140dp</dimen>
+    <dimen name="unit_spinner_width">80dp</dimen>
 </resources>

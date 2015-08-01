@@ -3,7 +3,7 @@
     <string name="title_activity_new_booking">Ship a package</string>
     <string name="search_address">Street Address (Search)</string>
     <string name="pickup_address">Pickup Address</string>
-    <string name="unit_number">Unit Number</string>
+    <string name="unit_number">Apt, Floor, Suite, etc.. (Optional)</string>
     <string name="bc_canada"> BC Canada </string>
     <string name="street_number">Street Number</string>
     <string name="street_name">Street Name</string>
@@ -19,10 +19,10 @@
     <string name="province">Province</string>
     <string name="ship_from">Ship from</string>
     <string name="dash">-</string>
-    <string name="length">Length (cm)</string>
-    <string name="weight">Weight (lb)</string>
-    <string name="width">Width (cm)</string>
-    <string name="height">Height (cm)</string>
+    <string name="length">Length</string>
+    <string name="weight">Weight</string>
+    <string name="width">Width</string>
+    <string name="height">Height</string>
     <string name="package_title">Package</string>
     <string name="big_box">Big Box</string>
     <string name="big_box_dimention">50 L X 50 W X 50 H (cm)</string>

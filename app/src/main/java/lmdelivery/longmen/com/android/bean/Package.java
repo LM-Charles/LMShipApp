@@ -30,6 +30,11 @@ public class Package extends Model implements Parcelable{
     public static final String BIG_WIDTH = "10";
     public static final String BIG_LENGTH = "10";
 
+    public static final int CM = 0;
+    public static final int INCH = 1;
+    public static final int LB = 2;
+    public static final int KG = 3;
+
     @Column(name = "Length")
     private String length;
     @Column(name = "Width")
@@ -43,6 +48,11 @@ public class Package extends Model implements Parcelable{
     @Column(name = "isOwnBox")
     private boolean isOwnBox;
     private boolean showValidation;
+    @Column(name = "weightUnit")
+    private int weightUnit;
+    @Column(name = "distanceUnit")
+    private int distanceUnit;
+
 
 
     public Package() {
@@ -53,6 +63,8 @@ public class Package extends Model implements Parcelable{
         this.boxSize = 0;
         this.isOwnBox = true;
         this.showValidation = false;
+        this.weightUnit = LB;
+        this.distanceUnit = CM;
     }
 
     @Override public String toString(){
@@ -133,6 +145,22 @@ public class Package extends Model implements Parcelable{
         this.weight = weight;
     }
 
+    public int getWeightUnit() {
+        return weightUnit;
+    }
+
+    public void setWeightUnit(int weightUnit) {
+        this.weightUnit = weightUnit;
+    }
+
+    public int getDistanceUnit() {
+        return distanceUnit;
+    }
+
+    public void setDistanceUnit(int distanceUnit) {
+        this.distanceUnit = distanceUnit;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -155,6 +183,9 @@ public class Package extends Model implements Parcelable{
             dest.writeInt(1);
         else
             dest.writeInt(0);
+
+        dest.writeInt(weightUnit);
+        dest.writeInt(distanceUnit);
     }
 
     public Package(Parcel in) {
@@ -165,6 +196,8 @@ public class Package extends Model implements Parcelable{
         weight = in.readString();
         isOwnBox = in.readInt()!=0;
         showValidation = in.readInt()!=0;
+        weightUnit = in.readInt();
+        distanceUnit = in.readInt();
     }
 
     public static final Parcelable.Creator<Package> CREATOR = new Parcelable.Creator<Package>()

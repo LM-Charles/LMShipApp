@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.Shipment;
 
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
 //            rateItems.add(item);
 //        }
         adapter = new ShipItemRecyclerViewAdapter(shipItems, context);
+        recyclerView.setItemAnimator(new SlideInUpAnimator());
         recyclerView.setAdapter(adapter);
     }
 

@@ -28,18 +28,18 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/white_text"
                     android:text="@string/package_title" />
 
 
                 <lmdelivery.longmen.com.android.widget.TypefaceTextView
                     android:id="@+id/ic_close"
-                    android:layout_width="50dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/icon_close"
-                    android:textColor="@color/window_background"
+                    android:textColor="@color/white_text"
+                    android:background="?attr/selectableItemBackground"
                     android:textSize="30sp"
                     geekui:customTypeface="fonts/ionicons.ttf" />
 
@@ -50,14 +50,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-
                 <CheckBox
-
                     android:id="@+id/checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/normal_padding"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:checked="true" />
 
                 <TextView
@@ -74,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/normal_padding"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:text="Free" />
             </RelativeLayout>
             <!--<View-->
@@ -88,8 +86,8 @@
                 android:layout_height="@dimen/edit_text_height"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingEnd="@dimen/normal_padding"
-                android:paddingStart="@dimen/normal_padding">
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin">
 
                 <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                     android:layout_width="0dp"
@@ -108,10 +106,10 @@
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
                 <Spinner
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/unit_spinner_width"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner_weight_unit"
-                    android:layout_weight="1" />
+                    android:gravity="center" />
 
 
             </LinearLayout>
@@ -123,8 +121,8 @@
                 android:layout_height="@dimen/edit_text_height"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingEnd="@dimen/normal_padding"
-                android:paddingStart="@dimen/normal_padding">
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin">
 
                 <lmdelivery.longmen.com.android.widget.CustomTextInputLayout
                     android:layout_width="0dp"
@@ -173,11 +171,10 @@
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
                 <Spinner
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/unit_spinner_width"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner_distance_unit"
-                    android:gravity="center"
-                    android:layout_weight="1" />
+                    android:gravity="center" />
             </LinearLayout>
 
             <LinearLayout
@@ -210,6 +207,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@id/ic_small_box"
+                        android:layout_toStartOf="@+id/rb_small_box"
                         android:orientation="vertical">
 
                         <TextView
@@ -264,6 +262,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@id/ic_med_box"
+                        android:layout_toStartOf="@+id/rb_med_box"
                         android:orientation="vertical">
 
                         <TextView
@@ -316,6 +315,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@id/ic_big_box"
+                        android:layout_toStartOf="@+id/rb_big_box"
                         android:orientation="vertical">
 
                         <TextView

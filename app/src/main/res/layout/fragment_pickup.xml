@@ -20,17 +20,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:textColor="@color/teal"
                     android:text="@string/ship_from"
                     android:textSize="@dimen/card_title_font_size" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/teal"
                     android:layout_marginTop="@dimen/normal_padding"
                     android:fontFamily="sans-serif"
-                    android:text="We will pick up your packages from this address"
+                    android:text="@string/pickup_sub_title"
                     android:textSize="@dimen/sub_title_font_size" />
 
             </LinearLayout>
@@ -39,8 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="@dimen/normal_padding"
-                android:paddingEnd="@dimen/normal_padding">
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -55,9 +53,7 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clipChildren="false"
-                        android:clipToPadding="false">
+                        android:layout_height="match_parent">
 
                         <EditText
                             android:id="@+id/et_sender_name"
