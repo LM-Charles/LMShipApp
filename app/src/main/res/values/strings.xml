@@ -70,9 +70,12 @@
     <string name="insurance_value">Insurance Value</string>
     <string name="insurance_price">Insurance Price</string>
     <string name="buy_insurance">Buy Insurance</string>
+    <string name="insurance">Insurance</string>
+
     <string name="dollar_sign">$</string>
     <string name="zero_CAD">0 CAD</string>
     <string name="pickup_sub_title">We will pick up your packages from this address</string>
+    <string name="no_est_value">Estimate Value is not provided</string>
 
 
 </resources>

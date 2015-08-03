@@ -44,7 +44,7 @@ public class Address extends Model implements Serializable {
     }
 
     public String buildFullAddress(){
-        String result = name + " " + phone + "\n" ;
+        String result = name + "\n" + phone + "\n";
         if(!unitNumber.isEmpty()){
             result += unitNumber+"-";
         }

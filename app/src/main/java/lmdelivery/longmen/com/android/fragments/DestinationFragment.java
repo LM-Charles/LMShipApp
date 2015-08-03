@@ -318,7 +318,7 @@ public class DestinationFragment extends Fragment {
             if (name.isEmpty()) {
                 ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
                 return false;
-            } else {
+            }else {
                 ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
                 return true;
             }
@@ -332,6 +332,9 @@ public class DestinationFragment extends Fragment {
             ((NewBookingActivity) getActivity()).dropOffAddr.setPhone(phone);
             if (phone.isEmpty()) {
                 ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
+                return false;
+            }  else if (phone.length()<10) {
+                ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.error_phone_too_short));
                 return false;
             } else {
                 ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);

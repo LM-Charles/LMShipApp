@@ -34,6 +34,7 @@ public class Constant {
     public static final int TAB_SUMMARY = 5;
 
     public static final Set<String> citiesInVan = new HashSet<>();
+    public static final String DEFAULT_CATEGORY = "Cosmetic";
 
     static {
         citiesInVan.add("VANCOUVER");
