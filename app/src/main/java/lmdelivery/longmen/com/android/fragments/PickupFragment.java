@@ -279,6 +279,9 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             if (phone.isEmpty()) {
                 ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
                 return false;
+            }  else if (phone.length()<10) {
+                ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.error_phone_too_short));
+                return false;
             }  else {
                 ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
                 return true;

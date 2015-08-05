@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public SummaryFragment summaryFragment;
 
 
+
     public FloatingActionButton fab;
     private ViewPager viewPager;
     public ArrayList<Package> packageArrayList;
@@ -71,6 +73,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public Address pickupAddr;
     public Address dropOffAddr;
     private Adapter adapter;
+    public String estValue;
+    public String insuranceValue;
+    public String category;
 
     private Context context;
 
@@ -436,6 +441,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             }
         }
         return result;
+    }
+
+    public boolean validateInsurance(){
+        return !TextUtils.isEmpty(estValue);
     }
 
     private void getRate(){

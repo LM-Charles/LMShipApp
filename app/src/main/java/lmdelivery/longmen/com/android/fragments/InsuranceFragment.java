@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +40,8 @@ public class InsuranceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
 
+        final NewBookingActivity activity = (NewBookingActivity)getActivity();
+
         spinner = (Spinner) rootView.findViewById(R.id.spinner_package_type);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.category_array, R.layout.spinner_item);
@@ -53,6 +57,29 @@ public class InsuranceFragment extends Fragment {
         final TextView tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
         llInsurance = (LinearLayout) rootView.findViewById(R.id.ll_insurance);
 
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+
+        estimateValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String valueStr = estimateValue.getText().toString();
+                activity.estValue = valueStr;
+            }
+        });
 
         insuranceValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,6 +96,7 @@ public class InsuranceFragment extends Fragment {
                 if (!TextUtils.isEmpty(valueStr)){
                     int value = Integer.parseInt(valueStr);
                     tvInsurace.setText("$ " + String.valueOf((double)value * 0.03));
+                    activity.insuranceValue = valueStr;
                 }
 
             }

@@ -4,6 +4,7 @@ package lmdelivery.longmen.com.android.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +28,13 @@ public class SummaryFragment extends Fragment {
     private TextView tvDropoff;
     private TextView tvTime;
     private TextView tvPackage;
+    private TextView tvInsurance;
 
     private CardView cardPackage;
     private CardView cardFrom;
     private CardView cardTo;
     private CardView cardTime;
+    private CardView cardInsurance;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -57,7 +60,6 @@ public class SummaryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     public boolean setupView(){
@@ -119,6 +121,38 @@ public class SummaryFragment extends Fragment {
             });
             result = false;
         }
+
+        if (!TextUtils.isEmpty(newBookingActivity.estValue)) {
+            String text = "Estimate Value: " + newBookingActivity.estValue + "\n";
+            if(TextUtils.isEmpty(newBookingActivity.category)){
+                text += "Category: " + Constant.DEFAULT_CATEGORY + "\n";
+            }else{
+                text += "Category: " + newBookingActivity.category + "\n";
+            }
+
+            if(!TextUtils.isEmpty(newBookingActivity.insuranceValue)){
+                text += "Insurance Value: " + newBookingActivity.insuranceValue + "\n";
+                int value = Integer.parseInt(newBookingActivity.insuranceValue);
+
+                text += "Insurance Cost: " + "$ " + String.valueOf((double)value * 0.03);
+            }else{
+                text += "Insurance Declined";
+            }
+
+            tvInsurance.setText(text);
+            cardInsurance.setOnClickListener(null);
+        } else {
+            tvInsurance.setText(getString(R.string.no_est_value));
+            cardInsurance.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newBookingActivity.scrollTo(Constant.TAB_INSURANCE);
+                }
+            });
+            result = false;
+        }
+
+
         return  result;
     }
 
@@ -142,10 +176,12 @@ public class SummaryFragment extends Fragment {
         tvDropoff = (TextView) view.findViewById(R.id.tv_dropoff_addr);
         tvTime = (TextView) view.findViewById(R.id.tv_pickup_time);
         tvPackage = (TextView) view.findViewById(R.id.tv_package_info);
+        tvInsurance = (TextView) view.findViewById(R.id.tv_insurance);
         cardPackage = (CardView) view.findViewById(R.id.card_package);
         cardFrom = (CardView) view.findViewById(R.id.card_from);
         cardTo = (CardView) view.findViewById(R.id.card_to);
         cardTime = (CardView) view.findViewById(R.id.card_time);
+        cardInsurance = (CardView) view.findViewById(R.id.card_insurance);
         return view;
     }
 
