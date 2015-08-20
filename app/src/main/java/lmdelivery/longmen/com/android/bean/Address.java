@@ -45,10 +45,20 @@ public class Address extends Model implements Serializable {
 
     public String buildFullAddress(){
         String result = name + "\n" + phone + "\n";
-        if(!unitNumber.isEmpty()){
-            result += unitNumber+"-";
+        if(country.equals("China") || country.equals("中国")){
+
+            result += streetName;
+            if(!unitNumber.isEmpty()){
+                result += " " + unitNumber + "\n";
+            }
+            result += city + ", " + province + ", " + postalCode + "\n" + country;
+        }else{
+            if(!unitNumber.isEmpty()){
+                result += unitNumber+"-";
+            }
+            result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + country;
         }
-        result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + country;
+
         return result;
     }
 

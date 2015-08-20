@@ -71,18 +71,29 @@
     </style>
 
     <style name="SummaryCardContent"  parent="android:Widget.TextView">
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:textColor">@color/window_background</item>
         <item name="android:textSize">@dimen/summary_card_content_font_size</item>
         <item name="android:paddingTop">@dimen/card_margin</item>
         <item name="android:paddingBottom">@dimen/card_margin</item>
     </style>
 
+    <style name="SummaryCardEdit"  parent="android:Widget.TextView">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">@color/window_background</item>
+        <item name="android:paddingTop">@dimen/card_margin</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:text">@string/icon_edit</item>
+    </style>
+
     <style name="Label"  parent="android:Widget.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/edit_text_font_size</item>
+        <item name="android:textSize">@dimen/label_text_font_size</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
@@ -98,4 +109,5 @@
 
     <dimen name="label_icon_font_size">22sp</dimen>
     <dimen name="label_icon_width">56dp</dimen>
+    <dimen name="label_text_font_size">16sp</dimen>
 </resources>

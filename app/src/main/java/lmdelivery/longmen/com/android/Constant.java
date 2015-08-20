@@ -15,7 +15,7 @@ public class Constant {
     public static final String EXTRA_PACKAGE = "EXTRA_PACKAGE";
     public static final String EXTRA_TIME = "EXTRA_TIME";
 
-    public static final int FAB_ANIMTION_DURATION = 1000;
+    public static final int FAB_ANIMTION_DURATION = 500;
     public static final int MAX_CITY_LENGTH = 15;
     public static final int MAX_PROVINCE_LENGTH = 15;
     public static final int PASSWORD_MIN_LENGTH = 6;

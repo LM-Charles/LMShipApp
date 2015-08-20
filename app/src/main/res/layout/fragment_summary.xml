@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="lmdelivery.longmen.com.android.fragments.SummaryFragment">
+    tools:context="lmdelivery.longmen.com.android.fragments.SummaryFragment"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,12 +15,13 @@
         <android.support.v7.widget.CardView
             android:id="@+id/card_from"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            card_view:cardBackgroundColor="@color/pickup_card_title_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pickup_card_title_background"
+                android:background="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <TextView
@@ -28,6 +31,10 @@
                 <TextView
                     android:id="@+id/tv_pickup_addr"
                     style="@style/SummaryCardContent" />
+
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/SummaryCardEdit"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -35,12 +42,13 @@
             android:id="@+id/card_to"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            card_view:cardBackgroundColor="@color/destination_card_title_background"
             android:layout_marginTop="@dimen/normal_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/destination_card_title_background"
+                android:background="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <TextView
@@ -50,6 +58,9 @@
                 <TextView
                     android:id="@+id/tv_dropoff_addr"
                     style="@style/SummaryCardContent" />
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/SummaryCardEdit"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -57,12 +68,13 @@
             android:id="@+id/card_package"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            card_view:cardBackgroundColor="@color/package_item_title_background"
             android:layout_marginTop="@dimen/normal_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/package_item_title_background"
+                android:background="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <TextView
@@ -72,6 +84,9 @@
                 <TextView
                     android:id="@+id/tv_package_info"
                     style="@style/SummaryCardContent" />
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/SummaryCardEdit"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -79,12 +94,13 @@
             android:id="@+id/card_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding">
+            android:layout_marginTop="@dimen/normal_padding"
+            card_view:cardBackgroundColor="@color/time_selected">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/time_selected"
+                android:background="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <TextView
@@ -94,6 +110,9 @@
                 <TextView
                     android:id="@+id/tv_pickup_time"
                     style="@style/SummaryCardContent" />
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/SummaryCardEdit"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -101,12 +120,13 @@
             android:id="@+id/card_insurance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding">
+            android:layout_marginTop="@dimen/normal_padding"
+            card_view:cardBackgroundColor="@color/insurance_color">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/insurance_color"
+                android:background="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <TextView
@@ -116,6 +136,10 @@
                 <TextView
                     android:id="@+id/tv_insurance"
                     style="@style/SummaryCardContent" />
+
+                <lmdelivery.longmen.com.android.widget.TypefaceTextView
+                    style="@style/SummaryCardEdit"
+                    geekui:customTypeface="fonts/fontawesome.ttf" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
