@@ -27,8 +27,8 @@
     </string-array>
 
     <string-array name="weight_unit">
-        <item>lb</item>
         <item>kg</item>
+        <item>lb</item>
     </string-array>
 
     <string-array name="category_array">
@@ -37,7 +37,6 @@
         <item>Luxury</item>
         <item>Other</item>
     </string-array>
-
 
     <string-array name="dropoff_country_array">
         <item>Canada</item>
@@ -82,6 +81,5 @@
     <string name="insurance_cost">"Insurance Cost: "</string>
     <string name="insurance_decline">Insurance Declined</string>
     <string name="country">Country</string>
-
-
+    <string name="own_box">I have my own box</string>
 </resources>

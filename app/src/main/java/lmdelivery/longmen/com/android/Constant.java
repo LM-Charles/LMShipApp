@@ -25,6 +25,8 @@ public class Constant {
     public static final String SHARE_USER_TOKEN = "SHARE_USER_TOKEN";
     public static final String SHARE_USER_PHONE = "SHARE_USER_PHONE";
     public static final String SHARE_USER_ID = "SHARE_USER_ID";
+    public static final String SHARE_WEIGHT_UNIT = "SHARE_WEIGHT_UNIT";
+    public static final String SHARE_LENGTH_UNIT = "SHARE_LENGTH_UNIT";
 
     public static final int TAB_FROM = 0;
     public static final int TAB_TO = 1;

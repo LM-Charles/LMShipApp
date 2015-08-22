@@ -27,9 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import lmdelivery.longmen.com.android.AppController;
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.util.Unit;
 import lmdelivery.longmen.com.android.widget.TypefaceTextView;
 
 
@@ -246,11 +249,12 @@ public class PackageFragment extends Fragment {
             holder.distanceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    aPackage.setDistanceUnit(holder.distanceSpinner.getSelectedItem().toString().equalsIgnoreCase("cm") ? Package.CM : Package.INCH);
+                    aPackage.setDistanceUnit(position==0 ? Unit.CM : Unit.INCH);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
+
                 }
             });
 
@@ -261,11 +265,13 @@ public class PackageFragment extends Fragment {
             holder.weightSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    aPackage.setWeightUnit(holder.weightSpinner.getSelectedItem().toString().equalsIgnoreCase("lb") ? Package.LB : Package.KG);
+                    aPackage.setWeightUnit(position==0 ? Unit.KG : Unit.LB);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
+                    int weightUnit = AppController.getInstance().getDefaultSharePreferences().getInt(Constant.SHARE_WEIGHT_UNIT, Unit.KG);
+
                 }
             });
             holder.weightSpinner.setAdapter(weightAdapter);
@@ -284,10 +290,12 @@ public class PackageFragment extends Fragment {
 
             if (aPackage.isOwnBox()) {
                 holder.price.setText(context.getString(R.string.free));
+                holder.price.setTextColor(context.getResources().getColor(R.color.green_done));
                 holder.llOwnBox.setVisibility(View.VISIBLE);
                 holder.llLmBox.setVisibility(View.GONE);
             } else {
                 holder.price.setText(context.getString(R.string.five_bucks));
+                holder.price.setTextColor(context.getResources().getColor(android.R.color.primary_text_dark));
                 holder.llOwnBox.setVisibility(View.GONE);
                 holder.llLmBox.setVisibility(View.VISIBLE);
             }
