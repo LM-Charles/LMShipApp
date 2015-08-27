@@ -40,7 +40,7 @@ public class InsuranceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
 
-        final NewBookingActivity activity = (NewBookingActivity)getActivity();
+        final NewBookingActivity activity = (NewBookingActivity) getActivity();
 
         spinner = (Spinner) rootView.findViewById(R.id.spinner_package_type);
 
@@ -57,9 +57,14 @@ public class InsuranceFragment extends Fragment {
         final TextView tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
         llInsurance = (LinearLayout) rootView.findViewById(R.id.ll_insurance);
 
-        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -93,9 +98,9 @@ public class InsuranceFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String valueStr = insuranceValue.getText().toString();
-                if (!TextUtils.isEmpty(valueStr)){
+                if (!TextUtils.isEmpty(valueStr)) {
                     int value = Integer.parseInt(valueStr);
-                    tvInsurace.setText("$ " + String.valueOf((double)value * 0.03));
+                    tvInsurace.setText("$ " + String.valueOf((double) value * 0.03));
                     activity.insuranceValue = valueStr;
                 }
 
@@ -172,4 +177,4 @@ public class InsuranceFragment extends Fragment {
         }
     }
 
-    }
+}

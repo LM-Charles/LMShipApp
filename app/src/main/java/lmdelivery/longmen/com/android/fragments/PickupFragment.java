@@ -1,6 +1,7 @@
 package lmdelivery.longmen.com.android.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -47,6 +48,8 @@ import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -127,6 +130,33 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+        super.onActivityCreated(savedInstanceState);
+        Observable<String> textChangeObservable = Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(final Subscriber<? super String> observer) {
+                final TextWatcher watcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(final Editable editable) {
+                        observer.onNext(editable.toString());
+                    }
+                };
+            }
+        });
     }
 
 
@@ -264,7 +294,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             if (name.isEmpty()) {
                 ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
                 return false;
-            }  else {
+            } else {
                 ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
                 return true;
             }
@@ -279,10 +309,10 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
             if (phone.isEmpty()) {
                 ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
                 return false;
-            }  else if (phone.length()<10) {
+            } else if (phone.length() < 10) {
                 ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.error_phone_too_short));
                 return false;
-            }  else {
+            } else {
                 ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
                 return true;
             }

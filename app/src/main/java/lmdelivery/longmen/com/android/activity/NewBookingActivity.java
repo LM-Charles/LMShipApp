@@ -474,10 +474,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             params.put("toAddress", dropOff);
 
             params.put("shipments", buildBoxJson());
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "rate/", params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -561,6 +561,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "order?token=" + AppController.getInstance().getUserToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
