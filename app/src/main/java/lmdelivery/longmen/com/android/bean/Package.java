@@ -14,6 +14,8 @@ import com.activeandroid.annotation.Table;
 
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.util.Unit;
+
 @Table(name = "Packages")
 public class Package extends Model implements Parcelable{
     public static final int SMALL_BOX = 0;
@@ -29,11 +31,6 @@ public class Package extends Model implements Parcelable{
     public static final String BIG_HEIGHT = "10";
     public static final String BIG_WIDTH = "10";
     public static final String BIG_LENGTH = "10";
-
-    public static final int CM = 0;
-    public static final int INCH = 1;
-    public static final int LB = 2;
-    public static final int KG = 3;
 
     @Column(name = "Length")
     private String length;
@@ -63,8 +60,8 @@ public class Package extends Model implements Parcelable{
         this.boxSize = 0;
         this.isOwnBox = true;
         this.showValidation = false;
-        this.weightUnit = LB;
-        this.distanceUnit = CM;
+        this.weightUnit = Unit.KG;
+        this.distanceUnit = Unit.CM;
     }
 
     @Override public String toString(){

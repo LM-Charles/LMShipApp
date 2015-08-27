@@ -64,7 +64,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/normal_padding"
                     android:layout_toEndOf="@+id/checkbox"
-                    android:text="I have my own box" />
+                    android:text="@string/own_box"
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/tv_price"
@@ -73,7 +74,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:text="Free" />
+                    android:text="@string/free"
+                    android:textColor="@color/green_done"
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <!--<View-->
             <!--android:layout_width="match_parent"-->

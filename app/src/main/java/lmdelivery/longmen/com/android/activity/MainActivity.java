@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
             public ViewHolder(View view) {
                 super(view);
                 mView = (LinearLayout) view.findViewById(R.id.ll_card);
-                ;
                 title = (TextView) view.findViewById(R.id.tv_title);
                 status = (TextView) view.findViewById(R.id.tv_status);
                 btnTrack = (TextView) view.findViewById(R.id.btn_track);

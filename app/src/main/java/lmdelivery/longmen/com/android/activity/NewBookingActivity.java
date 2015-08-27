@@ -15,6 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -62,8 +66,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public InsuranceFragment insuranceFragment;
     public TimeFragment timeFragment;
     public SummaryFragment summaryFragment;
-
-
 
     public FloatingActionButton fab;
     private ViewPager viewPager;
@@ -122,7 +124,12 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if (tab.getPosition() == Constant.TAB_SUMMARY) {
+                if(tab.getPosition() == Constant.TAB_TIME){
+                    if(selectedTime==null){
+                        hideFab();
+                    }
+                }
+                else if (tab.getPosition() == Constant.TAB_SUMMARY) {
                     setupDoneFab();
                 } else {
                     setupNextFab();
@@ -167,7 +174,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         break;
 
                     case Constant.TAB_INSURANCE:
-                        tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_greendot);
+                        if (!TextUtils.isEmpty(estValue)) {
+                            tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_greendot);
+                        }else {
+                            tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_yellowdot);
+                        }
 
                         break;
                 }
@@ -184,8 +195,25 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     }
 
-    private void setupDoneFab() {
+    private void hideFab(){
+        fab.animate().scaleX(0).scaleY(0).setInterpolator(new AccelerateInterpolator()).setDuration(Constant.FAB_ANIMTION_DURATION).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                fab.setVisibility(View.GONE);
+            }
+        }).start();
+    }
 
+    private void showFab(){
+        if(fab.getVisibility() == View.GONE){
+            fab.setVisibility(View.VISIBLE);
+            fab.setScaleX(0);
+            fab.setScaleY(0);
+            fab.animate().scaleX(1).scaleY(1).setInterpolator(new OvershootInterpolator()).setDuration(Constant.FAB_ANIMTION_DURATION).start();
+        }
+    }
+
+    private void setupDoneFab() {
         if (summaryFragment.setupView()) {
             fab.setImageResource(R.drawable.ic_done);
             fab.setBackgroundTintList(getResources().getColorStateList(R.color.done_state_list));
@@ -204,13 +232,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 }
             });
         } else {
-            fab.setVisibility(View.GONE);
+            hideFab();
         }
     }
 
     private void setupNextFab() {
-
-        fab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_arrow_forward_white_36dp);
         fab.setBackgroundTintList(getResources().getColorStateList(R.color.normal_state_list));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -237,10 +263,13 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         viewPager.setCurrentItem(Constant.TAB_INSURANCE, true);
                     }
                 } else if (currentTab == Constant.TAB_INSURANCE) {
-                    viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
+                    if (!TextUtils.isEmpty(estValue)) {
+                        viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
+                    }
                 }
             }
         });
+        showFab();
     }
 
     private void init() {
@@ -301,6 +330,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     @Override
     public void onTimeSelected(MyTime myTime) {
         selectedTime = myTime;
+        if(fab.getVisibility() == View.GONE){
+            setupNextFab();
+        }
     }
 
     static class Adapter extends FragmentPagerAdapter {

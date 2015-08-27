@@ -109,7 +109,9 @@ public class SummaryFragment extends Fragment {
         }
 
         if (newBookingActivity.selectedTime != null) {
-            tvTime.setText(newBookingActivity.selectedTime.isToday() ? getString(R.string.today) : getString(R.string.tomorrow) + " " + getResources().getStringArray(R.array.time_interval_array)[newBookingActivity.selectedTime.getTimeCatergory()]);
+            String time = newBookingActivity.selectedTime.isToday() ? getString(R.string.today) : getString(R.string.tomorrow);
+            time += " " + newBookingActivity.selectedTime.getTimeString();
+            tvTime.setText(time);
             cardTime.setOnClickListener(null);
         } else {
             tvTime.setText(getString(R.string.no_pickup_time));
@@ -125,18 +127,18 @@ public class SummaryFragment extends Fragment {
         if (!TextUtils.isEmpty(newBookingActivity.estValue)) {
             String text = "Estimate Value: " + newBookingActivity.estValue + "\n";
             if(TextUtils.isEmpty(newBookingActivity.category)){
-                text += "Category: " + Constant.DEFAULT_CATEGORY + "\n";
+                text += getString(R.string.category) + Constant.DEFAULT_CATEGORY + "\n";
             }else{
-                text += "Category: " + newBookingActivity.category + "\n";
+                text += getString(R.string.category) + newBookingActivity.category + "\n";
             }
 
             if(!TextUtils.isEmpty(newBookingActivity.insuranceValue)){
-                text += "Insurance Value: " + newBookingActivity.insuranceValue + "\n";
+                text += getString(R.string.insurance_value) + newBookingActivity.insuranceValue + "\n";
                 int value = Integer.parseInt(newBookingActivity.insuranceValue);
 
-                text += "Insurance Cost: " + "$ " + String.valueOf((double)value * 0.03);
+                text += getString(R.string.insurance_cost) + "$ " + String.valueOf((double)value * 0.03);
             }else{
-                text += "Insurance Declined";
+                text += getString(R.string.insurance_decline);
             }
 
             tvInsurance.setText(text);
