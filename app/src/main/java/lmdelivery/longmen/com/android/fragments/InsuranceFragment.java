@@ -13,16 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 
@@ -30,7 +26,7 @@ import lmdelivery.longmen.com.android.activity.NewBookingActivity;
  * A simple {@link Fragment} subclass.
  */
 public class InsuranceFragment extends Fragment {
-    private Spinner spinner;
+
     private LinearLayout llInsurance;
 
     public InsuranceFragment() {
@@ -43,31 +39,10 @@ public class InsuranceFragment extends Fragment {
 
         final NewBookingActivity activity = (NewBookingActivity) getActivity();
 
-        spinner = (Spinner) rootView.findViewById(R.id.spinner_package_type);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.category_array, R.layout.spinner_item);
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-
         final EditText estimateValue = (EditText) rootView.findViewById(R.id.et_est_value);
         final EditText insuranceValue = (EditText) rootView.findViewById(R.id.et_insurance_value);
         final TextView tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
         llInsurance = (LinearLayout) rootView.findViewById(R.id.ll_insurance);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                activity.category = Constant.DEFAULT_CATEGORY;
-            }
-        });
-
 
         estimateValue.addTextChangedListener(new TextWatcher() {
             @Override

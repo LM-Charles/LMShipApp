@@ -37,7 +37,7 @@
     <string name="err_street_empty">Street is empty</string>
     <string name="required">Required</string>
     <string name="free">Free</string>
-    <string name="five_bucks">$5 per box for any size</string>
+    <string name="five_bucks">$5/box for any size</string>
     <string name="only_ship_to_canada_china">We only support shipping to Canada or China for now</string>
     <string name="invalid_pickup">Pick up address is invalid</string>
     <string name="invalid_dropoff">Drop off address is invalid</string>

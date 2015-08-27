@@ -13,11 +13,12 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 import lmdelivery.longmen.com.android.AppController;
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Unit;
 
 @Table(name = "Packages")
-public class Package extends Model implements Parcelable{
+public class Package extends Model implements Parcelable {
     public static final int SMALL_BOX = 0;
     public static final int MED_BOX = 1;
     public static final int BIG_BOX = 2;
@@ -49,7 +50,8 @@ public class Package extends Model implements Parcelable{
     private int weightUnit;
     @Column(name = "distanceUnit")
     private int distanceUnit;
-
+    @Column(name = "category")
+    private String category;
 
 
     public Package() {
@@ -58,20 +60,23 @@ public class Package extends Model implements Parcelable{
         this.height = "";
         this.weight = "";
         this.boxSize = 0;
-        this.isOwnBox = true;
+        this.isOwnBox = false;
         this.showValidation = false;
         this.weightUnit = Unit.KG;
         this.distanceUnit = Unit.CM;
+        this.category = Constant.DEFAULT_CATEGORY;
+
     }
 
-    @Override public String toString(){
-        if(isOwnBox){
+    @Override
+    public String toString() {
+        if (isOwnBox) {
             Resources resources = AppController.getAppContext().getResources();
             return resources.getString(R.string.length) + ": " + length + "  " + resources.getString(R.string.width) + ": " + width + "\n" +
                     resources.getString(R.string.height) + ": " + height + "  " + resources.getString(R.string.weight) + ": " + weight;
-        }else{
+        } else {
             String strBoxSize = "";
-            switch (boxSize){
+            switch (boxSize) {
                 case SMALL_BOX:
                     strBoxSize = AppController.getAppContext().getString(R.string.small_box);
                     break;
@@ -158,6 +163,14 @@ public class Package extends Model implements Parcelable{
         this.distanceUnit = distanceUnit;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -171,12 +184,12 @@ public class Package extends Model implements Parcelable{
         dest.writeString(width);
         dest.writeString(height);
         dest.writeString(weight);
-        if(isOwnBox)
+        if (isOwnBox)
             dest.writeInt(1);
         else
             dest.writeInt(0);
 
-        if(showValidation)
+        if (showValidation)
             dest.writeInt(1);
         else
             dest.writeInt(0);
@@ -191,20 +204,18 @@ public class Package extends Model implements Parcelable{
         width = in.readString();
         height = in.readString();
         weight = in.readString();
-        isOwnBox = in.readInt()!=0;
-        showValidation = in.readInt()!=0;
+        isOwnBox = in.readInt() != 0;
+        showValidation = in.readInt() != 0;
         weightUnit = in.readInt();
         distanceUnit = in.readInt();
     }
 
-    public static final Parcelable.Creator<Package> CREATOR = new Parcelable.Creator<Package>()
-    {
-        public Package createFromParcel(Parcel in)
-        {
+    public static final Parcelable.Creator<Package> CREATOR = new Parcelable.Creator<Package>() {
+        public Package createFromParcel(Parcel in) {
             return new Package(in);
         }
-        public Package[] newArray(int size)
-        {
+
+        public Package[] newArray(int size) {
             return new Package[size];
         }
     };

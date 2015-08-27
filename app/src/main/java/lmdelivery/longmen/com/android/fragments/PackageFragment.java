@@ -1,5 +1,6 @@
 package lmdelivery.longmen.com.android.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -42,12 +43,18 @@ public class PackageFragment extends Fragment {
     private PackageRecyclerViewAdapter mAdapter;
     private RecyclerView recyclerView;
     private ArrayList<Package> packageArrayList;
+    private NewBookingActivity activity;
 
     public static PackageFragment newInstance() {
         PackageFragment fragment = new PackageFragment();
         return fragment;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (NewBookingActivity) activity;
+    }
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -73,10 +80,10 @@ public class PackageFragment extends Fragment {
                 mAdapter.addPackage();
             }
         });
-
-
         return view;
     }
+
+
 
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(false);
@@ -126,7 +133,7 @@ public class PackageFragment extends Fragment {
             public final CheckBox checkBox;
             public final RadioButton rbSmall, rbMed, rbBig;
             public final EditText etLength, etWidth, etHeight, etWeight;
-            public final Spinner distanceSpinner, weightSpinner;
+            public final Spinner distanceSpinner, weightSpinner, categorySpinner;
 
 
             public ViewHolder(View view) {
@@ -154,6 +161,7 @@ public class PackageFragment extends Fragment {
 
                 distanceSpinner = (Spinner) view.findViewById(R.id.spinner_distance_unit);
                 weightSpinner = (Spinner) view.findViewById(R.id.spinner_weight_unit);
+                categorySpinner = (Spinner) view.findViewById(R.id.spinner_package_type);
             }
 
 //            @Override
@@ -249,7 +257,8 @@ public class PackageFragment extends Fragment {
             holder.distanceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    aPackage.setDistanceUnit(position==0 ? Unit.CM : Unit.INCH);
+                    aPackage.setDistanceUnit(position == 0 ? Unit.CM : Unit.INCH);
+                    AppController.getInstance().getDefaultSharePreferences().edit().putInt(Constant.SHARE_LENGTH_UNIT,position == 0 ? Unit.CM : Unit.INCH).apply();
                 }
 
                 @Override
@@ -259,22 +268,53 @@ public class PackageFragment extends Fragment {
             });
 
             holder.distanceSpinner.setAdapter(adapter);
+            int lengthUnit = AppController.getInstance().getDefaultSharePreferences().getInt(Constant.SHARE_LENGTH_UNIT, Unit.CM);
+            if(lengthUnit == Unit.CM)
+                holder.distanceSpinner.setSelection(0);
+            else
+                holder.distanceSpinner.setSelection(1);
 
-            ArrayAdapter<CharSequence> weightAdapter = ArrayAdapter.createFromResource(context, R.array.weight_unit, R.layout.spinner_item);
+            final ArrayAdapter<CharSequence> weightAdapter = ArrayAdapter.createFromResource(context, R.array.weight_unit, R.layout.spinner_item);
             weightAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             holder.weightSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    aPackage.setWeightUnit(position==0 ? Unit.KG : Unit.LB);
+                    aPackage.setWeightUnit(position == 0 ? Unit.KG : Unit.LB);
+                    AppController.getInstance().getDefaultSharePreferences().edit().putInt(Constant.SHARE_WEIGHT_UNIT,position == 0 ? Unit.KG : Unit.LB).apply();
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    int weightUnit = AppController.getInstance().getDefaultSharePreferences().getInt(Constant.SHARE_WEIGHT_UNIT, Unit.KG);
-
                 }
             });
             holder.weightSpinner.setAdapter(weightAdapter);
+
+            int weightUnit = AppController.getInstance().getDefaultSharePreferences().getInt(Constant.SHARE_WEIGHT_UNIT, Unit.KG);
+            if(weightUnit == Unit.KG)
+                holder.weightSpinner.setSelection(0);
+            else
+                holder.weightSpinner.setSelection(1);
+
+
+
+            ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(context, R.array.category_array, R.layout.spinner_item);
+
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // Apply the adapter to the spinner
+            holder.categorySpinner.setAdapter(categoryAdapter);
+            holder.categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    aPackage.setCategory(holder.categorySpinner.getSelectedItem().toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             switch (aPackage.getBoxSize()){
                 case Package.BIG_BOX:
@@ -295,7 +335,7 @@ public class PackageFragment extends Fragment {
                 holder.llLmBox.setVisibility(View.GONE);
             } else {
                 holder.price.setText(context.getString(R.string.five_bucks));
-                holder.price.setTextColor(context.getResources().getColor(android.R.color.primary_text_dark));
+                holder.price.setTextColor(context.getResources().getColor(R.color.red));
                 holder.llOwnBox.setVisibility(View.GONE);
                 holder.llLmBox.setVisibility(View.VISIBLE);
             }
