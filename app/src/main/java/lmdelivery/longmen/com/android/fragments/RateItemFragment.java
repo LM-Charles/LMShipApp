@@ -118,11 +118,11 @@ public class RateItemFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.price.setText(mValues.get(position).getEstimatePrice());
-            holder.date.setText(mValues.get(position).getEstimatedDeliveryDate());
+            holder.price.setText(mValues.get(position).getEstimate());
+            holder.date.setText(mValues.get(position).getEstimatedDelivery());
             holder.type.setText(mValues.get(position).getServiceName());
             Glide.with(fragment)
-                    .load(mValues.get(position).getServiceIcon())
+                    .load(mValues.get(position).getService_icon_url())
                     .centerCrop()
                     //.placeholder(R.drawable.loading_spinner)
                     .crossFade()

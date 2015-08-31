@@ -124,8 +124,8 @@ public class SummaryFragment extends Fragment {
             result = false;
         }
 
-        if (!TextUtils.isEmpty(newBookingActivity.estValue)) {
-            String text = "Estimate Value: " + newBookingActivity.estValue + "\n";
+        if (!TextUtils.isEmpty(newBookingActivity.declareValue)) {
+            String text = "Estimate Value: " + newBookingActivity.declareValue + "\n";
             if(TextUtils.isEmpty(newBookingActivity.category)){
                 text += getString(R.string.category) + Constant.DEFAULT_CATEGORY + "\n";
             }else{

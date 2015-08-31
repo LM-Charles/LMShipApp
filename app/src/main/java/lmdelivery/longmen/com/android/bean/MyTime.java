@@ -4,6 +4,9 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+
 @Table(name = "MyTime")
 public class MyTime implements Serializable{
     @Column(name = "TimeString")
@@ -58,5 +61,25 @@ public class MyTime implements Serializable{
 
         MyTime rhs = (MyTime) obj;
         return timeCatergory == rhs.getTimeCatergory() && (isToday==rhs.isToday);
+    }
+
+    public long getUnixDate(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        Date today = cal.getTime();
+        if(isToday){
+            return today.getTime()/1000L;
+        }else{
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            Date tomorrow = cal.getTime();
+            return tomorrow.getTime()/1000L;
+        }
+    }
+    public String getSlot(){
+        return "SLOT_" + (++timeCatergory);
     }
 }

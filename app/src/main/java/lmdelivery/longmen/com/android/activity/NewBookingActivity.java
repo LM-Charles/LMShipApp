@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
@@ -28,6 +27,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,7 +76,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public Address pickupAddr;
     public Address dropOffAddr;
     private Adapter adapter;
-    public String estValue;
+    public String declareValue;
     public String insuranceValue;
     public String category;
 
@@ -174,7 +175,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         break;
 
                     case Constant.TAB_INSURANCE:
-                        if (!TextUtils.isEmpty(estValue)) {
+                        if (!TextUtils.isEmpty(declareValue)) {
                             tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_greendot);
                         }else {
                             tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_yellowdot);
@@ -229,6 +230,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     intent.putExtras(bundle);
                     startActivity(intent);
 
+//                    if(!TextUtils.isEmpty(AppController.getInstance().getUserId())){
+//                        getRate();
+//                    }
+
                 }
             });
         } else {
@@ -263,7 +268,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         viewPager.setCurrentItem(Constant.TAB_INSURANCE, true);
                     }
                 } else if (currentTab == Constant.TAB_INSURANCE) {
-                    if (!TextUtils.isEmpty(estValue)) {
+                    if (!TextUtils.isEmpty(declareValue)) {
                         viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
                     }
                 }
@@ -476,18 +481,32 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     public boolean validateInsurance(){
-        return !TextUtils.isEmpty(estValue);
+        return !TextUtils.isEmpty(declareValue);
     }
+
 
     private void getRate(){
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.loading));
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Logger.d(TAG, "getRateRequest canceled");
+                if(null!=getRateRequest) {
+                    getRateRequest.cancel();
+                    getRateRequest = null;
+                }
+            }
+        });
         pd.show();
 
         JSONObject params = new JSONObject();
         try {
+            params.put("client",AppController.getInstance().getUserId());
+
             JSONObject pickup = new JSONObject();
             pickup.put("address", pickupAddr.getStreetName());
+            pickup.put("address2", pickupAddr.getUnitNumber());
             pickup.put("city", pickupAddr.getCity());
             pickup.put("province", pickupAddr.getProvince());
             pickup.put("country", pickupAddr.getCountry());
@@ -496,6 +515,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
             JSONObject dropOff = new JSONObject();
             dropOff.put("address", dropOffAddr.getStreetName());
+            dropOff.put("address2", dropOffAddr.getUnitNumber());
             dropOff.put("city", dropOffAddr.getCity());
             dropOff.put("province", dropOffAddr.getProvince());
             dropOff.put("country", dropOffAddr.getCountry());
@@ -506,31 +526,40 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             params.put("toAddress", dropOff);
 
             params.put("shipments", buildBoxJson());
+            params.put("declareValue", declareValue);
+            params.put("insuranceValue", insuranceValue);
+
+            params.put("appointmentDate", selectedTime.getUnixDate());
+            params.put("appointmentSlotType", selectedTime.getSlot());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "rate/", params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.d(TAG, response.toString());
-                pd.dismiss();
-                getRateRequest = null;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Logger.d(TAG, "Estimate api body:\n" + gson.toJson(params));
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                getRateRequest = null;
-                pd.dismiss();
-                Util.handleVolleyError(error,context);
-            }
-        });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(getRateRequest);
+//        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "rate/", params, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Logger.d(TAG, response.toString());
+//                pd.dismiss();
+//                getRateRequest = null;
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                getRateRequest = null;
+//                pd.dismiss();
+//                Util.handleVolleyError(error,context);
+//            }
+//        });
+//        // Adding request to request queue
+//        AppController.getInstance().addToRequestQueue(getRateRequest);
     }
 
     private JSONArray buildBoxJson(){
+
         JSONArray shipments = new JSONArray();
 
         for(Package aPackage : packageArrayList){
@@ -540,30 +569,30 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     shipment.put("height", aPackage.getHeight());
                     shipment.put("width", aPackage.getWidth());
                     shipment.put("length", aPackage.getLength());
-                    shipment.put("weight", aPackage.getWeight());
+                    shipment.put("shipmentPackageType", "CUSTOM");
                 }else{
+                    shipment.put("height", "");
+                    shipment.put("width", "");
+                    shipment.put("length", "");
                     switch (aPackage.getBoxSize()){
                         case Package.BIG_BOX:
-                            shipment.put("height", Package.BIG_HEIGHT);
-                            shipment.put("width", Package.BIG_WIDTH);
-                            shipment.put("length", Package.BIG_LENGTH);
+                            shipment.put("shipmentPackageType", "LARGE");
                             break;
                         case Package.MED_BOX:
-                            shipment.put("height", Package.MED_HEIGHT);
-                            shipment.put("width", Package.MED_WIDTH);
-                            shipment.put("length", Package.MED_LENGTH);
+                            shipment.put("shipmentPackageType", "MEDIUM");
                             break;
                         case Package.SMALL_BOX:
-                            shipment.put("height", Package.SMALL_HEIGHT);
-                            shipment.put("width", Package.SMALL_WIDTH);
-                            shipment.put("length", Package.SMALL_LENGTH);
+                            shipment.put("shipmentPackageType", "SMALL");
                             break;
                     }
-                    shipment.put("weight", aPackage.getWeight());
                 }
+                shipment.put("weight", aPackage.getWeight());
+                shipment.put("goodCategoryType", aPackage.getCategory());
+                //TODO: add unit after desmond provide it in the api
+
                 shipments.put(shipment);
             }catch (Exception e){
-
+                Logger.e(TAG, "Failed to create shipment json");
             }
         }
         return shipments;

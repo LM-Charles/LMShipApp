@@ -5,14 +5,14 @@ package lmdelivery.longmen.com.android.bean;
  */
 public class RateItem {
 
-    String courierServiceId, serviceIcon, lmCategory, estimatePrice, estimatedDeliveryDate, courierName, serviceName;
+    private String courierServiceId, service_icon_url, lmCategory, estimate, estimatedDelivery, courierName, serviceName;
 
-    public RateItem(String courierServiceId, String serviceIcon, String lmCategory, String estimatePrice, String estimatedDeliveryDate, String courierName, String serviceName) {
+    public RateItem(String courierServiceId, String service_icon_url, String lmCategory, String estimate, String estimatedDelivery, String courierName, String serviceName) {
         this.courierServiceId = courierServiceId;
-        this.serviceIcon = serviceIcon;
+        this.service_icon_url = service_icon_url;
         this.lmCategory = lmCategory;
-        this.estimatePrice = estimatePrice;
-        this.estimatedDeliveryDate = estimatedDeliveryDate;
+        this.estimate = estimate;
+        this.estimatedDelivery = estimatedDelivery;
         this.courierName = courierName;
         this.serviceName = serviceName;
     }
@@ -25,12 +25,12 @@ public class RateItem {
         this.courierServiceId = courierServiceId;
     }
 
-    public String getServiceIcon() {
-        return serviceIcon;
+    public String getService_icon_url() {
+        return service_icon_url;
     }
 
-    public void setServiceIcon(String serviceIcon) {
-        this.serviceIcon = serviceIcon;
+    public void setService_icon_url(String service_icon_url) {
+        this.service_icon_url = service_icon_url;
     }
 
     public String getLmCategory() {
@@ -41,20 +41,20 @@ public class RateItem {
         this.lmCategory = lmCategory;
     }
 
-    public String getEstimatePrice() {
-        return estimatePrice;
+    public String getEstimate() {
+        return estimate;
     }
 
-    public void setEstimatePrice(String estimatePrice) {
-        this.estimatePrice = estimatePrice;
+    public void setEstimate(String estimate) {
+        this.estimate = estimate;
     }
 
-    public String getEstimatedDeliveryDate() {
-        return estimatedDeliveryDate;
+    public String getEstimatedDelivery() {
+        return estimatedDelivery;
     }
 
-    public void setEstimatedDeliveryDate(String estimatedDeliveryDate) {
-        this.estimatedDeliveryDate = estimatedDeliveryDate;
+    public void setEstimatedDelivery(String estimatedDelivery) {
+        this.estimatedDelivery = estimatedDelivery;
     }
 
     public String getCourierName() {

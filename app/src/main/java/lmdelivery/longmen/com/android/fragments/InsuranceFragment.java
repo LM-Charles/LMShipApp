@@ -56,7 +56,7 @@ public class InsuranceFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String valueStr = estimateValue.getText().toString();
-                activity.estValue = valueStr;
+                activity.declareValue = valueStr;
             }
         });
 

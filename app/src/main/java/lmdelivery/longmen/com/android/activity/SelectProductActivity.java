@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,18 +27,20 @@ import java.util.List;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.fragments.RateItemFragment;
 import lmdelivery.longmen.com.android.bean.Address;
-import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.bean.MyTime;
+import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.fragments.RateItemFragment;
+import lmdelivery.longmen.com.android.swipeback.SwipeBackActivity;
+import lmdelivery.longmen.com.android.swipeback.SwipeBackLayout;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
 
-public class SelectProductActivity extends AppCompatActivity {
+public class SelectProductActivity extends SwipeBackActivity {
 
     private static final java.lang.String TAG = SelectProductActivity.class.getName();
-
+    private SwipeBackLayout mSwipeBackLayout;
     private JsonObjectRequest bookShipRequest;
     private Address mPickupAddr;
     private Address mDropoffAddr;
@@ -51,12 +52,18 @@ public class SelectProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_product);
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
         context = this;
         Bundle bundle = getIntent().getExtras();
-        mPackageList = bundle.getParcelableArrayList(Constant.EXTRA_PACKAGE);
-        mPickupAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
-        mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
-        mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
+        try {
+            mPackageList = bundle.getParcelableArrayList(Constant.EXTRA_PACKAGE);
+            mPickupAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
+            mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
+            mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
+        }catch (Exception e){
+
+        }
 
 //        Logger.e(TAG, pickup.getFullAddress());
 //        Logger.e(TAG, dropoff.getFullAddress());
@@ -65,7 +72,6 @@ public class SelectProductActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         final ActionBar ab = getSupportActionBar();
         if(ab!=null)
             ab.setDisplayHomeAsUpEnabled(true);
@@ -103,6 +109,11 @@ public class SelectProductActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        
+        if (id == android.R.id.home) {
+            finish();
             return true;
         }
 

@@ -19,6 +19,7 @@
 
     <style name="Theme.DesignDemo" parent="Base.Theme.LMTheme">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
         <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
 
@@ -27,6 +28,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorButtonNormal</item>
+        <item name="android:windowIsTranslucent">true</item>
         <!--<item name="colorControlHighlight">@color/colorControlHighlight</item>-->
 
         <item name="android:windowBackground">@color/window_background</item>

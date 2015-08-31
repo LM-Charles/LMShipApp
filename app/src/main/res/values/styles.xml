@@ -10,6 +10,7 @@
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
@@ -110,4 +111,11 @@
     <dimen name="label_icon_font_size">22sp</dimen>
     <dimen name="label_icon_width">56dp</dimen>
     <dimen name="label_text_font_size">16sp</dimen>
+
+    <style name="SwipeBackLayout">
+        <item name="edge_size">50dip</item>
+        <item name="shadow_left">@drawable/shadow_left</item>
+        <item name="shadow_right">@drawable/shadow_right</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom</item>
+    </style>
 </resources>
