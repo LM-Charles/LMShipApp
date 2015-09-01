@@ -32,10 +32,10 @@
     </string-array>
 
     <string-array name="category_array">
-        <item>Cosmetic</item>
-        <item>Milk powder</item>
+        <item>Regular</item>
         <item>Luxury</item>
-        <item>Other</item>
+        <item>Cosmetics</item>
+        <item>Document</item>
     </string-array>
 
     <string-array name="dropoff_country_array">
@@ -82,4 +82,5 @@
     <string name="insurance_decline">Insurance Declined</string>
     <string name="country">Country</string>
     <string name="own_box">I have my own box</string>
+    <string name="err_no_estimate">Sorry! We cannot get any estimation. Please chagne your shipping address or try again later</string>
 </resources>

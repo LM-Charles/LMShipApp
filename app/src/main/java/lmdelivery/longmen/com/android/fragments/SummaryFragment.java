@@ -68,69 +68,68 @@ public class SummaryFragment extends Fragment {
         final NewBookingActivity newBookingActivity = ((NewBookingActivity) getActivity());
         if (newBookingActivity.validatePickup()) {
             tvPickup.setText(newBookingActivity.pickupAddr.buildFullAddress());
-            cardFrom.setOnClickListener(null);
+            tvPickup.setTextColor(getResources().getColor(R.color.white_text));
         } else {
             tvPickup.setText(getString(R.string.invalid_pickup));
-            cardFrom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newBookingActivity.scrollTo(Constant.TAB_FROM);
-                }
-            });
+            tvPickup.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
+        cardFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newBookingActivity.scrollTo(Constant.TAB_FROM);
+            }
+        });
 
         if (newBookingActivity.validateDropOff()) {
             tvDropoff.setText(newBookingActivity.dropOffAddr.buildFullAddress());
-            cardTo.setOnClickListener(null);
+            tvDropoff.setTextColor(getResources().getColor(R.color.white_text));
         } else {
             tvDropoff.setText(getString(R.string.invalid_dropoff));
-            cardTo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newBookingActivity.scrollTo(Constant.TAB_TO);
-                }
-            });
+            tvDropoff.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
+        cardTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newBookingActivity.scrollTo(Constant.TAB_TO);
+            }
+        });
 
         if(newBookingActivity.validateAllPackage()){
             tvPackage.setText(buildPackageString());
-            cardPackage.setOnClickListener(null);
+            tvPackage.setTextColor(getResources().getColor(R.color.white_text));
         }else{
             tvPackage.setText(getString(R.string.invalid_package));
-            cardPackage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newBookingActivity.scrollTo(Constant.TAB_PACKAGE);
-                }
-            });
+            tvPackage.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
+        cardPackage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newBookingActivity.scrollTo(Constant.TAB_PACKAGE);
+            }
+        });
 
         if (newBookingActivity.selectedTime != null) {
             String time = newBookingActivity.selectedTime.isToday() ? getString(R.string.today) : getString(R.string.tomorrow);
             time += " " + newBookingActivity.selectedTime.getTimeString();
             tvTime.setText(time);
-            cardTime.setOnClickListener(null);
+            tvTime.setTextColor(getResources().getColor(R.color.white_text));
         } else {
             tvTime.setText(getString(R.string.no_pickup_time));
-            cardTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newBookingActivity.scrollTo(Constant.TAB_TIME);
-                }
-            });
+            tvTime.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
+        cardTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newBookingActivity.scrollTo(Constant.TAB_TIME);
+            }
+        });
 
         if (!TextUtils.isEmpty(newBookingActivity.declareValue)) {
             String text = "Estimate Value: " + newBookingActivity.declareValue + "\n";
-            if(TextUtils.isEmpty(newBookingActivity.category)){
-                text += getString(R.string.category) + Constant.DEFAULT_CATEGORY + "\n";
-            }else{
-                text += getString(R.string.category) + newBookingActivity.category + "\n";
-            }
 
             if(!TextUtils.isEmpty(newBookingActivity.insuranceValue)){
                 text += getString(R.string.insurance_value) + newBookingActivity.insuranceValue + "\n";
@@ -140,21 +139,19 @@ public class SummaryFragment extends Fragment {
             }else{
                 text += getString(R.string.insurance_decline);
             }
-
             tvInsurance.setText(text);
-            cardInsurance.setOnClickListener(null);
+            tvInsurance.setTextColor(getResources().getColor(R.color.white_text));
         } else {
             tvInsurance.setText(getString(R.string.no_est_value));
-            cardInsurance.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newBookingActivity.scrollTo(Constant.TAB_INSURANCE);
-                }
-            });
+            tvInsurance.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
-
-
+        cardInsurance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newBookingActivity.scrollTo(Constant.TAB_INSURANCE);
+            }
+        });
         return  result;
     }
 

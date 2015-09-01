@@ -64,7 +64,7 @@ public class Package extends Model implements Parcelable {
         this.showValidation = false;
         this.weightUnit = Unit.KG;
         this.distanceUnit = Unit.CM;
-        this.category = Constant.DEFAULT_CATEGORY;
+        this.category = Constant.CATEGORY_ARR[0];
 
     }
 

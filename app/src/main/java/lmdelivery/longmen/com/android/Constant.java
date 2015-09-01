@@ -14,6 +14,7 @@ public class Constant {
     public static final String EXTRA_DROPOFF = "EXTRA_DROPOFF";
     public static final String EXTRA_PACKAGE = "EXTRA_PACKAGE";
     public static final String EXTRA_TIME = "EXTRA_TIME";
+    public static final String EXTRA_RATE_ITEM = "EXTRA_RATE_ITEM";
 
     public static final int FAB_ANIMTION_DURATION = 500;
     public static final int MAX_CITY_LENGTH = 15;
@@ -36,7 +37,7 @@ public class Constant {
     public static final int TAB_SUMMARY = 5;
 
     public static final Set<String> citiesInVan = new HashSet<>();
-    public static final String DEFAULT_CATEGORY = "Cosmetic";
+    public static final String[] CATEGORY_ARR = {"REGULAR", "LUXURY", "COSMETICS", "DOCUMENT"};
 
     static {
         citiesInVan.add("VANCOUVER");

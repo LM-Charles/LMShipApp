@@ -30,6 +30,7 @@ import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.Address;
 import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.bean.RateItem;
 import lmdelivery.longmen.com.android.fragments.RateItemFragment;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackActivity;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackLayout;
@@ -46,6 +47,8 @@ public class SelectProductActivity extends SwipeBackActivity {
     private Address mDropoffAddr;
     private MyTime mTime;
     private ArrayList<Package> mPackageList;
+    private ArrayList<RateItem> mRateList;
+
     private Context context;
 
     @Override
@@ -61,6 +64,7 @@ public class SelectProductActivity extends SwipeBackActivity {
             mPickupAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
             mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
             mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
+            mRateList = bundle.getParcelableArrayList(Constant.EXTRA_RATE_ITEM);
         }catch (Exception e){
 
         }

@@ -65,7 +65,7 @@ public class RateItemFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         ArrayList<RateItem> rateItems = new ArrayList<>();
         for(int i = 0; i < 10; i++){
-            RateItem item = new RateItem("1","http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
+            RateItem item = new RateItem("http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
             rateItems.add(item);
         }
         recyclerView.setAdapter(new RateItemRecyclerViewAdapter(rateItems));

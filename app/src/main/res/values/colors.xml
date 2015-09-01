@@ -30,20 +30,25 @@
 
     <color name="window_background">#eeeeee</color>
     <color name="white_text">#FFF5F5F5</color>
-    <color name="card_background">#37474F</color>
-    <color name="pickup_card_title_background">#3F51B5</color>
-    <color name="destination_card_title_background">#303F9F</color>
-    <color name="insurance_color">#E91E63</color>
+    <color name="card_background">#607D8B</color>
+    <!--<color name="from_color">#3F51B5</color>-->
+    <!--<color name="to_color">#303F9F</color>-->
+    <!--<color name="insurance_color">#E91E63</color>-->
+    <!--<color name="time_selected">#7B1FA2</color>-->
+    <!--<color name="time_ripple">#9C27B0</color>-->
+    <!--<color name="package_color">#512DA8</color>   -->
+    <color name="from_color">@color/card_background</color>
+    <color name="to_color">@color/card_background</color>
+    <color name="insurance_color">@color/card_background</color>
+    <color name="time_selected">@color/card_background</color>
+    <color name="time_ripple">#F9A825</color>
+    <color name="package_color">@color/card_background</color>
 
-
-    <color name="time_selected">#7B1FA2</color>
-    <color name="time_ripple">#9C27B0</color>
-    <color name="package_item_title_background">#512DA8</color>
     <color name="light_gray">#BDBDBD</color>
     <color name="default_text_color">#737373</color>
 
     <color name="green_done">#00C853</color>
-    <color name="red">#F44336</color>
+    <color name="red">#EF5350</color>
     <color name="teal">#009688</color>
     <color name="welcome_text_color">#91b6f7</color>
     <color name="welcome_icon_background">#b3e4fb</color>

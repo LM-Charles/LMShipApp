@@ -307,7 +307,7 @@ public class PackageFragment extends Fragment {
             holder.categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    aPackage.setCategory(holder.categorySpinner.getSelectedItem().toString());
+                    aPackage.setCategory(Constant.CATEGORY_ARR[position]);
                 }
 
                 @Override

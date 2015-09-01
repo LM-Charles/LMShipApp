@@ -28,12 +28,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -42,9 +42,11 @@ import java.util.regex.Pattern;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.api.Rate;
 import lmdelivery.longmen.com.android.bean.Address;
 import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.bean.RateItem;
 import lmdelivery.longmen.com.android.fragments.DestinationFragment;
 import lmdelivery.longmen.com.android.fragments.InsuranceFragment;
 import lmdelivery.longmen.com.android.fragments.PackageFragment;
@@ -78,7 +80,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private Adapter adapter;
     public String declareValue;
     public String insuranceValue;
-    public String category;
 
     private Context context;
 
@@ -221,17 +222,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SelectProductActivity.class);
-                    intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
-                    intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
-                    intent.putExtra(Constant.EXTRA_TIME, selectedTime);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-
 //                    if(!TextUtils.isEmpty(AppController.getInstance().getUserId())){
-//                        getRate();
+                        getRate();
 //                    }
 
                 }
@@ -285,12 +277,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         dropOffAddr = new Address();
         packageArrayList = new ArrayList<>();
         packageArrayList.add(new Package());
+        insuranceValue = "0";
+        declareValue = "0";
     }
 
     public void scrollTo(int tabPosition) {
-        tabLayout.getTabAt(tabPosition).select();
+        if(tabLayout.getTabAt(tabPosition)!=null)
+            tabLayout.getTabAt(tabPosition).select();
     }
-
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new Adapter(getSupportFragmentManager());
@@ -315,21 +309,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         adapter.addFragment(insuranceFragment, getString(R.string.tab_title_insurance));
         adapter.addFragment(summaryFragment, getString(R.string.tab_title_summary));
         viewPager.setAdapter(adapter);
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//            }
-//        });
-
     }
 
     @Override
@@ -502,7 +481,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
         JSONObject params = new JSONObject();
         try {
-            params.put("client",AppController.getInstance().getUserId());
+            params.put("client",2);
+            params.put("orderDate", "2012-04-23T18:25:43.511Z");
+//            params.put("client",AppController.getInstance().getUserId());
 
             JSONObject pickup = new JSONObject();
             pickup.put("address", pickupAddr.getStreetName());
@@ -511,7 +492,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             pickup.put("province", pickupAddr.getProvince());
             pickup.put("country", pickupAddr.getCountry());
             pickup.put("postal", pickupAddr.getPostalCode());
-            pickup.put("residential", true);
 
             JSONObject dropOff = new JSONObject();
             dropOff.put("address", dropOffAddr.getStreetName());
@@ -520,83 +500,67 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             dropOff.put("province", dropOffAddr.getProvince());
             dropOff.put("country", dropOffAddr.getCountry());
             dropOff.put("postal", dropOffAddr.getPostalCode());
-            dropOff.put("residential", true);
 
             params.put("fromAddress", pickup);
             params.put("toAddress", dropOff);
 
-            params.put("shipments", buildBoxJson());
+            params.put("shipments", Rate.buildBoxJson(packageArrayList));
             params.put("declareValue", declareValue);
             params.put("insuranceValue", insuranceValue);
 
             params.put("appointmentDate", selectedTime.getUnixDate());
+
             params.put("appointmentSlotType", selectedTime.getSlot());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Logger.d(TAG, "Estimate api body:\n" + gson.toJson(params));
+        Logger.d(TAG,"Sending get rate:\n" + params);
 
-//        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "rate/", params, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Logger.d(TAG, response.toString());
-//                pd.dismiss();
-//                getRateRequest = null;
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                getRateRequest = null;
-//                pd.dismiss();
-//                Util.handleVolleyError(error,context);
-//            }
-//        });
-//        // Adding request to request queue
-//        AppController.getInstance().addToRequestQueue(getRateRequest);
-    }
+        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "courier/rate/", params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.d(TAG, response.toString());
+                pd.dismiss();
+                getRateRequest = null;
 
-    private JSONArray buildBoxJson(){
+                try {
+                    Type listType = new TypeToken<ArrayList<RateItem>>() {}.getType();
+                    ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
+                    if(rateItemList.isEmpty()){
+                        Util.showMessageDialog(getString(R.string.err_no_estimate), context);
+                    }else if(rateItemList.size()==1 && rateItemList.get(0).getCourierName().equals("LM_DELIVERY")){
+                        //TODO: open LM same city delivery page
+                    }else{
+                        Intent intent = new Intent(context, SelectProductActivity.class);
+                        intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
+                        intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
+                        intent.putExtra(Constant.EXTRA_TIME, selectedTime);
 
-        JSONArray shipments = new JSONArray();
-
-        for(Package aPackage : packageArrayList){
-            try {
-                JSONObject shipment = new JSONObject();
-                if(aPackage.isOwnBox()){
-                    shipment.put("height", aPackage.getHeight());
-                    shipment.put("width", aPackage.getWidth());
-                    shipment.put("length", aPackage.getLength());
-                    shipment.put("shipmentPackageType", "CUSTOM");
-                }else{
-                    shipment.put("height", "");
-                    shipment.put("width", "");
-                    shipment.put("length", "");
-                    switch (aPackage.getBoxSize()){
-                        case Package.BIG_BOX:
-                            shipment.put("shipmentPackageType", "LARGE");
-                            break;
-                        case Package.MED_BOX:
-                            shipment.put("shipmentPackageType", "MEDIUM");
-                            break;
-                        case Package.SMALL_BOX:
-                            shipment.put("shipmentPackageType", "SMALL");
-                            break;
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
+                        bundle.putParcelableArrayList(Constant.EXTRA_RATE_ITEM, rateItemList);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                shipment.put("weight", aPackage.getWeight());
-                shipment.put("goodCategoryType", aPackage.getCategory());
-                //TODO: add unit after desmond provide it in the api
 
-                shipments.put(shipment);
-            }catch (Exception e){
-                Logger.e(TAG, "Failed to create shipment json");
             }
-        }
-        return shipments;
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getRateRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error,context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(getRateRequest);
     }
+
+
 
     private void bookShipment(){
         final ProgressDialog pd = new ProgressDialog(this);

@@ -27,6 +27,7 @@ import lmdelivery.longmen.com.android.R;
  * Created by Kaiyu on 2015-06-10.
  */
 public class Util {
+    public static final String TAG = Util.class.getSimpleName();
     public static void closeKeyBoard(Context context, EditText myEditText){
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
@@ -54,6 +55,7 @@ public class Util {
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
         } catch(JSONException e){
+            Logger.e(TAG, json);
             e.printStackTrace();
             return null;
         }
@@ -63,7 +65,7 @@ public class Util {
 
     public static void handleVolleyError(VolleyError error, Context context){
         NetworkResponse response = error.networkResponse;
-        String message = null;
+        String message;
         if(response != null && response.data != null){
             message = trimMessage(new String(response.data), "message");
             if(message!=null)

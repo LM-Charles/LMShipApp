@@ -16,7 +16,7 @@
             android:id="@+id/card_from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@color/pickup_card_title_background">
+            card_view:cardBackgroundColor="@color/from_color">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:id="@+id/card_to"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@color/destination_card_title_background"
+            card_view:cardBackgroundColor="@color/to_color"
             android:layout_marginTop="@dimen/normal_padding">
 
             <LinearLayout
@@ -68,7 +68,7 @@
             android:id="@+id/card_package"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@color/package_item_title_background"
+            card_view:cardBackgroundColor="@color/package_color"
             android:layout_marginTop="@dimen/normal_padding">
 
             <LinearLayout
