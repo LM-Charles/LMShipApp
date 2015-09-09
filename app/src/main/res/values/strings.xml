@@ -83,6 +83,7 @@
     <string name="country">Country</string>
     <string name="own_box">I have my own box</string>
     <string name="err_no_estimate">Sorry! We cannot get any estimation. Please chagne your shipping address or try again later</string>
+
     <string name="confirm">Confirm Shipment</string>
     <string name="estimate_delivery">Estimate Delivery:\n</string>
     <string name="action_same_city">Same City Test</string>
@@ -91,4 +92,7 @@
     <string name="fastest">Fastest</string>
     <string name="medium">Medium</string>
     <string name="economy">Economy</string>
+
+    <string name="passwrod_update_success">Password updated successfully\nPlease login again</string>
+
 </resources>

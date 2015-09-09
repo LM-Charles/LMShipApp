@@ -37,9 +37,10 @@ public class Constant {
     public static final int TAB_INSURANCE = 4;
     public static final int TAB_SUMMARY = 5;
 
-    public static final Set<String> citiesInVan = new HashSet<>();
+
     public static final String[] CATEGORY_ARR = {"REGULAR", "LUXURY", "COSMETICS", "DOCUMENT"};
 
+    public static final Set<String> citiesInVan = new HashSet<>();
     static {
         citiesInVan.add("VANCOUVER");
         citiesInVan.add("NORTH VANCOUVER");

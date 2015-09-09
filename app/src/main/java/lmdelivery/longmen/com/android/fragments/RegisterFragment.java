@@ -295,7 +295,7 @@ public class RegisterFragment extends Fragment {
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_verify_phone, null);
-        final EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
+        final EditText etPhone = (EditText) view.findViewById(R.id.et_email);
         final EditText etCode = (EditText) view.findViewById(R.id.et_code);
 
         final TextInputLayout tilPhone = (TextInputLayout) view.findViewById(R.id.til_phone);
@@ -332,7 +332,9 @@ public class RegisterFragment extends Fragment {
                     pd.setMessage(getString(R.string.loading));
                     pd.show();
 
-                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
+
+                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation?phone=1"+ phone + "&email=" + mEmailView.getText().toString() + "&password=" + mPasswordView.getText().toString(), new Response.Listener<JSONObject>() {
+
 
                         @Override
                         public void onResponse(JSONObject response) {
@@ -340,7 +342,13 @@ public class RegisterFragment extends Fragment {
                             Logger.e(TAG, response.toString());
                             pd.dismiss();
                             AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-                            DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
+
+                            try {
+                                String message = response.getString("message");
+                                DialogUtil.showMessageDialog(message, getActivity());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                             etPhone.addTextChangedListener(new TextWatcher() {
                                 @Override
@@ -392,7 +400,7 @@ public class RegisterFragment extends Fragment {
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendActivateAccountRequest(etCode, tilCode);
+                sendActivateAccountRequest(etCode, tilCode, dialog);
             }
         });
 
@@ -462,7 +470,7 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private void sendActivateAccountRequest(EditText etCode, TextInputLayout tilCode) {
+    private void sendActivateAccountRequest(EditText etCode, TextInputLayout tilCode,final Dialog dialog) {
         if (activateAccountRequest != null) {
             return;
         }
@@ -475,15 +483,17 @@ public class RegisterFragment extends Fragment {
             pd.setMessage(getString(R.string.loading));
             pd.show();
 
-            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation/" + code, new Response.Listener<JSONObject>() {
+
+            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation/" + code + "?email=" + AppController.getInstance().getUserEmail(), new Response.Listener<JSONObject>() {
+
 
                 @Override
                 public void onResponse(JSONObject response) {
                     activateAccountRequest = null;
                     Logger.e(TAG, response.toString());
                     pd.dismiss();
+                    dialog.dismiss();
                     showVerifySuccessDialog();
-
                 }
             }, new Response.ErrorListener() {
                 @Override
