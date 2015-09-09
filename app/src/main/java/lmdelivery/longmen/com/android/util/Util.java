@@ -19,6 +19,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 import lmdelivery.longmen.com.android.AppController;
 
 import lmdelivery.longmen.com.android.R;
@@ -33,20 +35,7 @@ public class Util {
         imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
     }
 
-    public static void showMessageDialog(String message, Context context){
-        try {
-            new AlertDialog.Builder(context)
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .show();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+
 
     public static String trimMessage(String json, String key){
         String trimmedString = null;
@@ -69,12 +58,12 @@ public class Util {
         if(response != null && response.data != null){
             message = trimMessage(new String(response.data), "message");
             if(message!=null)
-                showMessageDialog(message, context);
+                DialogUtil.showMessageDialog(message, context);
             else
-                showMessageDialog(context.getString(R.string.err_connection), context);
+                DialogUtil.showMessageDialog(context.getString(R.string.err_connection), context);
         }
         else
-            showMessageDialog(context.getString(R.string.err_connection), context);
+            DialogUtil.showMessageDialog(context.getString(R.string.err_connection), context);
     }
 
     public static void sendSupportEmail(Context context){
@@ -109,5 +98,26 @@ public class Util {
         }
     }
 
+    //convert ENUM to user readable
+    public static String toDisplayCase(String s) {
+
+        s = s.replace("_", " ");
+        final String ACTIONABLE_DELIMITERS = " '-/";
+        StringBuilder sb = new StringBuilder();
+        boolean capNext = true;
+        for (char c : s.toCharArray()) {
+            c = (capNext)
+                    ? Character.toUpperCase(c)
+                    : Character.toLowerCase(c);
+            sb.append(c);
+            capNext = (ACTIONABLE_DELIMITERS.indexOf((int) c) >= 0); // explicit cast not needed
+        }
+        return sb.toString();
+    }
+
+    public static double roundTo2(double value) {
+        DecimalFormat df = new DecimalFormat("##.##");
+        return Double.valueOf(df.format(value));
+    }
 
 }

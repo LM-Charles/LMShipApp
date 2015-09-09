@@ -8,15 +8,18 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.InflateException;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -47,6 +50,7 @@ import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.util.CountryCode;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
@@ -304,6 +308,17 @@ public class DestinationFragment extends Fragment {
 
             }
         });
+        mAutocompleteView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Util.closeKeyBoard(getActivity(),mAutocompleteView);
+                    handled = true;
+                }
+                return handled;
+            }
+        });
     }
 
     public boolean saveAndValidate() {
@@ -373,7 +388,10 @@ public class DestinationFragment extends Fragment {
         if (country.isEmpty()) {
             ((TextInputLayout) etCountry.getParent()).setError(getString(R.string.required));
             return false;
-        } else {
+        } else if (TextUtils.isEmpty(CountryCode.getCode(country))){
+            ((TextInputLayout) etCountry.getParent()).setError(getString(R.string.invalid_country));
+            return false;
+        }else {
             ((TextInputLayout) etCountry.getParent()).setErrorEnabled(false);
             return true;
         }
@@ -488,7 +506,6 @@ public class DestinationFragment extends Fragment {
             url += "&language=zh-CN";
 
         Logger.e(TAG, url);
-        // Request a string response from the provided URL.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
                 new Response.Listener<JSONObject>() {
                     @Override

@@ -15,6 +15,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -53,6 +55,7 @@ import lmdelivery.longmen.com.android.fragments.PackageFragment;
 import lmdelivery.longmen.com.android.fragments.PickupFragment;
 import lmdelivery.longmen.com.android.fragments.SummaryFragment;
 import lmdelivery.longmen.com.android.fragments.TimeFragment;
+import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -223,7 +226,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 @Override
                 public void onClick(View view) {
 //                    if(!TextUtils.isEmpty(AppController.getInstance().getUserId())){
-                        getRate();
+                        getRate(null);
 //                    }
 
                 }
@@ -272,7 +275,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void init() {
         context = this;
         pickupAddr = new Address();
-        pickupAddr.setCountry("Canada");
+        pickupAddr.setCountry("CA");
         pickupAddr.setProvince("BC");
         dropOffAddr = new Address();
         packageArrayList = new ArrayList<>();
@@ -368,46 +371,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 Toast.LENGTH_SHORT).show();
     }
 
-//    private List<String> validatePickup() {
-//        ArrayList<String> errList = new ArrayList<>();
-//
-//        //validate street
-//        String street = pickupAddr.getStreetName();
-//        if (street.isEmpty()) {
-//            errList.add(getString(R.string.err_street_empty));
-//        }
-//
-//        //validate city
-//        String city = pickupAddr.getCity();
-//        if (city.isEmpty()) {
-//            errList.add(getString(R.string.err_city_empty));
-//        } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
-//            errList.add(city + getString(R.string.err_not_in_van));
-//        }
-//
-//        //validate postal
-//        String zip = pickupAddr.getPostalCode();
-//        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-//        Pattern pattern = Pattern.compile(regex);
-//        Matcher matcher = pattern.matcher(zip);
-//        if (zip.isEmpty())
-//            errList.add(getString(R.string.err_post_empty));
-//        else if (!matcher.matches())
-//            errList.add(getString(R.string.err_post_wrong_format));
-//
-//        printErrList(errList);
-//        return errList;
-//    }
-
-    private void printErrList(ArrayList<String> errList) {
-        String out = "";
-        for (int i = 0; i < errList.size(); i++) {
-            out += errList.get(i) + "\n";
-        }
-        Logger.e(TAG, "error: " + out);
-    }
-
-
     public boolean validatePickup() {
         return pickupAddr != null && !pickupAddr.getCity().isEmpty() && !pickupAddr.getCountry().isEmpty() && !pickupAddr.getProvince().isEmpty()
                 && !pickupAddr.getStreetName().isEmpty() && validateCanadaPostalCode(pickupAddr.getPostalCode());
@@ -464,14 +427,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
 
-    private void getRate(){
+    private void getRate(JSONObject params){
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.loading));
         pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 Logger.d(TAG, "getRateRequest canceled");
-                if(null!=getRateRequest) {
+                if (null != getRateRequest) {
                     getRateRequest.cancel();
                     getRateRequest = null;
                 }
@@ -479,45 +442,12 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         });
         pd.show();
 
-        JSONObject params = new JSONObject();
-        try {
-            params.put("client",2);
-            params.put("orderDate", "2012-04-23T18:25:43.511Z");
-//            params.put("client",AppController.getInstance().getUserId());
-
-            JSONObject pickup = new JSONObject();
-            pickup.put("address", pickupAddr.getStreetName());
-            pickup.put("address2", pickupAddr.getUnitNumber());
-            pickup.put("city", pickupAddr.getCity());
-            pickup.put("province", pickupAddr.getProvince());
-            pickup.put("country", pickupAddr.getCountry());
-            pickup.put("postal", pickupAddr.getPostalCode());
-
-            JSONObject dropOff = new JSONObject();
-            dropOff.put("address", dropOffAddr.getStreetName());
-            dropOff.put("address2", dropOffAddr.getUnitNumber());
-            dropOff.put("city", dropOffAddr.getCity());
-            dropOff.put("province", dropOffAddr.getProvince());
-            dropOff.put("country", dropOffAddr.getCountry());
-            dropOff.put("postal", dropOffAddr.getPostalCode());
-
-            params.put("fromAddress", pickup);
-            params.put("toAddress", dropOff);
-
-            params.put("shipments", Rate.buildBoxJson(packageArrayList));
-            params.put("declareValue", declareValue);
-            params.put("insuranceValue", insuranceValue);
-
-            params.put("appointmentDate", selectedTime.getUnixDate());
-
-            params.put("appointmentSlotType", selectedTime.getSlot());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if (params==null)
+            params = Rate.buildEstimateParam(pickupAddr,dropOffAddr,packageArrayList,selectedTime,declareValue,insuranceValue);
 
         Logger.d(TAG,"Sending get rate:\n" + params);
 
-        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "courier/rate/", params, new Response.Listener<JSONObject>() {
+        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "courier/rate/", params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Logger.d(TAG, response.toString());
@@ -528,9 +458,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     Type listType = new TypeToken<ArrayList<RateItem>>() {}.getType();
                     ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
                     if(rateItemList.isEmpty()){
-                        Util.showMessageDialog(getString(R.string.err_no_estimate), context);
-                    }else if(rateItemList.size()==1 && rateItemList.get(0).getCourierName().equals("LM_DELIVERY")){
-                        //TODO: open LM same city delivery page
+                        DialogUtil.showMessageDialog(getString(R.string.err_no_estimate), context);
+                    }else if(rateItemList.size()==1){
+                        DialogUtil.showSingleEstimateDialog(context,rateItemList.get(0));
                     }else{
                         Intent intent = new Intent(context, SelectProductActivity.class);
                         intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
@@ -587,7 +517,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             e.printStackTrace();
         }
 
-        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "order?token=" + AppController.getInstance().getUserToken(), params, new Response.Listener<JSONObject>() {
+        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + AppController.getInstance().getUserToken(), params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Logger.e(TAG, response.toString());
@@ -604,5 +534,104 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(bookShipRequest);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_new_booking, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (item.getItemId()) {
+            case R.id.action_diff_city:
+                try {
+                    getRate(new JSONObject("{\n" +
+                            "    \"client\" : \"2\",\n" +
+                            "    \"fromAddress\" : {\n" +
+                            "        \"address\" : \"8000 Delsom Way\",\n" +
+                            "        \"address2\" : \"unit 10\",\n" +
+                            "        \"city\" : \"Delta\",\n" +
+                            "        \"province\" : \"BC\",\n" +
+                            "        \"postal\" : \"V4C0A9\",\n" +
+                            "        \"country\" : \"CA\"\n" +
+                            "    },\n" +
+                            "    \"toAddress\" : {\n" +
+                            "        \"address\" : \"812 Wharf Street\",\n" +
+                            "        \"city\" : \"Victoria\",\n" +
+                            "        \"province\" : \"BC\",\n" +
+                            "        \"postal\" : \"V8W1T3\",\n" +
+                            "        \"country\" : \"CA\"\n" +
+                            "    },\n" +
+                            "    \"shipments\" : [\n" +
+                            "        {\n" +
+                            "            \"height\" : 10,\n" +
+                            "            \"width\" : 10,\n" +
+                            "            \"length\" : 10,\n" +
+                            "            \"weight\" : 1,\n" +
+                            "            \"shipmentPackageType\" : \"CUSTOM\",\n" +
+                            "            \"goodCategoryType\" : \"REGULAR\"\n" +
+                            "\n" +
+                            "        }\n" +
+                            "    ],\n" +
+                            "    \"handler\" : \"optional_handler\",\n" +
+                            "    \"declareValue\" : 100,\n" +
+                            "    \"insuranceValue\" : 10,\n" +
+                            "    \"appointmentDate\" : 1263110400000,\n" +
+                            "    \"appointmentSlotType\" : \"SLOT_1\"\n" +
+                            "}"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.action_same_city:
+                try {
+                    getRate(new JSONObject("{\n" +
+                            "    \"client\" : \"2\",\n" +
+                            "    \"fromAddress\" : {\n" +
+                            "        \"address\" : \"8000 Delsom Way\",\n" +
+                            "        \"address2\" : \"unit 10\",\n" +
+                            "        \"city\" : \"Delta\",\n" +
+                            "        \"province\" : \"BC\",\n" +
+                            "        \"postal\" : \"V4C0A9\",\n" +
+                            "        \"country\" : \"CA\"\n" +
+                            "    },\n" +
+                            "    \"toAddress\" : {\n" +
+                            "        \"address\" : \"9188 Hemlock Drive\",\n" +
+                            "        \"city\" : \"Richmond\",\n" +
+                            "        \"province\" : \"BC\",\n" +
+                            "        \"postal\" : \"V7C2X4\",\n" +
+                            "        \"country\" : \"CA\"\n" +
+                            "    },\n" +
+                            "    \"shipments\" : [\n" +
+                            "        {\n" +
+                            "            \"height\" : 10,\n" +
+                            "            \"width\" : 10,\n" +
+                            "            \"length\" : 10,\n" +
+                            "            \"weight\" : 1,\n" +
+                            "            \"shipmentPackageType\" : \"CUSTOM\",\n" +
+                            "            \"goodCategoryType\" : \"COSMETICS\"\n" +
+                            "\n" +
+                            "        }\n" +
+                            "    ],\n" +
+                            "    \"handler\" : \"optional_handler\",\n" +
+                            "    \"declareValue\" : 100,\n" +
+                            "    \"insuranceValue\" : 10,\n" +
+                            "    \"appointmentDate\" : 1263110400000,\n" +
+                            "    \"appointmentSlotType\" : \"SLOT_1\"\n" +
+                            "}"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import lmdelivery.longmen.com.android.AppController;
@@ -31,6 +33,7 @@ import lmdelivery.longmen.com.android.bean.Address;
 import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.bean.RateItemPriceComparator;
 import lmdelivery.longmen.com.android.fragments.RateItemFragment;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackActivity;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackLayout;
@@ -47,6 +50,9 @@ public class SelectProductActivity extends SwipeBackActivity {
     private Address mDropoffAddr;
     private MyTime mTime;
     private ArrayList<Package> mPackageList;
+    private ArrayList<RateItem> mFastestList;
+    private ArrayList<RateItem> mMediumList;
+    private ArrayList<RateItem> mEconomyList;
     private ArrayList<RateItem> mRateList;
 
     private Context context;
@@ -73,6 +79,7 @@ public class SelectProductActivity extends SwipeBackActivity {
 //        Logger.e(TAG, dropoff.getFullAddress());
 //        Logger.e(TAG, time.getTimeString());
 //        Logger.e(TAG, packageList.size()+"");
+        parseCategory();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,9 +98,9 @@ public class SelectProductActivity extends SwipeBackActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new RateItemFragment(), "Category 1");
-        adapter.addFragment(new RateItemFragment(), "Category 2");
-        adapter.addFragment(new RateItemFragment(), "Category 3");
+        adapter.addFragment(RateItemFragment.newInstance(mFastestList), getString(R.string.fastest));
+        adapter.addFragment(RateItemFragment.newInstance(mMediumList), getString(R.string.medium));
+        adapter.addFragment(RateItemFragment.newInstance(mEconomyList), getString(R.string.economy));
         viewPager.setAdapter(adapter);
     }
 
@@ -153,6 +160,28 @@ public class SelectProductActivity extends SwipeBackActivity {
         }
     }
 
+    private void parseCategory(){
+        mEconomyList = new ArrayList<>();
+        mFastestList = new ArrayList<>();
+        mMediumList = new ArrayList<>();
+        for(RateItem rateItem:mRateList){
+            switch (rateItem.getCategory()){
+                case ("FASTEST_COURIER"):
+                    mFastestList.add(rateItem);
+                    break;
+                case ("MEDIUM_COURIER"):
+                    mMediumList.add(rateItem);
+                    break;
+                case ("ECONOMY_COURIER"):
+                    mEconomyList.add(rateItem);
+                    break;
+            }
+        }
+        Collections.sort(mFastestList, new RateItemPriceComparator());
+        Collections.sort(mMediumList, new RateItemPriceComparator());
+        Collections.sort(mEconomyList, new RateItemPriceComparator());
+    }
+
     private void bookShipment(){
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.loading));
@@ -177,7 +206,7 @@ public class SelectProductActivity extends SwipeBackActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "order?token=" + "userToken", params, new Response.Listener<JSONObject>() {
+        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + "userToken", params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Logger.e(TAG, response.toString());

@@ -2,6 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="lmdelivery.longmen.com.android.activity.NewBookingActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_same_city" android:title="@string/action_same_city"
+         app:showAsAction="never" />
+    <item android:id="@+id/action_diff_city" android:title="@string/action_diff_city"
+         app:showAsAction="never" />
 </menu>

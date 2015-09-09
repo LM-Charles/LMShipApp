@@ -37,6 +37,7 @@ import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.LoginActivity;
+import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -201,7 +202,7 @@ public class LoginFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "login?email=" + email + "&password=" + password, params, new Response.Listener<JSONObject>() {
+            loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "login?email=" + email + "&password=" + password, params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Logger.e(TAG, response.toString());
@@ -221,7 +222,7 @@ public class LoginFragment extends Fragment {
 
                     }catch (Exception e){
                         e.printStackTrace();
-                        Util.showMessageDialog(getString(R.string.err_connection),getActivity());
+                        DialogUtil.showMessageDialog(getString(R.string.err_connection), getActivity());
                     }
                 }
             }, new Response.ErrorListener() {
@@ -334,13 +335,13 @@ public class LoginFragment extends Fragment {
                     pd.setMessage(loginActivity.getString(R.string.loading));
                     pd.show();
 
-                    getResetCodeReq = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword", new Response.Listener<JSONObject>() {
+                    getResetCodeReq = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword", new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Logger.e(TAG, response.toString());
                             pd.dismiss();
                             getResetCodeReq = null;
-                            Util.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
+                            DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
 
                             tilCode.setVisibility(View.VISIBLE);
                             tilNewPassword.setVisibility(View.VISIBLE);
@@ -389,7 +390,7 @@ public class LoginFragment extends Fragment {
                     pd.setMessage(loginActivity.getString(R.string.loading));
                     pd.show();
 
-                    resetPasswordReq = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword/" + code + "&newPassword=" + newPassword,
+                    resetPasswordReq = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword/" + code + "&newPassword=" + newPassword,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {

@@ -8,13 +8,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.InflateException;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -132,32 +135,32 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
-        super.onActivityCreated(savedInstanceState);
-        Observable<String> textChangeObservable = Observable.create(new Observable.OnSubscribe<String>() {
-            @Override
-            public void call(final Subscriber<? super String> observer) {
-                final TextWatcher watcher = new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(final Editable editable) {
-                        observer.onNext(editable.toString());
-                    }
-                };
-            }
-        });
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//
+//        super.onActivityCreated(savedInstanceState);
+//        Observable<String> textChangeObservable = Observable.create(new Observable.OnSubscribe<String>() {
+//            @Override
+//            public void call(final Subscriber<? super String> observer) {
+//                final TextWatcher watcher = new TextWatcher() {
+//                    @Override
+//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                    }
+//
+//                    @Override
+//                    public void afterTextChanged(final Editable editable) {
+//                        observer.onNext(editable.toString());
+//                    }
+//                };
+//            }
+//        });
+//    }
 
 
     private void setUpTextListener() {
@@ -270,6 +273,17 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 }
                 ((NewBookingActivity) getActivity()).pickupAddr.setStreetName(mAutocompleteView.getText().toString());
 
+            }
+        });
+        mAutocompleteView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Util.closeKeyBoard(getActivity(), mAutocompleteView);
+                    handled = true;
+                }
+                return handled;
             }
         });
     }
@@ -415,7 +429,6 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
         url += placeID + "&key=" + Constant.GOOGLE_PLACE_API_SERVER_KEY;
 
         Logger.e(TAG, url);
-        // Request a string response from the provided URL.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
                 new Response.Listener<JSONObject>() {
                     @Override

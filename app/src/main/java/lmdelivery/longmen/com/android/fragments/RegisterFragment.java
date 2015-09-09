@@ -43,6 +43,7 @@ import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.LoginActivity;
+import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -221,7 +222,7 @@ public class RegisterFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            registerRequest = new JsonObjectRequest(Request.Method.PUT, Constant.URL + "user", params, new Response.Listener<JSONObject>() {
+            registerRequest = new JsonObjectRequest(Request.Method.PUT, Constant.REST_URL + "user", params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Logger.e(TAG, response.toString());
@@ -239,7 +240,7 @@ public class RegisterFragment extends Fragment {
                         showVerifyPhoneNumberDialog();
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Util.showMessageDialog(getString(R.string.err_connection), getActivity());
+                        DialogUtil.showMessageDialog(getString(R.string.err_connection), getActivity());
                     }
 
                 }
@@ -331,7 +332,7 @@ public class RegisterFragment extends Fragment {
                     pd.setMessage(getString(R.string.loading));
                     pd.show();
 
-                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
+                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
@@ -339,7 +340,7 @@ public class RegisterFragment extends Fragment {
                             Logger.e(TAG, response.toString());
                             pd.dismiss();
                             AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-                            Util.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
+                            DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
 
                             etPhone.addTextChangedListener(new TextWatcher() {
                                 @Override
@@ -437,7 +438,7 @@ public class RegisterFragment extends Fragment {
             pd.setMessage(getString(R.string.loading));
             pd.show();
 
-            getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
+            getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
@@ -445,7 +446,7 @@ public class RegisterFragment extends Fragment {
                     Logger.e(TAG, response.toString());
                     pd.dismiss();
                     AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-                    Util.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
+                    DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -474,7 +475,7 @@ public class RegisterFragment extends Fragment {
             pd.setMessage(getString(R.string.loading));
             pd.show();
 
-            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/activation/" + code, new Response.Listener<JSONObject>() {
+            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation/" + code, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {

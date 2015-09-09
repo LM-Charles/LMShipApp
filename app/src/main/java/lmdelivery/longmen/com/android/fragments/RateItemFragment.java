@@ -17,8 +17,12 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.util.DateUtil;
+import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +32,7 @@ import lmdelivery.longmen.com.android.bean.RateItem;
 public class RateItemFragment extends Fragment {
 
     RateItemFragment fragment;
+    ArrayList<RateItem> rateItemArrayList;
 
     /**
      * Use this factory method to create a new instance of
@@ -35,19 +40,21 @@ public class RateItemFragment extends Fragment {
      *
      * @return A new instance of fragment RateItemFragment.
      */
-    public static RateItemFragment newInstance() {
+    public static RateItemFragment newInstance(ArrayList<RateItem> rateItemArrayList) {
         RateItemFragment fragment = new RateItemFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("rateList", rateItemArrayList);
+        fragment.setArguments(args);
         return fragment;
     }
 
     public RateItemFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.rateItemArrayList = getArguments().getParcelableArrayList("rateList");
         fragment = this;
     }
 
@@ -63,12 +70,12 @@ public class RateItemFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        ArrayList<RateItem> rateItems = new ArrayList<>();
-        for(int i = 0; i < 10; i++){
-            RateItem item = new RateItem("http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
-            rateItems.add(item);
-        }
-        recyclerView.setAdapter(new RateItemRecyclerViewAdapter(rateItems));
+//        ArrayList<RateItem> rateItems = new ArrayList<>();
+//        for(int i = 0; i < 10; i++){
+//            RateItem item = new RateItem("http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
+//            rateItems.add(item);
+//        }
+        recyclerView.setAdapter(new RateItemRecyclerViewAdapter(rateItemArrayList));
     }
 
     private class RateItemRecyclerViewAdapter extends RecyclerView.Adapter<RateItemRecyclerViewAdapter.ViewHolder> {
@@ -92,7 +99,7 @@ public class RateItemFragment extends Fragment {
                 mView = view;
                 type = (TextView) view.findViewById(R.id.tv_carrier_type);
                 date = (TextView) view.findViewById(R.id.tv_est_date);
-                price = (TextView) view.findViewById(R.id.price);
+                price = (TextView) view.findViewById(R.id.tv_price);
                 icon = (ImageView) view.findViewById(R.id.logo);
             }
 
@@ -118,14 +125,19 @@ public class RateItemFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.price.setText(mValues.get(position).getEstimate());
-            holder.date.setText(mValues.get(position).getEstimatedDelivery());
-            holder.type.setText(mValues.get(position).getServiceName());
+            RateItem item = mValues.get(position);
+            try {
+                holder.price.setText("$" + Util.roundTo2(Double.parseDouble(item.getEstimate())));
+            }catch (Exception e){
+                Logger.e("Failed to parse price");
+                holder.price.setText("$-");
+            }
+            holder.date.setText(getString(R.string.estimate_delivery) + DateUtil.UnixTimeToDateString(item.getEstimatedDelivery()));
+            holder.type.setText(Util.toDisplayCase(item.getServiceName()));
             Glide.with(fragment)
-                    .load(mValues.get(position).getService_icon_url())
-                    .centerCrop()
-                    //.placeholder(R.drawable.loading_spinner)
+                    .load(Constant.ENDPOINT + item.getService_icon_url())
                     .crossFade()
+                    .error(R.mipmap.ic_launcher)
                     .into(holder.icon);
 
 

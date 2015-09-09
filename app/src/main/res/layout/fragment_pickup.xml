@@ -119,6 +119,7 @@
                             android:hint="@string/search_address"
                             android:inputType="textPostalAddress"
                             android:textSize="@dimen/edit_text_font_size"
+                            android:imeOptions="actionSearch"
                             tools:text="address" />
 
                     </android.support.design.widget.TextInputLayout>

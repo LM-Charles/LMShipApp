@@ -3,16 +3,18 @@ package lmdelivery.longmen.com.android.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Comparator;
+
 /**
  * Created by rzhu on 6/30/2015.
  */
 public class RateItem implements Parcelable {
 
-    private String service_icon_url, lmCategory, estimate, estimatedDelivery, courierName, serviceName;
+    private String service_icon_url, category, estimate, estimatedDelivery, courierName, serviceName;
 
-    public RateItem( String service_icon_url, String lmCategory, String estimate, String estimatedDelivery, String courierName, String serviceName) {
+    public RateItem( String service_icon_url, String category, String estimate, String estimatedDelivery, String courierName, String serviceName) {
         this.service_icon_url = service_icon_url;
-        this.lmCategory = lmCategory;
+        this.category = category;
         this.estimate = estimate;
         this.estimatedDelivery = estimatedDelivery;
         this.courierName = courierName;
@@ -27,12 +29,12 @@ public class RateItem implements Parcelable {
         this.service_icon_url = service_icon_url;
     }
 
-    public String getLmCategory() {
-        return lmCategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setLmCategory(String lmCategory) {
-        this.lmCategory = lmCategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getEstimate() {
@@ -75,7 +77,7 @@ public class RateItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(service_icon_url);
-        dest.writeString(lmCategory);
+        dest.writeString(category);
         dest.writeString(estimate);
         dest.writeString(estimatedDelivery);
         dest.writeString(courierName);
@@ -84,7 +86,7 @@ public class RateItem implements Parcelable {
 
     public RateItem(Parcel in) {
         service_icon_url = in.readString();
-        lmCategory = in.readString();
+        category = in.readString();
         estimate = in.readString();
         estimatedDelivery = in.readString();
         courierName = in.readString();
@@ -100,4 +102,5 @@ public class RateItem implements Parcelable {
             return new RateItem[size];
         }
     };
+
 }
