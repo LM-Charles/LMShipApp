@@ -298,13 +298,13 @@ public class LoginFragment extends Fragment {
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_forgot_pw, null);
-        final EditText etPhone = (EditText) view.findViewById(R.id.et_phone);
+        final EditText etEmail = (EditText) view.findViewById(R.id.et_email);
         final EditText etCode = (EditText) view.findViewById(R.id.et_code);
         final EditText etNewPassword = (EditText) view.findViewById(R.id.et_new_password);
         final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
 
 
-        final TextInputLayout tilPhone = (TextInputLayout) view.findViewById(R.id.til_phone);
+        final TextInputLayout tilEmail = (TextInputLayout) view.findViewById(R.id.til_phone);
         final TextInputLayout tilCode = (TextInputLayout) view.findViewById(R.id.til_code);
         final TextInputLayout tilNewPassword = (TextInputLayout) view.findViewById(R.id.til_new_password);
 
@@ -325,10 +325,10 @@ public class LoginFragment extends Fragment {
                 if (getResetCodeReq != null)
                     return;
 
-                final String phone = etPhone.getText().toString();
+                final String email = etEmail.getText().toString();
 
-                if (TextUtils.isEmpty(phone)) {
-                    tilPhone.setError(getString(R.string.error_field_required));
+                if (TextUtils.isEmpty(email)) {
+                    tilEmail.setError(getString(R.string.error_field_required));
                 } else {
                     final ProgressDialog pd = new ProgressDialog(getActivity());
                     pd.setMessage(loginActivity.getString(R.string.loading));
@@ -340,11 +340,17 @@ public class LoginFragment extends Fragment {
                             Logger.e(TAG, response.toString());
                             pd.dismiss();
                             getResetCodeReq = null;
-                            Util.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
+                            try {
+                                String message = response.getString("message");
+                                Util.showMessageDialog(message, getActivity());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                             tilCode.setVisibility(View.VISIBLE);
                             tilNewPassword.setVisibility(View.VISIBLE);
-                            tilPhone.setVisibility(View.VISIBLE);
+                            tilEmail.setVisibility(View.VISIBLE);
+                            tilEmail.setFocusable(false);
                             getCodeBtn.setText(getString(R.string.request_again));
                             resetBtn.setVisibility(View.VISIBLE);
                             contactBtn.setVisibility(View.VISIBLE);
@@ -389,14 +395,16 @@ public class LoginFragment extends Fragment {
                     pd.setMessage(loginActivity.getString(R.string.loading));
                     pd.show();
 
-                    resetPasswordReq = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword/" + code + "&newPassword=" + newPassword,
+                    resetPasswordReq = new JsonObjectRequest(Request.Method.POST, Constant.URL + "user/resetPassword/" + code + "?email=" + etEmail.getText().toString() + "&newPassword=" + newPassword,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Logger.e(TAG, response.toString());
                                     pd.dismiss();
                                     resetPasswordReq = null;
-
+                                    Toast.makeText(getActivity(), R.string.passwrod_update_success,Toast.LENGTH_LONG).show();
+                                    mEmailView.setText(etEmail.getText().toString());
+                                    dialog.dismiss();
                                 }
                             }, new Response.ErrorListener() {
                         @Override
@@ -427,12 +435,12 @@ public class LoginFragment extends Fragment {
         dialog.setTitle(getActivity().getString(R.string.forgot_password)
         );
         dialog.show();
-        etPhone.post(new Runnable() {
+        etEmail.post(new Runnable() {
             @Override
             public void run() {
                 String phoneNumber = Util.getPhoneNumber();
                 if (!TextUtils.isEmpty(phoneNumber))
-                    etPhone.setText(phoneNumber);
+                    etEmail.setText(phoneNumber);
             }
         });
     }
