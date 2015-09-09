@@ -128,7 +128,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+//                viewPager.setCurrentItem(tab.getPosition());
                 if(tab.getPosition() == Constant.TAB_TIME){
                     if(selectedTime==null){
                         hideFab();
@@ -377,8 +377,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     public boolean validateDropOff() {
-        return dropOffAddr != null && !dropOffAddr.getCity().isEmpty() && !dropOffAddr.getCountry().isEmpty() && !dropOffAddr.getProvince().isEmpty()
-                && !dropOffAddr.getStreetName().isEmpty() && validateCanadaChinaPostalCode(dropOffAddr.getPostalCode());
+//        return dropOffAddr != null && !dropOffAddr.getCity().isEmpty() && !dropOffAddr.getCountry().isEmpty() && !dropOffAddr.getProvince().isEmpty()
+//                && !dropOffAddr.getStreetName().isEmpty() && validateCanadaChinaPostalCode(dropOffAddr.getPostalCode());
+        return dropOffFragment.saveAndValidate();
     }
 
     private boolean validateCanadaPostalCode(String zip) {

@@ -324,23 +324,24 @@ public class DestinationFragment extends Fragment {
     public boolean saveAndValidate() {
         if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).dropOffAddr.setUnitNumber(etUnit.getText().toString());
-            boolean validateCountry = validateCountry();
-            boolean validateDropoffCity = validateDropoffCity();
-            boolean validatePostalCode = validatePostalCode();
-            boolean validateStreet = validateStreet();
-            boolean validateName = validateName();
-            boolean validatePhone = validatePhone();
-            boolean validateProvince = validateProvince();
+        }
+            boolean validateCountry = validateCountry(etCountry.getText().toString());
+            boolean validateDropoffCity = validateDropoffCity(etCity.getText().toString());
+            boolean validatePostalCode = validatePostalCode(etPostal.getText().toString());
+            boolean validateStreet = validateStreet(mAutocompleteView.getText().toString());
+            boolean validateName = validateName(etName.getText().toString());
+            boolean validatePhone = validatePhone(etPhone.getText().toString());
+            boolean validateProvince = validateProvince(etProvince.getText().toString());
 
             return validateDropoffCity && validatePostalCode && validateStreet && validateName && validatePhone && validateProvince && validateCountry;
-        } else
-            return false;
+
     }
 
-    private boolean validateName() {
+    private boolean validateName(String name) {
+
         if (isAdded()) {
-            String name = etName.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setName(name);
+        }
             if (name.isEmpty()) {
                 ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
                 return false;
@@ -348,14 +349,13 @@ public class DestinationFragment extends Fragment {
                 ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else
-            return false;
+
     }
 
-    private boolean validatePhone() {
+    private boolean validatePhone(String phone) {
         if (isAdded()) {
-            String phone = etPhone.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setPhone(phone);
+        }
             if (phone.isEmpty()) {
                 ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
                 return false;
@@ -366,13 +366,13 @@ public class DestinationFragment extends Fragment {
                 ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else
-            return false;
+
     }
 
-    private boolean validateProvince() {
-        String province = etProvince.getText().toString();
-        ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(province);
+    private boolean validateProvince(String province) {
+        if(isAdded()) {
+            ((NewBookingActivity) getActivity()).dropOffAddr.setProvince(province);
+        }
         if (province.isEmpty()) {
             ((TextInputLayout) etProvince.getParent()).setError(getString(R.string.required));
             return false;
@@ -382,9 +382,10 @@ public class DestinationFragment extends Fragment {
         }
     }
 
-    private boolean validateCountry() {
-        String country = etCountry.getText().toString();
-        ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(country);
+    private boolean validateCountry(String country) {
+        if (isAdded()) {
+            ((NewBookingActivity) getActivity()).dropOffAddr.setCountry(country);
+        }
         if (country.isEmpty()) {
             ((TextInputLayout) etCountry.getParent()).setError(getString(R.string.required));
             return false;
@@ -398,10 +399,10 @@ public class DestinationFragment extends Fragment {
     }
 
 
-    private boolean validateStreet() {
+    private boolean validateStreet(String street) {
         if (isAdded()) {
-            String street = mAutocompleteView.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setStreetName(street);
+        }
             if (street.isEmpty()) {
                 ((TextInputLayout) mAutocompleteView.getParent()).setError(getString(R.string.required));
                 return false;
@@ -409,15 +410,13 @@ public class DestinationFragment extends Fragment {
                 ((TextInputLayout) mAutocompleteView.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else {
-            return false;
-        }
+
     }
 
-    private boolean validateDropoffCity() {
+    private boolean validateDropoffCity(String city) {
         if (isAdded()) {
-            String city = etCity.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setCity(city);
+        }
             if (city.isEmpty()) {
                 ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
                 return false;
@@ -425,14 +424,13 @@ public class DestinationFragment extends Fragment {
                 ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
                 return true;
             }
-        }
-        return false;
+
     }
 
-    private boolean validatePostalCode() {
+    private boolean validatePostalCode(String zip) {
         if (isAdded()) {
-            String zip = etPostal.getText().toString();
             ((NewBookingActivity) getActivity()).dropOffAddr.setPostalCode(zip);
+        }
 
             if (zip.isEmpty()) {
                 ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
@@ -459,8 +457,7 @@ public class DestinationFragment extends Fragment {
                 ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else
-            return false;
+
     }
 
 
