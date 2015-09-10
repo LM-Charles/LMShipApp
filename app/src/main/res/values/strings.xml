@@ -67,9 +67,10 @@
     <string name="sender_phone">Sender\'s Phone Number</string>
     <string name="receiver_phone">Receiver\'s Phone number</string>
     <string name="receiver_name">Receiver\'s name</string>
-    <string name="est_value">Estimate Value</string>
-    <string name="insurance_value">Insurance Value</string>
-    <string name="insurance_price">Insurance Price</string>
+    <string name="est_value">Estimate Value (optional)</string>
+    <string name="estimate_value">Estimate Value: $</string>
+    <string name="insurance_value">Insurance Value: $</string>
+    <string name="insurance_price">Insurance Price: $</string>
     <string name="buy_insurance">Buy Insurance</string>
     <string name="insurance">Insurance</string>
 
@@ -94,5 +95,7 @@
     <string name="economy">Economy</string>
 
     <string name="passwrod_update_success">Password updated successfully\nPlease login again</string>
+    <string name="insurance_value_sub_label">The amount we pay if package lost</string>
+    <string name="max_1000">Maximum $1000</string>
 
 </resources>

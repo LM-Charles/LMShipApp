@@ -7,29 +7,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="@dimen/activity_vertical_margin">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/setting_item_height">
-
-                <TextView
-                    style="@style/Label"
-                    android:text="@string/category" />
-
-                <Spinner
-                    android:id="@+id/spinner_package_type"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"/>
-            </RelativeLayout>
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -37,8 +23,16 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
                     style="@style/Label"
                     android:text="@string/est_value" />
+
+                <TextView
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="8dp"
+                    style="@style/SubLabel"
+                    android:text="For import tax calculation" />
 
                 <TextView
                     style="@style/Label"
@@ -84,12 +78,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/activity_vertical_margin">
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:layout_marginTop="@dimen/normal_padding"
                 android:orientation="horizontal">
 
                 <TextView
@@ -121,7 +115,16 @@
 
                     <TextView
                         style="@style/Label"
-                        android:text="@string/insurance_value" />
+                        android:text="@string/insurance_value"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView
+                        style="@style/SubLabel"
+                        android:text="@string/insurance_value_sub_label"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="8dp"/>
+
 
                     <TextView
                         style="@style/Label"
@@ -159,7 +162,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textSize="@dimen/edit_text_font_size"
+                        android:textSize="18sp"
                         android:text="$0"
                         android:layout_alignParentEnd="true"/>
 

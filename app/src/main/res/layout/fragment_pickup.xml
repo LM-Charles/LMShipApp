@@ -152,7 +152,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/edit_text_height"
+                    android:layout_height="93dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingStart="@dimen/label_icon_width">
@@ -192,6 +192,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/bc_canada"
+                        android:layout_marginBottom="11dp"
                         android:textSize="@dimen/edit_text_font_size" />
                 </LinearLayout>
 

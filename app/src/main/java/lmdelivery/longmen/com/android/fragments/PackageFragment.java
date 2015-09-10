@@ -335,7 +335,7 @@ public class PackageFragment extends Fragment {
                 holder.llLmBox.setVisibility(View.GONE);
             } else {
                 holder.price.setText(context.getString(R.string.five_bucks));
-                holder.price.setTextColor(context.getResources().getColor(R.color.red));
+                holder.price.setTextColor(context.getResources().getColor(R.color.card_background));
                 holder.llOwnBox.setVisibility(View.GONE);
                 holder.llLmBox.setVisibility(View.VISIBLE);
             }
@@ -365,11 +365,13 @@ public class PackageFragment extends Fragment {
                         holder.price.setText(context.getString(R.string.free));
                         holder.llOwnBox.setVisibility(View.VISIBLE);
                         holder.llLmBox.setVisibility(View.GONE);
+                        holder.price.setTextColor(context.getResources().getColor(R.color.green_done));
                     } else {
                         holder.price.setText(context.getString(R.string.five_bucks));
                         aPackage.setIsOwnBox(false);
                         holder.llOwnBox.setVisibility(View.GONE);
                         holder.llLmBox.setVisibility(View.VISIBLE);
+                        holder.price.setTextColor(context.getResources().getColor(R.color.card_background));
                     }
                 }
             });

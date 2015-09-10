@@ -80,6 +80,6 @@ public class MyTime implements Serializable{
         }
     }
     public String getSlot(){
-        return "SLOT_" + (++timeCatergory);
+        return "SLOT_" + (timeCatergory+1);
     }
 }

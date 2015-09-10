@@ -128,7 +128,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-//                viewPager.setCurrentItem(tab.getPosition());
+                viewPager.setCurrentItem(tab.getPosition());
                 if(tab.getPosition() == Constant.TAB_TIME){
                     if(selectedTime==null){
                         hideFab();
@@ -263,7 +263,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         viewPager.setCurrentItem(Constant.TAB_INSURANCE, true);
                     }
                 } else if (currentTab == Constant.TAB_INSURANCE) {
-                    if (!TextUtils.isEmpty(declareValue)) {
+                    if (insuranceFragment.saveAndValidate(insuranceValue)) {
                         viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
                     }
                 }
@@ -275,7 +275,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void init() {
         context = this;
         pickupAddr = new Address();
-        pickupAddr.setCountry("CA");
+        pickupAddr.setCountry("Canada");
         pickupAddr.setProvince("BC");
         dropOffAddr = new Address();
         packageArrayList = new ArrayList<>();
@@ -372,8 +372,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     public boolean validatePickup() {
-        return pickupAddr != null && !pickupAddr.getCity().isEmpty() && !pickupAddr.getCountry().isEmpty() && !pickupAddr.getProvince().isEmpty()
-                && !pickupAddr.getStreetName().isEmpty() && validateCanadaPostalCode(pickupAddr.getPostalCode());
+//        return pickupAddr != null && !pickupAddr.getCity().isEmpty() && !pickupAddr.getCountry().isEmpty() && !pickupAddr.getProvince().isEmpty()
+//                && !pickupAddr.getStreetName().isEmpty() && validateCanadaPostalCode(pickupAddr.getPostalCode());
+        return pickupFragment.saveAndValidate();
     }
 
     public boolean validateDropOff() {
@@ -424,7 +425,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     public boolean validateInsurance(){
-        return !TextUtils.isEmpty(declareValue);
+//        return !TextUtils.isEmpty(declareValue);
+        //everything optional
+        return insuranceFragment.saveAndValidate(insuranceValue);
     }
 
 

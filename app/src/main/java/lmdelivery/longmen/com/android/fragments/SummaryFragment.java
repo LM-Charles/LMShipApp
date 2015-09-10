@@ -16,6 +16,7 @@ import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,9 +64,13 @@ public class SummaryFragment extends Fragment {
     }
 
     public boolean setupView(){
+        final NewBookingActivity newBookingActivity = ((NewBookingActivity) getActivity());
+        if(newBookingActivity==null)
+            return false;
+
         boolean result = true;
 
-        final NewBookingActivity newBookingActivity = ((NewBookingActivity) getActivity());
+
         if (newBookingActivity.validatePickup()) {
             tvPickup.setText(newBookingActivity.pickupAddr.buildFullAddress());
             tvPickup.setTextColor(getResources().getColor(R.color.white_text));
@@ -128,14 +133,14 @@ public class SummaryFragment extends Fragment {
             }
         });
 
-        if (!TextUtils.isEmpty(newBookingActivity.declareValue)) {
-            String text = "Estimate Value: " + newBookingActivity.declareValue + "\n";
+        if (newBookingActivity.validateInsurance()) {
+            String text = getString(R.string.estimate_value) + newBookingActivity.declareValue + "\n";
 
             if(!TextUtils.isEmpty(newBookingActivity.insuranceValue)){
                 text += getString(R.string.insurance_value) + newBookingActivity.insuranceValue + "\n";
                 int value = Integer.parseInt(newBookingActivity.insuranceValue);
 
-                text += getString(R.string.insurance_cost) + "$ " + String.valueOf((double)value * 0.03);
+                text += getString(R.string.insurance_cost) + Util.roundTo2((double) value * 0.03);
             }else{
                 text += getString(R.string.insurance_decline);
             }

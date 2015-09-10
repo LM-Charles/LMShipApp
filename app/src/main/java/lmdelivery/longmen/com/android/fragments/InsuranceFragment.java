@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -19,8 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
+import lmdelivery.longmen.com.android.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,9 +31,16 @@ import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 public class InsuranceFragment extends Fragment {
 
     private LinearLayout llInsurance;
+    private EditText insuranceValue;
+    private TextView tvInsurace;
 
     public InsuranceFragment() {
         // Required empty public constructor
+    }
+
+
+    public void removeError(){
+        insuranceValue.setError(null);
     }
 
     @Override
@@ -40,8 +50,8 @@ public class InsuranceFragment extends Fragment {
         final NewBookingActivity activity = (NewBookingActivity) getActivity();
 
         final EditText estimateValue = (EditText) rootView.findViewById(R.id.et_est_value);
-        final EditText insuranceValue = (EditText) rootView.findViewById(R.id.et_insurance_value);
-        final TextView tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
+        insuranceValue = (EditText) rootView.findViewById(R.id.et_insurance_value);
+        tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
         llInsurance = (LinearLayout) rootView.findViewById(R.id.ll_insurance);
 
         estimateValue.addTextChangedListener(new TextWatcher() {
@@ -72,11 +82,18 @@ public class InsuranceFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String valueStr = insuranceValue.getText().toString();
-                if (!TextUtils.isEmpty(valueStr)) {
-                    int value = Integer.parseInt(valueStr);
-                    tvInsurace.setText("$ " + String.valueOf((double) value * 0.03));
-                    activity.insuranceValue = valueStr;
-                }
+//                if (!TextUtils.isEmpty(valueStr)) {
+//                    int value = Integer.parseInt(valueStr);
+//                    if(value> Constant.MAX_INSURANCE_VALUE)  {
+//                        ((TextInputLayout) insuranceValue.getParent()).setError("Max $1000");
+//                    }else{
+//                        tvInsurace.setText("$ " + Util.roundTo2((double) value * 0.03));
+//                        ((TextInputLayout) insuranceValue.getParent()).setErrorEnabled(false);
+//                    }
+//                    activity.insuranceValue = valueStr;
+//
+//                }
+                saveAndValidate(valueStr);
 
             }
         });
@@ -96,6 +113,29 @@ public class InsuranceFragment extends Fragment {
         return rootView;
     }
 
+    public boolean saveAndValidate(String value){
+        if(isAdded()){
+            ((NewBookingActivity) getActivity()).insuranceValue = value;
+        }
+
+        if(!TextUtils.isEmpty(value)) {
+            try {
+                int insurance = Integer.parseInt(value);
+                if(insurance> Constant.MAX_INSURANCE_VALUE)  {
+                    insuranceValue.setError(getString(R.string.max_1000));
+                    return false;
+                }else{
+                    tvInsurace.setText("$ " + Util.roundTo2((double) insurance * 0.03));
+                    insuranceValue.setError(null);
+                    return true;
+                }
+            } catch (Exception e) {
+                return true;
+            }
+        }else
+            return true;
+
+    }
 
     private void revealInsurance() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -122,7 +162,7 @@ public class InsuranceFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             // get the center for the clipping circle
-            int cx = (llInsurance.getLeft() + llInsurance.getRight()) / 2;
+            int cx = llInsurance.getRight();
             int cy = (llInsurance.getTop() + llInsurance.getBottom()) / 2;
 
             // get the initial radius for the clipping circle

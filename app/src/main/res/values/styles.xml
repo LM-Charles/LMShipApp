@@ -97,6 +97,15 @@
         <item name="android:textSize">@dimen/label_text_font_size</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/label_text_color</item>
+    </style>
+
+    <style name="SubLabel"  parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/sublabel_text_font_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
 
     <style name="LabelIcon"  parent="android:Widget.TextView">
@@ -105,12 +114,14 @@
         <item name="android:textSize">@dimen/label_icon_font_size</item>
         <item name="android:layout_marginBottom">7dp</item>
         <item name="android:gravity">center_vertical</item>
+
     </style>
 
 
     <dimen name="label_icon_font_size">22sp</dimen>
     <dimen name="label_icon_width">56dp</dimen>
     <dimen name="label_text_font_size">16sp</dimen>
+    <dimen name="sublabel_text_font_size">14sp</dimen>
 
     <style name="SwipeBackLayout">
         <item name="edge_size">50dip</item>

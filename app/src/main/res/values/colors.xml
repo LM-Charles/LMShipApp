@@ -41,7 +41,7 @@
     <color name="to_color">@color/card_background</color>
     <color name="insurance_color">@color/card_background</color>
     <color name="time_selected">@color/card_background</color>
-    <color name="time_ripple">#F9A825</color>
+    <color name="time_ripple">#90A4AE</color>
     <color name="package_color">@color/card_background</color>
 
     <color name="light_gray">#BDBDBD</color>
@@ -56,5 +56,8 @@
     <color name="welcome_text_background">#ec6392</color>
     <color name="welcome_icon_color">#96baf8</color>
     <color name="yellow">#FFEB3B</color>
+
+    <color name="label_text_color">#212121</color>
+
 
 </resources>

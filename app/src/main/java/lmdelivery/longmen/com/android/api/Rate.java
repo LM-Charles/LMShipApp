@@ -29,7 +29,7 @@ public class Rate {
             pickup.put("address2", pickupAddr.getUnitNumber());
             pickup.put("city", pickupAddr.getCity());
             pickup.put("province", pickupAddr.getProvince());
-            pickup.put("country", pickupAddr.getCountry());
+            pickup.put("country", "CA");
             pickup.put("postal", pickupAddr.getPostalCode());
 
             JSONObject dropOff = new JSONObject();

@@ -41,6 +41,8 @@ public class Constant {
     public static final String[] CATEGORY_ARR = {"REGULAR", "LUXURY", "COSMETICS", "DOCUMENT"};
 
     public static final Set<String> citiesInVan = new HashSet<>();
+    public static final int MAX_INSURANCE_VALUE = 1000;
+
     static {
         citiesInVan.add("VANCOUVER");
         citiesInVan.add("NORTH VANCOUVER");

@@ -451,7 +451,7 @@ public class DestinationFragment extends Fragment {
                 return false;
 
             } else if (!matcher2.matches() && (country.equals("China") || country.equals("中国"))) {
-                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_canada));
+                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_china));
                 return false;
             } else {
                 ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);

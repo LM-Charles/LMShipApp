@@ -291,20 +291,20 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
     public boolean saveAndValidate() {
         if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
-            boolean validatePickupCity = validatePickupCity();
-            boolean validatePostalCode = validatePostalCode();
-            boolean validateStreet = validateStreet();
-            boolean validateName = validateName();
-            boolean validatePhone = validatePhone();
-            return validatePickupCity && validatePostalCode && validateStreet && validateName && validatePhone;
         }
-        return false;
+            boolean validatePickupCity = validatePickupCity(etCity.getText().toString());
+            boolean validatePostalCode = validatePostalCode(etPostal.getText().toString());
+            boolean validateStreet = validateStreet(mAutocompleteView.getText().toString());
+            boolean validateName = validateName(etName.getText().toString());
+            boolean validatePhone = validatePhone(etPhone.getText().toString());
+            return validatePickupCity && validatePostalCode && validateStreet && validateName && validatePhone;
+
     }
 
-    private boolean validateName() {
+    private boolean validateName(String name) {
         if (isAdded()) {
-            String name = etName.getText().toString();
             ((NewBookingActivity) getActivity()).pickupAddr.setName(name);
+        }
             if (name.isEmpty()) {
                 ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
                 return false;
@@ -312,14 +312,12 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else
-            return false;
     }
 
-    private boolean validatePhone() {
+    private boolean validatePhone(String phone) {
         if (isAdded()) {
-            String phone = etPhone.getText().toString();
             ((NewBookingActivity) getActivity()).pickupAddr.setPhone(phone);
+        }
             if (phone.isEmpty()) {
                 ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
                 return false;
@@ -330,13 +328,11 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else
-            return false;
     }
 
-    private boolean validateStreet() {
-        String street = mAutocompleteView.getText().toString();
-        ((NewBookingActivity) getActivity()).pickupAddr.setStreetName(street);
+    private boolean validateStreet(String street) {
+        if(isAdded())
+            ((NewBookingActivity) getActivity()).pickupAddr.setStreetName(street);
         if (street.isEmpty()) {
             ((TextInputLayout) mAutocompleteView.getParent()).setError(getString(R.string.required));
             return false;
@@ -346,10 +342,10 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
         }
     }
 
-    private boolean validatePickupCity() {
+    private boolean validatePickupCity(String city) {
         if (isAdded()) {
-            String city = etCity.getText().toString();
             ((NewBookingActivity) getActivity()).pickupAddr.setCity(city);
+        }
             if (city.isEmpty()) {
                 ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
                 return false;
@@ -360,15 +356,13 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else
-            return false;
+
     }
 
-    private boolean validatePostalCode() {
+    private boolean validatePostalCode(String zip) {
         if (isAdded()) {
-            String zip = etPostal.getText().toString();
             ((NewBookingActivity) getActivity()).pickupAddr.setPostalCode(zip);
-
+        }
             if (zip.isEmpty()) {
                 ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
                 return false;
@@ -386,9 +380,7 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
                 return true;
             }
-        } else {
-            return false;
-        }
+
     }
 
     /**

@@ -32,8 +32,8 @@
     <string name="err_city_empty">City cannot be empty</string>
     <string name="err_not_in_van">"We can only pickup in great vancouver area for now"</string>
     <string name="err_post_empty">Postal Code cannot be empty</string>
-    <string name="err_post_wrong_format_canada">Canada Postal format:\nV6X 0A5</string>
-    <string name="err_post_wrong_format_china">China Postal format:\n518026</string>
+    <string name="err_post_wrong_format_canada">Valid Postal:\nV6X 0A5</string>
+    <string name="err_post_wrong_format_china">Valid Postal:\n518026</string>
     <string name="err_street_empty">Street is empty</string>
     <string name="required">Required</string>
     <string name="free">Free</string>
