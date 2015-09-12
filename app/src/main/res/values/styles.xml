@@ -100,6 +100,23 @@
         <item name="android:textColor">@color/label_text_color</item>
     </style>
 
+    <style name="Label.Gray"  parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/label_text_font_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="Label.Price"  parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/label_text_font_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/price</item>
+    </style>
+
     <style name="SubLabel"  parent="android:Widget.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -129,4 +146,6 @@
         <item name="shadow_right">@drawable/shadow_right</item>
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
+
+    <color name="price">#009688</color>
 </resources>

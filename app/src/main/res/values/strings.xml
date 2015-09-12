@@ -97,5 +97,8 @@
     <string name="passwrod_update_success">Password updated successfully\nPlease login again</string>
     <string name="insurance_value_sub_label">The amount we pay if package lost</string>
     <string name="max_1000">Maximum $1000</string>
+    <string name="packaging">Packaging</string>
+    <string name="tax">Tax</string>
+    <string name="shipping">Shipping</string>
 
 </resources>

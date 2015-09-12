@@ -16,6 +16,7 @@ import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.util.Unit;
+import lmdelivery.longmen.com.android.util.Util;
 
 @Table(name = "Packages")
 public class Package extends Model implements Parcelable {
@@ -149,6 +150,31 @@ public class Package extends Model implements Parcelable {
 
     public int getWeightUnit() {
         return weightUnit;
+    }
+
+    public String getWeightKG(){
+        if (weightUnit==Unit.LB){
+            return Util.roundTo2(Unit.lbTokg(Double.parseDouble(weight)));
+        }else
+            return String.valueOf(weight);
+    }
+    public String getHeightCM(){
+        if (distanceUnit==Unit.INCH){
+            return Util.roundTo2(Unit.inchTocm(Double.parseDouble(height)));
+        }else
+            return String.valueOf(height);
+    }
+    public String getWidthCM(){
+        if (distanceUnit==Unit.INCH){
+            return Util.roundTo2(Unit.inchTocm(Double.parseDouble(width)));
+        }else
+            return String.valueOf(width);
+    }
+    public String getLengthCM(){
+        if (distanceUnit==Unit.INCH){
+            return Util.roundTo2(Unit.inchTocm(Double.parseDouble(length)));
+        }else
+            return String.valueOf(length);
     }
 
     public void setWeightUnit(int weightUnit) {

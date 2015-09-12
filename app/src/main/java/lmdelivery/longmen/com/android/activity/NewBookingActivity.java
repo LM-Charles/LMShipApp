@@ -62,6 +62,8 @@ import lmdelivery.longmen.com.android.util.Util;
 
 public class NewBookingActivity extends AppCompatActivity implements TimeFragment.OnTimeSelectedListener, GoogleApiClient.OnConnectionFailedListener {
     private static final java.lang.String TAG = NewBookingActivity.class.getName();
+    static final int PICK_RATE_REQUEST = 1;
+
     private JsonObjectRequest getRateRequest;
     private JsonObjectRequest bookShipRequest;
 
@@ -198,6 +200,21 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         fab = (FloatingActionButton) findViewById(R.id.fab);
         setupNextFab();
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == PICK_RATE_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+
+                Logger.e(TAG, "selected item: " + ((RateItem) data.getParcelableExtra("selected_rate")).getServiceName());
+                // Do something with the contact here (bigger example below)
+            }
+        }
     }
 
     private void hideFab(){
@@ -475,7 +492,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
                         bundle.putParcelableArrayList(Constant.EXTRA_RATE_ITEM, rateItemList);
                         intent.putExtras(bundle);
-                        startActivity(intent);
+                        startActivityForResult(intent,PICK_RATE_REQUEST);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -1,6 +1,7 @@
 package lmdelivery.longmen.com.android.fragments;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.activity.SelectProductActivity;
 import lmdelivery.longmen.com.android.bean.RateItem;
 import lmdelivery.longmen.com.android.util.DateUtil;
 import lmdelivery.longmen.com.android.util.Logger;
@@ -85,6 +87,7 @@ public class RateItemFragment extends Fragment {
         private List<RateItem> mValues;
         private int selectedPosition;
 
+
         public class ViewHolder extends RecyclerView.ViewHolder {
             public String mBoundString;
 
@@ -125,7 +128,8 @@ public class RateItemFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            RateItem item = mValues.get(position);
+
+            final RateItem item = mValues.get(position);
             try {
                 holder.price.setText("$" + Util.roundTo2(Double.parseDouble(item.getEstimate())));
             }catch (Exception e){
@@ -144,7 +148,7 @@ public class RateItemFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    ((SelectProductActivity)getActivity()).returnSelectedRate(item);
                 }
             });
         }

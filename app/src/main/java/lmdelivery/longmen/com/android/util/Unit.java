@@ -10,9 +10,7 @@ public class Unit {
     public static final int LB = 2;
     public static final int KG = 3;
 
-    public static double kgTolb(double kg){
-        return kg * 2.20462;
-    }
+    public static double kgTolb(double kg){return kg * 2.20462;}
     public static double lbTokg(double lb){
         return lb * 0.453592;
     }
@@ -21,5 +19,20 @@ public class Unit {
     }
     public static double inchTocm(double inch){
         return inch * 2.54;
+    }
+
+    public static String getUnitString(int type){
+        switch (type){
+            case CM:
+                return "CM";
+            case INCH:
+                return "INCH";
+            case LB:
+                return "LB";
+            case KG:
+                return "KG";
+            default:
+                return "";
+        }
     }
 }

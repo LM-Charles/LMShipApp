@@ -54,6 +54,7 @@ public class Util {
 
     public static void handleVolleyError(VolleyError error, Context context){
         NetworkResponse response = error.networkResponse;
+        Logger.e(TAG,error.toString());
         String message;
         if(response != null && response.data != null){
             message = trimMessage(new String(response.data), "message");
@@ -115,9 +116,9 @@ public class Util {
         return sb.toString();
     }
 
-    public static double roundTo2(double value) {
+    public static String roundTo2(double value) {
         DecimalFormat df = new DecimalFormat("##.##");
-        return Double.valueOf(df.format(value));
+        return df.format(value);
     }
 
 }

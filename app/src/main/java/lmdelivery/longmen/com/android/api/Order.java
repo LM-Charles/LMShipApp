@@ -10,18 +10,19 @@ import lmdelivery.longmen.com.android.bean.*;
 import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.util.CountryCode;
 import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Unit;
 
 /**
- * Created by rzhu on 8/31/2015.
+ * Created by rzhu on 9/11/2015.
  */
-public class Rate {
-    private static final String TAG = Rate.class.getSimpleName();
+public class Order {
+    private static final String TAG = Order.class.getSimpleName();
 
-    public static JSONObject buildEstimateParam(Address pickupAddr, Address dropOffAddr, ArrayList<Package> packageArrayList,
+    public static JSONObject buildOrderParam(String clientId, String nickName, RateItem rateItem, Address pickupAddr, Address dropOffAddr, ArrayList<Package> packageArrayList,
                                                 MyTime selectedTime, String declareValue, String insuranceValue){
         JSONObject params = new JSONObject();
         try {
-            params.put("client",2);
+            params.put("client",clientId);
 //            params.put("client",AppController.getInstance().getUserId());
 
             JSONObject pickup = new JSONObject();
@@ -42,14 +43,14 @@ public class Rate {
 
             params.put("fromAddress", pickup);
             params.put("toAddress", dropOff);
-
+            params.put("courierServiceType", rateItem.getServiceName());
             params.put("shipments", Rate.buildBoxJson(packageArrayList));
             params.put("declareValue", declareValue);
             params.put("insuranceValue", insuranceValue);
-
             params.put("appointmentDate", selectedTime.getUnixDate());
-
             params.put("appointmentSlotType", selectedTime.getSlot());
+            params.put("nickName", nickName);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -85,9 +86,10 @@ public class Rate {
                             break;
                     }
                 }
-
                 shipment.put("weight", aPackage.getWeightKG());
                 shipment.put("goodCategoryType", aPackage.getCategory());
+                shipment.put("displayLengthPreference", Unit.getUnitString(aPackage.getDistanceUnit()));
+                shipment.put("displayWeightPreference",  Unit.getUnitString(aPackage.getWeightUnit()));
                 shipments.put(shipment);
             }catch (Exception e){
                 Logger.e(TAG, "Failed to create shipment json");

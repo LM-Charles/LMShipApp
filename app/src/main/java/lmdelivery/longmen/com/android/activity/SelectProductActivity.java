@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -131,6 +132,13 @@ public class SelectProductActivity extends SwipeBackActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void returnSelectedRate(RateItem item){
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("selected_rate",item);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
@@ -182,46 +190,46 @@ public class SelectProductActivity extends SwipeBackActivity {
         Collections.sort(mEconomyList, new RateItemPriceComparator());
     }
 
-    private void bookShipment(){
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage(getString(R.string.loading));
-        pd.show();
-
-        JSONObject params = new JSONObject();
-        try {
-            params.put("userId", AppController.getInstance().getUserId());
-
-            params.put("fromAddress", mPickupAddr.getStreetName());
-            params.put("fromCity", mPickupAddr.getCity());
-            params.put("fromProvince", mPickupAddr.getProvince());
-            params.put("fromCountry", mPickupAddr.getCountry());
-            params.put("fromPostal", mPickupAddr.getPostalCode());
-
-            params.put("toAddress", mDropoffAddr.getStreetName());
-            params.put("toCity", mDropoffAddr.getCity());
-            params.put("toProvince", mDropoffAddr.getProvince());
-            params.put("toCountry", mDropoffAddr.getCountry());
-            params.put("toPostal", mDropoffAddr.getPostalCode());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + "userToken", params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.e(TAG, response.toString());
-                pd.dismiss();
-                bookShipRequest = null;
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                bookShipRequest = null;
-                pd.dismiss();
-                Util.handleVolleyError(error, context);
-            }
-        });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(bookShipRequest);
-    }
+//    private void bookShipment(){
+//        final ProgressDialog pd = new ProgressDialog(this);
+//        pd.setMessage(getString(R.string.loading));
+//        pd.show();
+//
+//        JSONObject params = new JSONObject();
+//        try {
+//            params.put("userId", AppController.getInstance().getUserId());
+//
+//            params.put("fromAddress", mPickupAddr.getStreetName());
+//            params.put("fromCity", mPickupAddr.getCity());
+//            params.put("fromProvince", mPickupAddr.getProvince());
+//            params.put("fromCountry", mPickupAddr.getCountry());
+//            params.put("fromPostal", mPickupAddr.getPostalCode());
+//
+//            params.put("toAddress", mDropoffAddr.getStreetName());
+//            params.put("toCity", mDropoffAddr.getCity());
+//            params.put("toProvince", mDropoffAddr.getProvince());
+//            params.put("toCountry", mDropoffAddr.getCountry());
+//            params.put("toPostal", mDropoffAddr.getPostalCode());
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + "userToken", params, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Logger.e(TAG, response.toString());
+//                pd.dismiss();
+//                bookShipRequest = null;
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                bookShipRequest = null;
+//                pd.dismiss();
+//                Util.handleVolleyError(error, context);
+//            }
+//        });
+//        // Adding request to request queue
+//        AppController.getInstance().addToRequestQueue(bookShipRequest);
+//    }
 }
