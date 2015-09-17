@@ -16,6 +16,10 @@ public class Constant {
     public static final String EXTRA_PACKAGE = "EXTRA_PACKAGE";
     public static final String EXTRA_TIME = "EXTRA_TIME";
     public static final String EXTRA_RATE_ITEM = "EXTRA_RATE_ITEM";
+    public static final String EXTRA_INSURANCE_VALUE = "EXTRA_INSURANCE_VALUE";
+    public static final String EXTRA_ESTIMATE_VALUE = "EXTRA_ESTIMATE_VALUE";
+    public static final String EXTRA_INSURANCE_ITEM = "EXTRA_INSURANCE_ITEM";
+    public static final String EXTRA_PACKAGE_ITEM = "EXTRA_PACKAGE_ITEM";
 
     public static final int FAB_ANIMTION_DURATION = 500;
     public static final int MAX_CITY_LENGTH = 15;
@@ -42,7 +46,7 @@ public class Constant {
 
     public static final Set<String> citiesInVan = new HashSet<>();
     public static final int MAX_INSURANCE_VALUE = 1000;
-
+    public static final int MAX_DECLARE_VALUE = 100000;
     static {
         citiesInVan.add("VANCOUVER");
         citiesInVan.add("NORTH VANCOUVER");

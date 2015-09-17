@@ -83,8 +83,6 @@ public class PackageFragment extends Fragment {
         return view;
     }
 
-
-
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -295,8 +293,6 @@ public class PackageFragment extends Fragment {
             else
                 holder.weightSpinner.setSelection(1);
 
-
-
             ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(context, R.array.category_array, R.layout.spinner_item);
 
             // Specify the layout to use when the list of choices appears
@@ -330,12 +326,12 @@ public class PackageFragment extends Fragment {
 
             if (aPackage.isOwnBox()) {
                 holder.price.setText(context.getString(R.string.free));
-                holder.price.setTextColor(context.getResources().getColor(R.color.green_done));
+                holder.price.setTextColor(context.getResources().getColor(R.color.price));
                 holder.llOwnBox.setVisibility(View.VISIBLE);
                 holder.llLmBox.setVisibility(View.GONE);
             } else {
                 holder.price.setText(context.getString(R.string.five_bucks));
-                holder.price.setTextColor(context.getResources().getColor(R.color.card_background));
+                holder.price.setTextColor(context.getResources().getColor(R.color.price));
                 holder.llOwnBox.setVisibility(View.GONE);
                 holder.llLmBox.setVisibility(View.VISIBLE);
             }
@@ -444,7 +440,6 @@ public class PackageFragment extends Fragment {
                         ((TextInputLayout) holder.etLength.getParent()).setErrorEnabled(false);
                     }
                     aPackage.setLength(holder.etLength.getText().toString());
-
                 }
             });
 

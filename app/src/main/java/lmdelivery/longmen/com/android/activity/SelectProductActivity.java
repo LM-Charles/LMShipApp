@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -18,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +32,7 @@ import java.util.List;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.api.Order;
 import lmdelivery.longmen.com.android.bean.Address;
 import lmdelivery.longmen.com.android.bean.MyTime;
 import lmdelivery.longmen.com.android.bean.Package;
@@ -38,6 +41,7 @@ import lmdelivery.longmen.com.android.bean.RateItemPriceComparator;
 import lmdelivery.longmen.com.android.fragments.RateItemFragment;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackActivity;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackLayout;
+import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -55,6 +59,10 @@ public class SelectProductActivity extends SwipeBackActivity {
     private ArrayList<RateItem> mMediumList;
     private ArrayList<RateItem> mEconomyList;
     private ArrayList<RateItem> mRateList;
+    private RateItem mPackageRate;
+    private RateItem mInsuranceRate;
+    private String mInsuranceValue;
+    private String mEstValue;
 
     private Context context;
 
@@ -72,6 +80,10 @@ public class SelectProductActivity extends SwipeBackActivity {
             mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
             mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
             mRateList = bundle.getParcelableArrayList(Constant.EXTRA_RATE_ITEM);
+            mPackageRate = bundle.getParcelable(Constant.EXTRA_PACKAGE_ITEM);
+            mInsuranceRate = bundle.getParcelable(Constant.EXTRA_INSURANCE_ITEM);
+            mInsuranceValue = getIntent().getStringExtra(Constant.EXTRA_INSURANCE_VALUE);
+            mEstValue = getIntent().getStringExtra(Constant.EXTRA_ESTIMATE_VALUE);
         }catch (Exception e){
 
         }
@@ -132,11 +144,20 @@ public class SelectProductActivity extends SwipeBackActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void returnSelectedRate(RateItem item){
+    public void returnSelectedRate(){
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("selected_rate",item);
+//        returnIntent.putExtra("selected_rate",item);
         setResult(RESULT_OK, returnIntent);
         finish();
+    }
+
+    public void showPaymentDialog(final RateItem item){
+        DialogUtil.showSingleEstimateDialog(this, item, mInsuranceRate, mPackageRate, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                bookShipment(item);
+            }
+        });
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -190,46 +211,30 @@ public class SelectProductActivity extends SwipeBackActivity {
         Collections.sort(mEconomyList, new RateItemPriceComparator());
     }
 
-//    private void bookShipment(){
-//        final ProgressDialog pd = new ProgressDialog(this);
-//        pd.setMessage(getString(R.string.loading));
-//        pd.show();
-//
-//        JSONObject params = new JSONObject();
-//        try {
-//            params.put("userId", AppController.getInstance().getUserId());
-//
-//            params.put("fromAddress", mPickupAddr.getStreetName());
-//            params.put("fromCity", mPickupAddr.getCity());
-//            params.put("fromProvince", mPickupAddr.getProvince());
-//            params.put("fromCountry", mPickupAddr.getCountry());
-//            params.put("fromPostal", mPickupAddr.getPostalCode());
-//
-//            params.put("toAddress", mDropoffAddr.getStreetName());
-//            params.put("toCity", mDropoffAddr.getCity());
-//            params.put("toProvince", mDropoffAddr.getProvince());
-//            params.put("toCountry", mDropoffAddr.getCountry());
-//            params.put("toPostal", mDropoffAddr.getPostalCode());
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + "userToken", params, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Logger.e(TAG, response.toString());
-//                pd.dismiss();
-//                bookShipRequest = null;
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                bookShipRequest = null;
-//                pd.dismiss();
-//                Util.handleVolleyError(error, context);
-//            }
-//        });
-//        // Adding request to request queue
-//        AppController.getInstance().addToRequestQueue(bookShipRequest);
-//    }
+    public void bookShipment(RateItem rateItem){
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.loading));
+        pd.show();
+
+        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + "userToken",
+                Order.buildOrderParam(AppController.getInstance().getUserId(), "",rateItem,mPickupAddr,mDropoffAddr,mPackageList,mTime,mEstValue,mInsuranceValue)
+                , new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                bookShipRequest = null;
+                returnSelectedRate();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                bookShipRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error, context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(bookShipRequest);
+    }
 }

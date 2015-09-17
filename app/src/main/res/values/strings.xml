@@ -68,18 +68,18 @@
     <string name="receiver_phone">Receiver\'s Phone number</string>
     <string name="receiver_name">Receiver\'s name</string>
     <string name="est_value">Estimate Value (optional)</string>
-    <string name="estimate_value">Estimate Value: $</string>
-    <string name="insurance_value">Insurance Value: $</string>
-    <string name="insurance_price">Insurance Price: $</string>
+    <string name="estimate_value">Estimate Value: </string>
+    <string name="insurance_value">Insurance Value: </string>
+    <string name="insurance_price">Insurance Price: </string>
     <string name="buy_insurance">Buy Insurance</string>
     <string name="insurance">Insurance</string>
 
     <string name="dollar_sign">$</string>
     <string name="zero_CAD">0 CAD</string>
     <string name="pickup_sub_title">We will pick up your packages from this address</string>
-    <string name="no_est_value">Estimate Value is not provided</string>
+    <string name="insurance_value_invalid">Insurance value is invalid</string>
     <string name="category">"Category: "</string>
-    <string name="insurance_cost">"Insurance Cost: "</string>
+    <string name="insurance_cost">"Insurance Cost:"</string>
     <string name="insurance_decline">Insurance Declined</string>
     <string name="country">Country</string>
     <string name="own_box">I have my own box</string>
@@ -100,5 +100,10 @@
     <string name="packaging">Packaging</string>
     <string name="tax">Tax</string>
     <string name="shipping">Shipping</string>
+    <string name="cannot_be_negative">Cannot be negative</string>
+    <string name="invalid_number">Invalid number</string>
+    <string name="declare_value_too_big">Declare value too large</string>
+    <string name="unknown">UNKNOWN</string>
+    <string name="total">Total</string>
 
 </resources>

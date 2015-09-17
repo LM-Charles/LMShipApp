@@ -134,20 +134,20 @@ public class SummaryFragment extends Fragment {
         });
 
         if (newBookingActivity.validateInsurance()) {
-            String text = getString(R.string.estimate_value) + newBookingActivity.declareValue + "\n";
+            String text = getString(R.string.estimate_value)+ " $ " + newBookingActivity.declareValue + "\n";
 
             if(!TextUtils.isEmpty(newBookingActivity.insuranceValue)){
-                text += getString(R.string.insurance_value) + newBookingActivity.insuranceValue + "\n";
+                text += getString(R.string.insurance_value) + " $ " + newBookingActivity.insuranceValue + "\n";
                 int value = Integer.parseInt(newBookingActivity.insuranceValue);
 
-                text += getString(R.string.insurance_cost) + Util.roundTo2((double) value * 0.03);
+                text += getString(R.string.insurance_cost) + " $ " + Util.roundTo2((double) value * 0.03);
             }else{
                 text += getString(R.string.insurance_decline);
             }
             tvInsurance.setText(text);
             tvInsurance.setTextColor(getResources().getColor(R.color.white_text));
         } else {
-            tvInsurance.setText(getString(R.string.no_est_value));
+            tvInsurance.setText(getString(R.string.insurance_value_invalid));
             tvInsurance.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }

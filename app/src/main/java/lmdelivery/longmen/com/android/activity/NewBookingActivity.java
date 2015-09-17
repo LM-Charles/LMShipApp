@@ -44,6 +44,7 @@ import java.util.regex.Pattern;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.api.Order;
 import lmdelivery.longmen.com.android.api.Rate;
 import lmdelivery.longmen.com.android.bean.Address;
 import lmdelivery.longmen.com.android.bean.MyTime;
@@ -111,7 +112,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
 
         final ActionBar ab = getSupportActionBar();
-        if(ab!=null)
+        if (ab != null)
             ab.setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -131,12 +132,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if(tab.getPosition() == Constant.TAB_TIME){
-                    if(selectedTime==null){
+                if (tab.getPosition() == Constant.TAB_TIME) {
+                    if (selectedTime == null) {
                         hideFab();
                     }
-                }
-                else if (tab.getPosition() == Constant.TAB_SUMMARY) {
+                } else if (tab.getPosition() == Constant.TAB_SUMMARY) {
                     setupDoneFab();
                 } else {
                     setupNextFab();
@@ -183,7 +183,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     case Constant.TAB_INSURANCE:
                         if (!TextUtils.isEmpty(declareValue)) {
                             tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_greendot);
-                        }else {
+                        } else {
                             tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_yellowdot);
                         }
 
@@ -211,13 +211,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
 
-                Logger.e(TAG, "selected item: " + ((RateItem) data.getParcelableExtra("selected_rate")).getServiceName());
+                //Logger.e(TAG, "selected item: " + ((RateItem) data.getParcelableExtra("selected_rate")).getServiceName());
+                Logger.e(TAG, "make order successfully");
                 // Do something with the contact here (bigger example below)
             }
         }
     }
 
-    private void hideFab(){
+    private void hideFab() {
         fab.animate().scaleX(0).scaleY(0).setInterpolator(new AccelerateInterpolator()).setDuration(Constant.FAB_ANIMTION_DURATION).withEndAction(new Runnable() {
             @Override
             public void run() {
@@ -226,8 +227,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         }).start();
     }
 
-    private void showFab(){
-        if(fab.getVisibility() == View.GONE){
+    private void showFab() {
+        if (fab.getVisibility() == View.GONE) {
             fab.setVisibility(View.VISIBLE);
             fab.setScaleX(0);
             fab.setScaleY(0);
@@ -243,7 +244,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 @Override
                 public void onClick(View view) {
 //                    if(!TextUtils.isEmpty(AppController.getInstance().getUserId())){
-                        getRate(null);
+                    getRate();
 //                    }
 
                 }
@@ -280,7 +281,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         viewPager.setCurrentItem(Constant.TAB_INSURANCE, true);
                     }
                 } else if (currentTab == Constant.TAB_INSURANCE) {
-                    if (insuranceFragment.saveAndValidate(insuranceValue)) {
+                    if (insuranceFragment.saveAndValidate(insuranceValue, declareValue)) {
                         viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
                     }
                 }
@@ -299,10 +300,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         packageArrayList.add(new Package());
         insuranceValue = "0";
         declareValue = "0";
+
     }
 
     public void scrollTo(int tabPosition) {
-        if(tabLayout.getTabAt(tabPosition)!=null)
+        if (tabLayout.getTabAt(tabPosition) != null)
             tabLayout.getTabAt(tabPosition).select();
     }
 
@@ -317,7 +319,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             packageFragment = PackageFragment.newInstance();
         if (timeFragment == null)
             timeFragment = TimeFragment.newInstance();
-        if(insuranceFragment == null)
+        if (insuranceFragment == null)
             insuranceFragment = new InsuranceFragment();
         if (summaryFragment == null)
             summaryFragment = SummaryFragment.newInstance();
@@ -334,7 +336,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     @Override
     public void onTimeSelected(MyTime myTime) {
         selectedTime = myTime;
-        if(fab.getVisibility() == View.GONE){
+        if (fab.getVisibility() == View.GONE) {
             setupNextFab();
         }
     }
@@ -441,14 +443,12 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         return result;
     }
 
-    public boolean validateInsurance(){
-//        return !TextUtils.isEmpty(declareValue);
-        //everything optional
-        return insuranceFragment.saveAndValidate(insuranceValue);
+    public boolean validateInsurance() {
+        return insuranceFragment.saveAndValidate(insuranceValue, declareValue);
     }
 
 
-    private void getRate(JSONObject params){
+    private void getRate() {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.loading));
         pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -463,10 +463,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         });
         pd.show();
 
-        if (params==null)
-            params = Rate.buildEstimateParam(pickupAddr,dropOffAddr,packageArrayList,selectedTime,declareValue,insuranceValue);
 
-        Logger.d(TAG,"Sending get rate:\n" + params);
+        JSONObject params = Rate.buildEstimateParam(pickupAddr, dropOffAddr, packageArrayList, selectedTime, declareValue, insuranceValue);
+
+        Logger.d(TAG, "Sending get rate:\n" + params);
 
         getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "courier/rate/", params, new Response.Listener<JSONObject>() {
             @Override
@@ -476,13 +476,21 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 getRateRequest = null;
 
                 try {
-                    Type listType = new TypeToken<ArrayList<RateItem>>() {}.getType();
-                    ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
-                    if(rateItemList.isEmpty()){
+                    Type listType = new TypeToken<ArrayList<RateItem>>() {
+                    }.getType();
+                    final ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
+                    RateItem insuranceItem = new Gson().fromJson(response.getJSONObject("insuranceRate").toString(), RateItem.class);
+                    RateItem packageItem = new Gson().fromJson(response.getJSONObject("handlingRate").toString(), RateItem.class);
+                    if (rateItemList.isEmpty()) {
                         DialogUtil.showMessageDialog(getString(R.string.err_no_estimate), context);
-                    }else if(rateItemList.size()==1){
-                        DialogUtil.showSingleEstimateDialog(context,rateItemList.get(0));
-                    }else{
+                    } else if (rateItemList.size() == 1) {
+                        DialogUtil.showSingleEstimateDialog(context, rateItemList.get(0), insuranceItem, packageItem, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                bookShipment(rateItemList.get(0));
+                            }
+                        });
+                    } else {
                         Intent intent = new Intent(context, SelectProductActivity.class);
                         intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
                         intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
@@ -491,8 +499,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         Bundle bundle = new Bundle();
                         bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
                         bundle.putParcelableArrayList(Constant.EXTRA_RATE_ITEM, rateItemList);
+                        bundle.putParcelable(Constant.EXTRA_INSURANCE_ITEM, insuranceItem);
+                        bundle.putParcelable(Constant.EXTRA_PACKAGE_ITEM, packageItem);
                         intent.putExtras(bundle);
-                        startActivityForResult(intent,PICK_RATE_REQUEST);
+                        startActivityForResult(intent, PICK_RATE_REQUEST);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -504,53 +514,34 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             public void onErrorResponse(VolleyError error) {
                 getRateRequest = null;
                 pd.dismiss();
-                Util.handleVolleyError(error,context);
+                Util.handleVolleyError(error, context);
             }
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(getRateRequest);
     }
 
-
-
-    private void bookShipment(){
+    public void bookShipment(RateItem rateItem) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.loading));
         pd.show();
 
-        JSONObject params = new JSONObject();
-        try {
-            params.put("userId", AppController.getInstance().getUserId());
+        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + AppController.getInstance().getUserToken(),
+                Order.buildOrderParam(AppController.getInstance().getUserId(), "", rateItem, pickupAddr, dropOffAddr, packageArrayList, selectedTime, declareValue, insuranceValue),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.e(TAG, response.toString());
+                        pd.dismiss();
+                        bookShipRequest = null;
 
-            params.put("fromAddress", pickupAddr.getStreetName());
-            params.put("fromCity", pickupAddr.getCity());
-            params.put("fromProvince", pickupAddr.getProvince());
-            params.put("fromCountry", pickupAddr.getCountry());
-            params.put("fromPostal", pickupAddr.getPostalCode());
-
-            params.put("toAddress", dropOffAddr.getStreetName());
-            params.put("toCity", dropOffAddr.getCity());
-            params.put("toProvince", dropOffAddr.getProvince());
-            params.put("toCountry", dropOffAddr.getCountry());
-            params.put("toPostal", dropOffAddr.getPostalCode());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + AppController.getInstance().getUserToken(), params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.e(TAG, response.toString());
-                pd.dismiss();
-                bookShipRequest = null;
-            }
-        }, new Response.ErrorListener() {
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 bookShipRequest = null;
                 pd.dismiss();
-                Util.handleVolleyError(error,context);
+                Util.handleVolleyError(error, context);
             }
         });
         // Adding request to request queue
@@ -573,84 +564,56 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
         switch (item.getItemId()) {
             case R.id.action_diff_city:
-                try {
-                    getRate(new JSONObject("{\n" +
-                            "    \"client\" : \"2\",\n" +
-                            "    \"fromAddress\" : {\n" +
-                            "        \"address\" : \"8000 Delsom Way\",\n" +
-                            "        \"address2\" : \"unit 10\",\n" +
-                            "        \"city\" : \"Delta\",\n" +
-                            "        \"province\" : \"BC\",\n" +
-                            "        \"postal\" : \"V4C0A9\",\n" +
-                            "        \"country\" : \"CA\"\n" +
-                            "    },\n" +
-                            "    \"toAddress\" : {\n" +
-                            "        \"address\" : \"812 Wharf Street\",\n" +
-                            "        \"city\" : \"Victoria\",\n" +
-                            "        \"province\" : \"BC\",\n" +
-                            "        \"postal\" : \"V8W1T3\",\n" +
-                            "        \"country\" : \"CA\"\n" +
-                            "    },\n" +
-                            "    \"shipments\" : [\n" +
-                            "        {\n" +
-                            "            \"height\" : 10,\n" +
-                            "            \"width\" : 10,\n" +
-                            "            \"length\" : 10,\n" +
-                            "            \"weight\" : 1,\n" +
-                            "            \"shipmentPackageType\" : \"CUSTOM\",\n" +
-                            "            \"goodCategoryType\" : \"REGULAR\"\n" +
-                            "\n" +
-                            "        }\n" +
-                            "    ],\n" +
-                            "    \"handler\" : \"optional_handler\",\n" +
-                            "    \"declareValue\" : 100,\n" +
-                            "    \"insuranceValue\" : 10,\n" +
-                            "    \"appointmentDate\" : 1263110400000,\n" +
-                            "    \"appointmentSlotType\" : \"SLOT_1\"\n" +
-                            "}"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                pickupAddr.setCountry("CA");
+                pickupAddr.setCity("Richmond");
+                pickupAddr.setProvince("BC");
+                pickupAddr.setName("Rufus");
+                pickupAddr.setPhone("7788594684");
+                pickupAddr.setStreetName("7362 Elmbridge Way");
+                pickupAddr.setPostalCode("V6X 0A6");
+                pickupAddr.buildFullAddress();
+
+                dropOffAddr.setCountry("CA");
+                dropOffAddr.setProvince("MB");
+                dropOffAddr.setCity("Winnipeg");
+                dropOffAddr.setName("Rufus");
+                dropOffAddr.setPhone("7788594684");
+                dropOffAddr.setStreetName("1234 Fairfield Avenue");
+                dropOffAddr.setPostalCode("R3T 2R2");
+                dropOffAddr.buildFullAddress();
+
+                selectedTime = new MyTime("9am - 11am", 0, true);
+                packageArrayList.get(0).setBoxSize(Package.BIG_BOX);
+                packageArrayList.get(0).setWeight("5");
+                insuranceValue = "100";
+                declareValue = "100";
+                getRate();
                 break;
             case R.id.action_same_city:
-                try {
-                    getRate(new JSONObject("{\n" +
-                            "    \"client\" : \"2\",\n" +
-                            "    \"fromAddress\" : {\n" +
-                            "        \"address\" : \"8000 Delsom Way\",\n" +
-                            "        \"address2\" : \"unit 10\",\n" +
-                            "        \"city\" : \"Delta\",\n" +
-                            "        \"province\" : \"BC\",\n" +
-                            "        \"postal\" : \"V4C0A9\",\n" +
-                            "        \"country\" : \"CA\"\n" +
-                            "    },\n" +
-                            "    \"toAddress\" : {\n" +
-                            "        \"address\" : \"9188 Hemlock Drive\",\n" +
-                            "        \"city\" : \"Richmond\",\n" +
-                            "        \"province\" : \"BC\",\n" +
-                            "        \"postal\" : \"V7C2X4\",\n" +
-                            "        \"country\" : \"CA\"\n" +
-                            "    },\n" +
-                            "    \"shipments\" : [\n" +
-                            "        {\n" +
-                            "            \"height\" : 10,\n" +
-                            "            \"width\" : 10,\n" +
-                            "            \"length\" : 10,\n" +
-                            "            \"weight\" : 1,\n" +
-                            "            \"shipmentPackageType\" : \"CUSTOM\",\n" +
-                            "            \"goodCategoryType\" : \"COSMETICS\"\n" +
-                            "\n" +
-                            "        }\n" +
-                            "    ],\n" +
-                            "    \"handler\" : \"optional_handler\",\n" +
-                            "    \"declareValue\" : 100,\n" +
-                            "    \"insuranceValue\" : 10,\n" +
-                            "    \"appointmentDate\" : 1263110400000,\n" +
-                            "    \"appointmentSlotType\" : \"SLOT_1\"\n" +
-                            "}"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                pickupAddr.setCountry("CA");
+                pickupAddr.setCity("Richmond");
+                pickupAddr.setProvince("BC");
+                pickupAddr.setName("Rufus");
+                pickupAddr.setPhone("7788594684");
+                pickupAddr.setStreetName("7362 Elmbridge Way");
+                pickupAddr.setPostalCode("V6X 0A6");
+                pickupAddr.buildFullAddress();
+
+                dropOffAddr.setCountry("CA");
+                dropOffAddr.setProvince("BC");
+                dropOffAddr.setCity("Vancouver");
+                dropOffAddr.setName("Rufus");
+                dropOffAddr.setPhone("7788594684");
+                dropOffAddr.setStreetName("736 Granville Street");
+                dropOffAddr.setPostalCode("V6Z 1E4");
+                dropOffAddr.buildFullAddress();
+
+                selectedTime = new MyTime("9am - 11am", 0, true);
+                packageArrayList.get(0).setBoxSize(Package.BIG_BOX);
+                packageArrayList.get(0).setWeight("5");
+                insuranceValue = "100";
+                declareValue = "100";
+                getRate();
                 break;
         }
         return super.onOptionsItemSelected(item);

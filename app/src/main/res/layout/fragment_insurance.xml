@@ -44,7 +44,7 @@
                         android:layout_width="@dimen/setting_text_width"
                         android:layout_height="wrap_content"
                         android:hint="@string/zero_CAD"
-                        android:inputType="numberSigned"
+                        android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
                         tools:text="@string/zero_CAD"
                         android:lines="1"
@@ -136,7 +136,7 @@
                         android:layout_width="@dimen/setting_text_width"
                         android:layout_height="wrap_content"
                         android:hint="@string/zero_CAD"
-                        android:inputType="numberSigned"
+                        android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
                         android:lines="1"
                         tools:text="@string/zero_CAD"
@@ -163,7 +163,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:textSize="18sp"
-                        android:text="$0"
+                        android:text="$ 0"
                         android:layout_alignParentEnd="true"/>
 
                 </RelativeLayout>

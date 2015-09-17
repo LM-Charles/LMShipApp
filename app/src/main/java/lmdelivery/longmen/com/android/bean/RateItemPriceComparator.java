@@ -11,8 +11,8 @@ public class RateItemPriceComparator implements Comparator<RateItem> {
     @Override
     public int compare(RateItem lhs, RateItem rhs) {
         try {
-            double lPrice = Double.parseDouble(lhs.getEstimate());
-            double rPrice = Double.parseDouble(rhs.getEstimate());
+            double lPrice = lhs.getEstimate();
+            double rPrice = rhs.getEstimate();
             if (lPrice > rPrice)
                 return 1;
             else if (lPrice == rPrice)

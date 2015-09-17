@@ -131,7 +131,7 @@ public class RateItemFragment extends Fragment {
 
             final RateItem item = mValues.get(position);
             try {
-                holder.price.setText("$" + Util.roundTo2(Double.parseDouble(item.getEstimate())));
+                holder.price.setText("$" + Util.roundTo2(item.getEstimate()));
             }catch (Exception e){
                 Logger.e("Failed to parse price");
                 holder.price.setText("$-");
@@ -148,7 +148,7 @@ public class RateItemFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((SelectProductActivity)getActivity()).returnSelectedRate(item);
+                    ((SelectProductActivity)getActivity()).showPaymentDialog(item);
                 }
             });
         }

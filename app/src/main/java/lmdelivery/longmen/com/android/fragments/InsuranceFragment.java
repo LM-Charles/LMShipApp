@@ -31,7 +31,7 @@ import lmdelivery.longmen.com.android.util.Util;
 public class InsuranceFragment extends Fragment {
 
     private LinearLayout llInsurance;
-    private EditText insuranceValue;
+    private EditText insuranceValue,estimateValue;
     private TextView tvInsurace;
 
     public InsuranceFragment() {
@@ -39,17 +39,11 @@ public class InsuranceFragment extends Fragment {
     }
 
 
-    public void removeError(){
-        insuranceValue.setError(null);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
 
-        final NewBookingActivity activity = (NewBookingActivity) getActivity();
-
-        final EditText estimateValue = (EditText) rootView.findViewById(R.id.et_est_value);
+        estimateValue = (EditText) rootView.findViewById(R.id.et_est_value);
         insuranceValue = (EditText) rootView.findViewById(R.id.et_insurance_value);
         tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
         llInsurance = (LinearLayout) rootView.findViewById(R.id.ll_insurance);
@@ -65,8 +59,7 @@ public class InsuranceFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String valueStr = estimateValue.getText().toString();
-                activity.declareValue = valueStr;
+                saveAndValidate(insuranceValue.getText().toString(),estimateValue.getText().toString());
             }
         });
 
@@ -81,20 +74,7 @@ public class InsuranceFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String valueStr = insuranceValue.getText().toString();
-//                if (!TextUtils.isEmpty(valueStr)) {
-//                    int value = Integer.parseInt(valueStr);
-//                    if(value> Constant.MAX_INSURANCE_VALUE)  {
-//                        ((TextInputLayout) insuranceValue.getParent()).setError("Max $1000");
-//                    }else{
-//                        tvInsurace.setText("$ " + Util.roundTo2((double) value * 0.03));
-//                        ((TextInputLayout) insuranceValue.getParent()).setErrorEnabled(false);
-//                    }
-//                    activity.insuranceValue = valueStr;
-//
-//                }
-                saveAndValidate(valueStr);
-
+                saveAndValidate(insuranceValue.getText().toString(),estimateValue.getText().toString());
             }
         });
 
@@ -106,6 +86,9 @@ public class InsuranceFragment extends Fragment {
                     revealInsurance();
                 } else {
                     hideInsurance();
+                    insuranceValue.setText("");
+                    tvInsurace.setText("$ 0");
+                    ((NewBookingActivity) getActivity()).insuranceValue = "";
                 }
             }
         });
@@ -113,14 +96,19 @@ public class InsuranceFragment extends Fragment {
         return rootView;
     }
 
-    public boolean saveAndValidate(String value){
+    public boolean saveAndValidate(String insValue, String decValue){
         if(isAdded()){
-            ((NewBookingActivity) getActivity()).insuranceValue = value;
+            ((NewBookingActivity) getActivity()).insuranceValue = insValue.isEmpty()?"0":insValue;
+            ((NewBookingActivity) getActivity()).declareValue = decValue.isEmpty()?"0":decValue;
         }
 
-        if(!TextUtils.isEmpty(value)) {
+        if(!TextUtils.isEmpty(insValue)) {
             try {
-                int insurance = Integer.parseInt(value);
+                int insurance = Integer.parseInt(insValue);
+                if(insurance < 0)  {
+                    insuranceValue.setError(getString(R.string.cannot_be_negative));
+                    return false;
+                }
                 if(insurance> Constant.MAX_INSURANCE_VALUE)  {
                     insuranceValue.setError(getString(R.string.max_1000));
                     return false;
@@ -130,9 +118,30 @@ public class InsuranceFragment extends Fragment {
                     return true;
                 }
             } catch (Exception e) {
-                return true;
+                insuranceValue.setError(getString(R.string.invalid_number));
+                return false;
             }
-        }else
+        }
+
+        if(!TextUtils.isEmpty(decValue)) {
+            try {
+                int declare = Integer.parseInt(decValue);
+                if(declare < 0)  {
+                    estimateValue.setError(getString(R.string.cannot_be_negative));
+                    return false;
+                }else if(declare > Constant.MAX_DECLARE_VALUE)  {
+                    estimateValue.setError(getString(R.string.declare_value_too_big));
+                    return false;
+                }else{
+                    estimateValue.setError(null);
+                    return true;
+                }
+            } catch (Exception e) {
+                estimateValue.setError(getString(R.string.invalid_number));
+                return false;
+            }
+        }
+
             return true;
 
     }

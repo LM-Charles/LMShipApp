@@ -10,15 +10,22 @@ import java.util.Comparator;
  */
 public class RateItem implements Parcelable {
 
-    private String service_icon_url, category, estimate, estimatedDelivery, courierName, serviceName;
+    private String service_icon_url;
+    private String category;
+    private double estimate;
+    private String estimatedDelivery;
+    private String courierName;
+    private String serviceName;
+    private double taxEstimate;
 
-    public RateItem( String service_icon_url, String category, String estimate, String estimatedDelivery, String courierName, String serviceName) {
+    public RateItem( String service_icon_url, String category, double estimate, String estimatedDelivery, String courierName, String serviceName, double taxEstimate) {
         this.service_icon_url = service_icon_url;
         this.category = category;
         this.estimate = estimate;
         this.estimatedDelivery = estimatedDelivery;
         this.courierName = courierName;
         this.serviceName = serviceName;
+        this.taxEstimate = taxEstimate;
     }
 
     public String getService_icon_url() {
@@ -37,11 +44,11 @@ public class RateItem implements Parcelable {
         this.category = category;
     }
 
-    public String getEstimate() {
+    public double getEstimate() {
         return estimate;
     }
 
-    public void setEstimate(String estimate) {
+    public void setEstimate(double estimate) {
         this.estimate = estimate;
     }
 
@@ -68,6 +75,13 @@ public class RateItem implements Parcelable {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+    public double getTaxEstimate() {
+        return taxEstimate;
+    }
+
+    public void setTaxEstimate(double taxEstimate) {
+        this.taxEstimate = taxEstimate;
+    }
 
     @Override
     public int describeContents() {
@@ -78,19 +92,21 @@ public class RateItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(service_icon_url);
         dest.writeString(category);
-        dest.writeString(estimate);
+        dest.writeDouble(estimate);
         dest.writeString(estimatedDelivery);
         dest.writeString(courierName);
         dest.writeString(serviceName);
+        dest.writeDouble(taxEstimate);
     }
 
     public RateItem(Parcel in) {
         service_icon_url = in.readString();
         category = in.readString();
-        estimate = in.readString();
+        estimate = in.readDouble();
         estimatedDelivery = in.readString();
         courierName = in.readString();
         serviceName = in.readString();
+        taxEstimate = in.readDouble();
     }
 
     public static final Parcelable.Creator<RateItem> CREATOR = new Parcelable.Creator<RateItem>() {

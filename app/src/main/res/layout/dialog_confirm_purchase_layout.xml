@@ -48,14 +48,14 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/price"
-            android:textSize="24sp"
-            tools:text="$50.56" />
+        <!--<TextView-->
+            <!--android:id="@+id/tv_price"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="@color/price"-->
+            <!--android:textSize="24sp"-->
+            <!--tools:text="$50.56" />-->
 
 
     </LinearLayout>
@@ -64,12 +64,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:alpha=".2"
-            android:background="@android:color/black" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -82,6 +76,7 @@
                 android:text="@string/shipping" />
 
             <TextView
+                android:id="@+id/tv_ship_price"
                 style="@style/Label.Price"
                 android:layout_alignParentEnd="true"
                 tools:text="$ 11.4" />
@@ -90,7 +85,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:alpha=".2"
+            android:alpha=".1"
             android:background="@android:color/black" />
 
         <RelativeLayout
@@ -104,6 +99,7 @@
                 android:text="@string/packaging" />
 
             <TextView
+                android:id="@+id/tv_package_price"
                 style="@style/Label.Price"
                 android:layout_alignParentEnd="true"
                 tools:text="$ 11.4" />
@@ -112,7 +108,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:alpha=".2"
+            android:alpha=".1"
             android:background="@android:color/black" />
 
         <RelativeLayout
@@ -126,6 +122,7 @@
                 android:text="@string/insurance" />
 
             <TextView
+                android:id="@+id/tv_insurance_price"
                 style="@style/Label.Price"
                 android:layout_alignParentEnd="true"
                 tools:text="$ 11.4" />
@@ -134,7 +131,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:alpha=".2"
+            android:alpha=".1"
             android:background="@android:color/black" />
 
         <RelativeLayout
@@ -148,7 +145,32 @@
                 android:text="@string/tax" />
 
             <TextView
+                android:id="@+id/tv_tax_price"
                 style="@style/Label.Price"
+                android:layout_alignParentEnd="true"
+                tools:text="$ 11.4" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha=".1"
+            android:background="@android:color/black" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Label.Gray"
+                android:layout_alignParentStart="true"
+                android:text="@string/total" />
+
+            <TextView
+                android:id="@+id/tv_total_price"
+                style="@style/Label.Price"
+                android:textStyle="bold"
                 android:layout_alignParentEnd="true"
                 tools:text="$ 11.4" />
         </RelativeLayout>

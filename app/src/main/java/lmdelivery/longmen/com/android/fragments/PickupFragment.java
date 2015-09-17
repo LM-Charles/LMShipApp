@@ -292,12 +292,17 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
         if (getActivity() != null) {
             ((NewBookingActivity) getActivity()).pickupAddr.setUnitNumber(etUnit.getText().toString());
         }
+        try {
             boolean validatePickupCity = validatePickupCity(etCity.getText().toString());
             boolean validatePostalCode = validatePostalCode(etPostal.getText().toString());
             boolean validateStreet = validateStreet(mAutocompleteView.getText().toString());
             boolean validateName = validateName(etName.getText().toString());
             boolean validatePhone = validatePhone(etPhone.getText().toString());
             return validatePickupCity && validatePostalCode && validateStreet && validateName && validatePhone;
+        }catch (Exception e){
+            return false;
+        }
+
 
     }
 

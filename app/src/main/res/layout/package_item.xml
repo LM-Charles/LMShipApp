@@ -75,7 +75,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:text="@string/five_bucks"
-                    android:textColor="@color/red"
+                    android:textColor="@color/price"
                     android:textSize="16sp"/>
             </RelativeLayout>
             <!--<View-->
@@ -121,7 +121,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/weight"
-                        android:inputType="numberSigned"
+                        android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
                         tools:text="weight" />
 
@@ -158,7 +158,7 @@
                         android:hint="@string/length"
                         android:labelFor="@string/length"
                         android:textSize="@dimen/edit_text_font_size"
-                        android:inputType="numberSigned"
+                        android:inputType="number"
                         tools:text="length" />
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
@@ -172,7 +172,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/width"
-                        android:inputType="numberSigned"
+                        android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
                         tools:text="width" />
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
@@ -187,7 +187,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/height"
-                        android:inputType="numberSigned"
+                        android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
                         tools:text="height" />
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>

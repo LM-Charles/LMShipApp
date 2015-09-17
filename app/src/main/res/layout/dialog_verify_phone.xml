@@ -47,8 +47,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/verify_code"
             android:maxLines="1"
-            android:singleLine="true"/>
-            <!--android:inputType="numberSigned"/>-->
+            android:singleLine="true"
+            android:inputType="number"/>
     </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
     <Button

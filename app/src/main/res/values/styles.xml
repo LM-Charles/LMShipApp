@@ -1,8 +1,4 @@
 <resources>
-
-    <style name="Theme.DesignDemo" parent="Base.Theme.LMTheme">
-    </style>
-
     <style name="Base.Theme.LMTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -15,6 +11,8 @@
 
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:alpha">.87</item>
     </style>
 
     <style name="RobotoButtonStyle" parent="android:Widget.Holo.Light.Button">
