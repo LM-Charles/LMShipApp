@@ -117,7 +117,8 @@ public class LoginFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    //empty in order to use the value in the ui form
+                    attemptLogin("","");
                     return true;
                 }
                 return false;
@@ -128,7 +129,8 @@ public class LoginFragment extends Fragment {
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                //empty in order to use the value in the ui form
+                attemptLogin("","");
             }
         });
 
@@ -151,38 +153,39 @@ public class LoginFragment extends Fragment {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
-
+    public void attemptLogin(String email,String password) {
         if (loginRequest != null) {
             return;
         }
 
-        // Reset errors.
-        tilPassWord.setError(null);
-        tilEmail.setError(null);
-
-        // Store values at the time of the login attempt.
-        final String email = mEmailView.getText().toString();
-        final String password = mPasswordView.getText().toString();
-
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(password)) {
-            tilPassWord.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
-        }
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            // Reset errors.
+            tilPassWord.setError(null);
+            tilEmail.setError(null);
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            tilEmail.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            tilEmail.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
+            // Store values at the time of the login attempt.
+            email = mEmailView.getText().toString();
+            password = mPasswordView.getText().toString();
+
+            if (TextUtils.isEmpty(password)) {
+                tilPassWord.setError(getString(R.string.error_field_required));
+                focusView = mPasswordView;
+                cancel = true;
+            }
+
+            // Check for a valid email address.
+            if (TextUtils.isEmpty(email)) {
+                tilEmail.setError(getString(R.string.error_field_required));
+                focusView = mEmailView;
+                cancel = true;
+            } else if (!isEmailValid(email)) {
+                tilEmail.setError(getString(R.string.error_invalid_email));
+                focusView = mEmailView;
+                cancel = true;
+            }
         }
 
         if (cancel) {
@@ -202,6 +205,8 @@ public class LoginFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            final String finalEmail = email;
+            final String finalPassword = password;
             loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "login?email=" + email + "&password=" + password, params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -211,14 +216,22 @@ public class LoginFragment extends Fragment {
                     try {
                         String id = response.getString("id");
                         String token = response.getString("apiToken");
-
+                        String status = response.getString("status");
                         SharedPreferences sharedPref = getActivity().getSharedPreferences(Constant.SHARE_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString(Constant.SHARE_USER_EMAIL, email);
+                        editor.putString(Constant.SHARE_USER_EMAIL, finalEmail);
                         editor.putString(Constant.SHARE_USER_ID, id);
                         editor.putString(Constant.SHARE_USER_TOKEN, token);
                         editor.apply();
-                        Toast.makeText(getActivity(), "Login success", Toast.LENGTH_LONG).show();
+
+                        if(!status.equals("ACTIVE")){
+                            Toast.makeText(getActivity(), R.string.verify_again, Toast.LENGTH_LONG).show();
+                            ((LoginActivity) getActivity()).showVerifyPhoneNumberDialog(finalEmail, finalPassword);
+                        }else{
+                            editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
+                            editor.apply();
+                            ((LoginActivity) getActivity()).returnLoginSuccessResult();
+                        }
 
                     }catch (Exception e){
                         e.printStackTrace();

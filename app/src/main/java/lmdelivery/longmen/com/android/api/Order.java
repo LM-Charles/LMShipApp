@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android.api;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -24,12 +25,6 @@ import lmdelivery.longmen.com.android.util.Unit;
  */
 public class Order {
     private static final String TAG = Order.class.getSimpleName();
-
-    public static void makeOrder(final Context context, final JsonObjectRequest bookShipRequest){
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(bookShipRequest);
-    }
 
     public static JSONObject buildOrderParam(String clientId, String nickName, RateItem rateItem, Address pickupAddr, Address dropOffAddr, ArrayList<Package> packageArrayList,
                                                 MyTime selectedTime, String declareValue, String insuranceValue){
@@ -62,7 +57,10 @@ public class Order {
             params.put("insuranceValue", insuranceValue);
             params.put("appointmentDate", selectedTime.getUnixDate());
             params.put("appointmentSlotType", selectedTime.getSlot());
-            params.put("nickName", nickName);
+            if(!TextUtils.isEmpty(nickName))
+                params.put("nickName", nickName);
+
+            Logger.i(TAG,params.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();

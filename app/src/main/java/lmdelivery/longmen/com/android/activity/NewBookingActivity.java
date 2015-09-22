@@ -89,6 +89,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private Context context;
 
+
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
      * to the user's sign in state as well as the Google's APIs.
@@ -243,10 +244,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    if(!TextUtils.isEmpty(AppController.getInstance().getUserId())){
-                    getRate();
-//                    }
-
+                   getRate();
                 }
             });
         } else {
@@ -487,7 +485,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         DialogUtil.showSingleEstimateDialog(context, rateItemList.get(0), insuranceItem, packageItem, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                bookShipment(rateItemList.get(0));
+                                if(AppController.getInstance().isUserActivated()){
+                                    bookShipment(rateItemList.get(0));
+                                }else{
+                                    Toast.makeText(getApplicationContext(), R.string.register_before_book,Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(context, LoginActivity.class);
+                                    intent.putExtra(Constant.EXTRA_INSURANCE_ITEM, rateItemList.get(0));
+                                    startActivityForResult(intent,Constant.LOGIN_REQUEST_CODE);
+                                }
                             }
                         });
                     } else {

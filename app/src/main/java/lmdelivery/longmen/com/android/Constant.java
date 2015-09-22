@@ -30,6 +30,7 @@ public class Constant {
     public static final String SHARE_USER_EMAIL = "SHARE_USER_EMAIL";
     public static final String SHARE_USER_TOKEN = "SHARE_USER_TOKEN";
     public static final String SHARE_USER_PHONE = "SHARE_USER_PHONE";
+    public static final String SHARE_IS_USER_ACTIVATED = "SHARE_IS_USER_ACTIVATED";
     public static final String SHARE_USER_ID = "SHARE_USER_ID";
     public static final String SHARE_WEIGHT_UNIT = "SHARE_WEIGHT_UNIT";
     public static final String SHARE_LENGTH_UNIT = "SHARE_LENGTH_UNIT";
@@ -40,6 +41,9 @@ public class Constant {
     public static final int TAB_TIME = 3;
     public static final int TAB_INSURANCE = 4;
     public static final int TAB_SUMMARY = 5;
+
+
+    public static final int LOGIN_REQUEST_CODE = 0;
 
 
     public static final String[] CATEGORY_ARR = {"REGULAR", "LUXURY", "COSMETICS", "DOCUMENT"};
@@ -57,6 +61,5 @@ public class Constant {
         citiesInVan.add("BURNABY");
         citiesInVan.add("COQUITLAM");
     }
-
 
 }

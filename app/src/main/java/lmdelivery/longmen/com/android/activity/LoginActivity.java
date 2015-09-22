@@ -1,8 +1,15 @@
 package lmdelivery.longmen.com.android.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,21 +18,42 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import lmdelivery.longmen.com.android.AppController;
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.fragments.LoginFragment;
 import lmdelivery.longmen.com.android.fragments.RegisterFragment;
+import lmdelivery.longmen.com.android.util.DialogUtil;
+import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Util;
 
 
 /**
@@ -42,11 +70,17 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     public LoginFragment loginFragment;
     public RegisterFragment registerFragment;
 
+    private JsonObjectRequest getCodeRequest;
+    private JsonObjectRequest activateAccountRequest;
+
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        context = this;
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         rootLayout = (CoordinatorLayout) findViewById(R.id.main_content);
@@ -204,11 +238,21 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     public void onStop() {
         super.onStop();
 
-        if(loginFragment!=null){
+        if (loginFragment != null) {
             loginFragment.cancelQueueRequest();
         }
-        if(registerFragment!=null){
+        if (registerFragment != null) {
             registerFragment.cancelQueueRequest();
+        }
+
+        if (getCodeRequest != null) {
+            getCodeRequest.cancel();
+            getCodeRequest = null;
+        }
+
+        if (activateAccountRequest != null) {
+            activateAccountRequest.cancel();
+            activateAccountRequest = null;
         }
     }
 
@@ -239,6 +283,243 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         public CharSequence getPageTitle(int position) {
             return mFragmentTitles.get(position);
         }
+    }
+
+    public void returnLoginSuccessResult() {
+        Intent returnIntent = new Intent();
+        //returnIntent.putExtra(Constant.EXTRA_RATE_ITEM, );
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
+    public void showVerifyPhoneNumberDialog(final String email, final String password) {
+        final Dialog dialog = new Dialog(this);
+
+        // Get the layout inflater
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_verify_phone, null);
+        final EditText etPhone = (EditText) view.findViewById(R.id.et_email);
+        final EditText etCode = (EditText) view.findViewById(R.id.et_code);
+
+        final TextInputLayout tilPhone = (TextInputLayout) view.findViewById(R.id.til_phone);
+        final TextInputLayout tilCode = (TextInputLayout) view.findViewById(R.id.til_code);
+        final Button btnSave = (Button) view.findViewById(R.id.btn_save);
+        final Button btnVerify = (Button) view.findViewById(R.id.btn_verify);
+        final Button btnContact = (Button) view.findViewById(R.id.btn_contact);
+        final Button btnRequestAgain = (Button) view.findViewById(R.id.btn_request_again);
+
+        final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
+
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.sendSupportEmail(context);
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getCodeRequest != null)
+                    return;
+
+                final String phone = etPhone.getText().toString();
+                if (phone.isEmpty()) {
+                    tilPhone.setError(getString(R.string.error_field_required));
+                } else if (phone.length() < 10) {
+                    tilPhone.setError(getString(R.string.error_phone_too_short));
+                } else if (phone.length() > 10) {
+                    tilPhone.setError(getString(R.string.error_phone_too_long));
+                } else {
+                    final ProgressDialog pd = new ProgressDialog(context);
+                    pd.setMessage(getString(R.string.loading));
+                    pd.show();
+
+
+                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation?phone=1" + phone + "&email=" + email + "&password=" + password, new Response.Listener<JSONObject>() {
+
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            getCodeRequest = null;
+                            Logger.e(TAG, response.toString());
+                            pd.dismiss();
+                            AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
+
+                            try {
+                                String message = response.getString("message");
+                                DialogUtil.showMessageDialog(message, context);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            etPhone.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                    btnContact.setVisibility(View.GONE);
+                                    btnVerify.setVisibility(View.GONE);
+                                    btnSave.setVisibility(View.VISIBLE);
+                                    tilCode.setVisibility(View.GONE);
+                                    btnRequestAgain.setVisibility(View.GONE);
+                                    tvNoCode.setVisibility(View.GONE);
+                                }
+                            });
+                            btnContact.setVisibility(View.VISIBLE);
+                            btnVerify.setVisibility(View.VISIBLE);
+                            btnSave.setVisibility(View.GONE);
+                            btnRequestAgain.setVisibility(View.VISIBLE);
+                            tilCode.setVisibility(View.VISIBLE);
+                            tvNoCode.setVisibility(View.VISIBLE);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            getCodeRequest = null;
+                            pd.dismiss();
+                            Util.handleVolleyError(error, context);
+                        }
+                    });
+
+                    // Adding request to request queue
+                    AppController.getInstance().addToRequestQueue(getCodeRequest);
+                }
+            }
+        });
+
+        btnRequestAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendGetCodeRequest(etPhone, tilPhone);
+            }
+        });
+
+
+        btnVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendActivateAccountRequest(etCode, tilCode, dialog, email, password);
+            }
+        });
+
+        // Inflate and set the layout for the dialog
+        dialog.setContentView(view);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setTitle(getString(R.string.verify_phone));
+        dialog.show();
+        etPhone.post(new Runnable() {
+            @Override
+            public void run() {
+                String phoneNumber = Util.getPhoneNumber();
+                if (!TextUtils.isEmpty(phoneNumber))
+                    etPhone.setText(phoneNumber);
+            }
+        });
+    }
+
+    private void sendGetCodeRequest(EditText etPhone, TextInputLayout tilPhone) {
+        if (getCodeRequest != null)
+            return;
+
+        final String phone = etPhone.getText().toString();
+        if (phone.isEmpty()) {
+            tilPhone.setError(getString(R.string.error_field_required));
+        } else if (phone.length() < 10) {
+            tilPhone.setError(getString(R.string.error_phone_too_short));
+        } else if (phone.length() > 10) {
+            tilPhone.setError(getString(R.string.error_phone_too_long));
+        } else {
+
+            final ProgressDialog pd = new ProgressDialog(context);
+            pd.setMessage(getString(R.string.loading));
+            pd.show();
+
+            getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    getCodeRequest = null;
+                    Logger.e(TAG, response.toString());
+                    pd.dismiss();
+                    AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
+                    DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), context);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    getCodeRequest = null;
+                    pd.dismiss();
+                    Util.handleVolleyError(error, context);
+                }
+            });
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(getCodeRequest);
+        }
+    }
+
+    private void sendActivateAccountRequest(EditText etCode, TextInputLayout tilCode, final Dialog dialog, final String email, final String password) {
+        if (activateAccountRequest != null) {
+            return;
+        }
+
+        String code = etCode.getText().toString().trim();
+        if (code.isEmpty()) {
+            tilCode.setError(getString(R.string.error_field_required));
+        } else {
+            final ProgressDialog pd = new ProgressDialog(context);
+            pd.setMessage(getString(R.string.loading));
+            pd.show();
+
+
+            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation/" + code + "?email=" + AppController.getInstance().getUserEmail(), new Response.Listener<JSONObject>() {
+
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    activateAccountRequest = null;
+                    Logger.e(TAG, response.toString());
+                    pd.dismiss();
+                    dialog.dismiss();
+                    SharedPreferences sharedPref = context.getSharedPreferences(Constant.SHARE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
+                    editor.apply();
+                    showVerifySuccessDialog(email, password);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Logger.e(TAG, error.toString());
+                    activateAccountRequest = null;
+                    pd.dismiss();
+                    Util.handleVolleyError(error, context);
+                }
+            });
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(activateAccountRequest, "activateAccount");
+        }
+    }
+
+    private void showVerifySuccessDialog(final String email, final String password) {
+        new AlertDialog.Builder(context)
+                .setMessage(getString(R.string.account_activated))
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        loginFragment.attemptLogin(email, password);
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
 

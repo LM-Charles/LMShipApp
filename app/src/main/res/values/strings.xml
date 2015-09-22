@@ -105,5 +105,8 @@
     <string name="declare_value_too_big">Declare value too large</string>
     <string name="unknown">UNKNOWN</string>
     <string name="total">Total</string>
+    <string name="register_before_book">Please register/sign in before making a booking</string>
+    <string name="login_success">Login success</string>
+    <string name="verify_again">Please verify your phone number</string>
 
 </resources>

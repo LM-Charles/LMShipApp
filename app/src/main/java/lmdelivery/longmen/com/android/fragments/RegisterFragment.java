@@ -61,8 +61,7 @@ public class RegisterFragment extends Fragment {
     private TextInputLayout tilEmail;
 
     private JsonObjectRequest registerRequest;
-    private JsonObjectRequest getCodeRequest;
-    private JsonObjectRequest activateAccountRequest;
+
 
 
     private OnRegisterListener mListener;
@@ -78,15 +77,6 @@ public class RegisterFragment extends Fragment {
             registerRequest = null;
         }
 
-        if (getCodeRequest != null) {
-            getCodeRequest.cancel();
-            getCodeRequest = null;
-        }
-
-        if (activateAccountRequest != null) {
-            activateAccountRequest.cancel();
-            activateAccountRequest = null;
-        }
     }
 
     @Override
@@ -170,7 +160,7 @@ public class RegisterFragment extends Fragment {
 
         // Store values at the time of the login attempt.
         final String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -237,7 +227,7 @@ public class RegisterFragment extends Fragment {
                         editor.putString(Constant.SHARE_USER_ID, id);
                         editor.apply();
                         Toast.makeText(getActivity(), getString(R.string.register_successful), Toast.LENGTH_LONG).show();
-                        showVerifyPhoneNumberDialog();
+                        ((LoginActivity)getActivity()).showVerifyPhoneNumberDialog(email, password);
                     } catch (Exception e) {
                         e.printStackTrace();
                         DialogUtil.showMessageDialog(getString(R.string.err_connection), getActivity());
@@ -289,136 +279,6 @@ public class RegisterFragment extends Fragment {
     }
 
 
-    public void showVerifyPhoneNumberDialog() {
-        final Dialog dialog = new Dialog(getActivity());
-
-        // Get the layout inflater
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_verify_phone, null);
-        final EditText etPhone = (EditText) view.findViewById(R.id.et_email);
-        final EditText etCode = (EditText) view.findViewById(R.id.et_code);
-
-        final TextInputLayout tilPhone = (TextInputLayout) view.findViewById(R.id.til_phone);
-        final TextInputLayout tilCode = (TextInputLayout) view.findViewById(R.id.til_code);
-        final Button btnSave = (Button) view.findViewById(R.id.btn_save);
-        final Button btnVerify = (Button) view.findViewById(R.id.btn_verify);
-        final Button btnContact = (Button) view.findViewById(R.id.btn_contact);
-        final Button btnRequestAgain = (Button) view.findViewById(R.id.btn_request_again);
-
-        final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
-
-        btnContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Util.sendSupportEmail(getActivity());
-            }
-        });
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getCodeRequest != null)
-                    return;
-
-                final String phone = etPhone.getText().toString();
-                if (phone.isEmpty()) {
-                    tilPhone.setError(getString(R.string.error_field_required));
-                } else if (phone.length() < 10) {
-                    tilPhone.setError(getString(R.string.error_phone_too_short));
-                } else if (phone.length() > 10) {
-                    tilPhone.setError(getString(R.string.error_phone_too_long));
-                } else {
-                    final ProgressDialog pd = new ProgressDialog(getActivity());
-                    pd.setMessage(getString(R.string.loading));
-                    pd.show();
-
-
-                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation?phone=1"+ phone + "&email=" + mEmailView.getText().toString() + "&password=" + mPasswordView.getText().toString(), new Response.Listener<JSONObject>() {
-
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            getCodeRequest = null;
-                            Logger.e(TAG, response.toString());
-                            pd.dismiss();
-                            AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-
-                            try {
-                                String message = response.getString("message");
-                                DialogUtil.showMessageDialog(message, getActivity());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            etPhone.addTextChangedListener(new TextWatcher() {
-                                @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                                @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                                @Override
-                                public void afterTextChanged(Editable s) {
-                                    btnContact.setVisibility(View.GONE);
-                                    btnVerify.setVisibility(View.GONE);
-                                    btnSave.setVisibility(View.VISIBLE);
-                                    tilCode.setVisibility(View.GONE);
-                                    btnRequestAgain.setVisibility(View.GONE);
-                                    tvNoCode.setVisibility(View.GONE);
-                                }
-                            });
-                            btnContact.setVisibility(View.VISIBLE);
-                            btnVerify.setVisibility(View.VISIBLE);
-                            btnSave.setVisibility(View.GONE);
-                            btnRequestAgain.setVisibility(View.VISIBLE);
-                            tilCode.setVisibility(View.VISIBLE);
-                            tvNoCode.setVisibility(View.VISIBLE);
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            getCodeRequest = null;
-                            pd.dismiss();
-                            Util.handleVolleyError(error, getActivity());
-                        }
-                    });
-
-                    // Adding request to request queue
-                    AppController.getInstance().addToRequestQueue(getCodeRequest);
-                }
-            }
-        });
-
-        btnRequestAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendGetCodeRequest(etPhone, tilPhone);
-            }
-        });
-
-
-        btnVerify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendActivateAccountRequest(etCode, tilCode, dialog);
-            }
-        });
-
-        // Inflate and set the layout for the dialog
-        dialog.setContentView(view);
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setTitle(getString(R.string.verify_phone));
-        dialog.show();
-        etPhone.post(new Runnable() {
-            @Override
-            public void run() {
-                String phoneNumber = Util.getPhoneNumber();
-                if (!TextUtils.isEmpty(phoneNumber))
-                    etPhone.setText(phoneNumber);
-            }
-        });
-    }
 
     public void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         if (getActivity() != null) {
@@ -429,96 +289,7 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private void sendGetCodeRequest(EditText etPhone, TextInputLayout tilPhone) {
-        if (getCodeRequest != null)
-            return;
-
-        final String phone = etPhone.getText().toString();
-        if (phone.isEmpty()) {
-            tilPhone.setError(getString(R.string.error_field_required));
-        } else if (phone.length() < 10) {
-            tilPhone.setError(getString(R.string.error_phone_too_short));
-        } else if (phone.length() > 10) {
-            tilPhone.setError(getString(R.string.error_phone_too_long));
-        } else {
-
-            final ProgressDialog pd = new ProgressDialog(getActivity());
-            pd.setMessage(getString(R.string.loading));
-            pd.show();
-
-            getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
-
-                @Override
-                public void onResponse(JSONObject response) {
-                    getCodeRequest = null;
-                    Logger.e(TAG, response.toString());
-                    pd.dismiss();
-                    AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-                    DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), getActivity());
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    getCodeRequest = null;
-                    pd.dismiss();
-                    Util.handleVolleyError(error, getActivity());
-                }
-            });
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(getCodeRequest);
-        }
-    }
-
-    private void sendActivateAccountRequest(EditText etCode, TextInputLayout tilCode,final Dialog dialog) {
-        if (activateAccountRequest != null) {
-            return;
-        }
-
-        String code = etCode.getText().toString().trim();
-        if (code.isEmpty()) {
-            tilCode.setError(getString(R.string.error_field_required));
-        } else {
-            final ProgressDialog pd = new ProgressDialog(getActivity());
-            pd.setMessage(getString(R.string.loading));
-            pd.show();
 
 
-            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation/" + code + "?email=" + AppController.getInstance().getUserEmail(), new Response.Listener<JSONObject>() {
 
-
-                @Override
-                public void onResponse(JSONObject response) {
-                    activateAccountRequest = null;
-                    Logger.e(TAG, response.toString());
-                    pd.dismiss();
-                    dialog.dismiss();
-                    showVerifySuccessDialog();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Logger.e(TAG, error.toString());
-                    activateAccountRequest = null;
-                    pd.dismiss();
-                    Util.handleVolleyError(error, getActivity());
-                }
-            });
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(activateAccountRequest, "activateAccount");
-        }
-    }
-
-    private void showVerifySuccessDialog() {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(getString(R.string.account_activated))
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        loginActivity.finish();
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
 }

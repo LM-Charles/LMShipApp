@@ -76,4 +76,8 @@ public class AppController extends com.activeandroid.app.Application {
     public String getUserEmail(){
         return getDefaultSharePreferences().getString(Constant.SHARE_USER_EMAIL,"");
     }
+
+    public boolean isUserActivated(){
+        return getDefaultSharePreferences().getBoolean(Constant.SHARE_IS_USER_ACTIVATED,false);
+    }
 }
