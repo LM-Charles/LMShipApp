@@ -57,8 +57,7 @@ public class Order {
             params.put("insuranceValue", insuranceValue);
             params.put("appointmentDate", selectedTime.getUnixDate());
             params.put("appointmentSlotType", selectedTime.getSlot());
-            if(!TextUtils.isEmpty(nickName))
-                params.put("nickName", nickName);
+            params.put("nickname", nickName);
 
             Logger.i(TAG,params.toString());
 
