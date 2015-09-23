@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.bean.*;
 import lmdelivery.longmen.com.android.bean.Package;
 import lmdelivery.longmen.com.android.util.CountryCode;
@@ -21,8 +22,7 @@ public class Rate {
                                                 MyTime selectedTime, String declareValue, String insuranceValue){
         JSONObject params = new JSONObject();
         try {
-            params.put("client",2);
-//            params.put("client",AppController.getInstance().getUserId());
+            params.put("client", AppController.getInstance().getUserId());
 
             JSONObject pickup = new JSONObject();
             pickup.put("address", pickupAddr.getStreetName());

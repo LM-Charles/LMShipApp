@@ -108,5 +108,8 @@
     <string name="register_before_book">Please register/sign in before making a booking</string>
     <string name="login_success">Login success</string>
     <string name="verify_again">Please verify your phone number</string>
+    <string name="book_success">Your shipment was booked successfully.</string>
+    <string name="logout_confirm">Are you sure that you want to logout from:\n%1$s</string>
+    <string name="logout_success">Successfully logged out</string>
 
 </resources>

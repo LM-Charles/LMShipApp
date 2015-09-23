@@ -231,6 +231,7 @@ public class LoginFragment extends Fragment {
                             editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
                             editor.apply();
                             ((LoginActivity) getActivity()).returnLoginSuccessResult();
+                            Toast.makeText(getActivity(), R.string.login_success, Toast.LENGTH_LONG).show();
                         }
 
                     }catch (Exception e){
@@ -348,7 +349,7 @@ public class LoginFragment extends Fragment {
                     pd.setMessage(loginActivity.getString(R.string.loading));
                     pd.show();
 
-                    getResetCodeReq = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/resetPassword", new Response.Listener<JSONObject>() {
+                    getResetCodeReq = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/resetPassword?email=" + email, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Logger.e(TAG, response.toString());
@@ -451,14 +452,5 @@ public class LoginFragment extends Fragment {
         dialog.setTitle(getActivity().getString(R.string.forgot_password)
         );
         dialog.show();
-        etEmail.post(new Runnable() {
-            @Override
-            public void run() {
-                String phoneNumber = Util.getPhoneNumber();
-                if (!TextUtils.isEmpty(phoneNumber))
-                    etEmail.setText(phoneNumber);
-            }
-        });
     }
-
 }

@@ -49,6 +49,7 @@ import java.util.List;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.bean.RateItem;
 import lmdelivery.longmen.com.android.fragments.LoginFragment;
 import lmdelivery.longmen.com.android.fragments.RegisterFragment;
 import lmdelivery.longmen.com.android.util.DialogUtil;
@@ -74,6 +75,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     private JsonObjectRequest activateAccountRequest;
 
     private Context context;
+    private RateItem rateItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +89,12 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         collapsingToolbar.setTitle("龙门镖局");
         loadBackdrop();
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        rateItem = getIntent().getParcelableExtra(Constant.EXTRA_RATE_ITEM);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
@@ -287,7 +292,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
 
     public void returnLoginSuccessResult() {
         Intent returnIntent = new Intent();
-        //returnIntent.putExtra(Constant.EXTRA_RATE_ITEM, );
+        returnIntent.putExtra(Constant.EXTRA_RATE_ITEM, rateItem);
         setResult(RESULT_OK, returnIntent);
         finish();
     }

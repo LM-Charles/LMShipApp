@@ -1,7 +1,11 @@
 package lmdelivery.longmen.com.android.activity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -25,22 +29,36 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+import lmdelivery.longmen.com.android.AppController;
+import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.Shipment;
+import lmdelivery.longmen.com.android.util.DialogUtil;
+import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.Util;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final java.lang.String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
     private Context context;
     private RecyclerView recyclerView;
     private ShipItemRecyclerViewAdapter adapter;
+    private JsonObjectRequest logoutRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +129,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (logoutRequest != null)
+            logoutRequest.cancel();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (AppController.getInstance().isUserActivated())
+            getMenuInflater().inflate(R.menu.menu_main_logout, menu);
+        else
+            getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -128,12 +162,71 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
-            case R.id.action_settings:
+            case R.id.action_login:
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.action_logout:
+                new AlertDialog.Builder(context)
+                        .setMessage(getString(R.string.logout_confirm, AppController.getInstance().getUserEmail()))
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                logout();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        if (logoutRequest != null) {
+            return;
+        }
+
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.loading));
+        pd.show();
+
+        logoutRequest = new JsonObjectRequest(Request.Method.DELETE, Constant.REST_URL + "login/" + AppController.getInstance().getUserId() + "?token=" + AppController.getInstance().getUserToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                logoutRequest = null;
+                try {
+                    SharedPreferences.Editor editor = AppController.getInstance().getDefaultSharePreferences().edit();
+                    editor.putString(Constant.SHARE_USER_EMAIL, "");
+                    editor.putString(Constant.SHARE_USER_ID, "");
+                    editor.putString(Constant.SHARE_USER_TOKEN, "");
+                    editor.putString(Constant.SHARE_USER_PHONE, "");
+                    editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, false);
+                    editor.apply();
+                    invalidateOptionsMenu();
+                    Toast.makeText(context, R.string.logout_success, Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                logoutRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error, context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(logoutRequest, "logout");
     }
 
 
