@@ -52,7 +52,6 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             app:layout_scrollFlags="enterAlways"
-            app:tabTextColor="@color/white_text"
             app:tabSelectedTextColor="@color/white_text"
             app:tabIndicatorColor="@color/yellow"/>
 

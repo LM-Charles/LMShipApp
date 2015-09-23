@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 /**
@@ -49,7 +52,10 @@ public class AppController extends com.activeandroid.app.Application {
 
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
-        getRequestQueue().add(req);
+        req.setRetryPolicy(new DefaultRetryPolicy(10000, //10 seconds time out
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                getRequestQueue().add(req);
     }
 
     public void cancelPendingRequests(Object tag) {

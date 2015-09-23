@@ -63,7 +63,6 @@ public class RegisterFragment extends Fragment {
     private JsonObjectRequest registerRequest;
 
 
-
     private OnRegisterListener mListener;
 
     public RegisterFragment() {
@@ -71,12 +70,10 @@ public class RegisterFragment extends Fragment {
     }
 
     public void cancelQueueRequest() {
-
         if (registerRequest != null) {
             registerRequest.cancel();
             registerRequest = null;
         }
-
     }
 
     @Override
@@ -227,7 +224,7 @@ public class RegisterFragment extends Fragment {
                         editor.putString(Constant.SHARE_USER_ID, id);
                         editor.apply();
                         Toast.makeText(getActivity(), getString(R.string.register_successful), Toast.LENGTH_LONG).show();
-                        ((LoginActivity)getActivity()).showVerifyPhoneNumberDialog(email, password);
+                        ((LoginActivity) getActivity()).showVerifyPhoneNumberDialog(email, password);
                     } catch (Exception e) {
                         e.printStackTrace();
                         DialogUtil.showMessageDialog(getString(R.string.err_connection), getActivity());
@@ -279,7 +276,6 @@ public class RegisterFragment extends Fragment {
     }
 
 
-
     public void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         if (getActivity() != null) {
             //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
@@ -288,8 +284,6 @@ public class RegisterFragment extends Fragment {
             mEmailView.setAdapter(adapter);
         }
     }
-
-
 
 
 }

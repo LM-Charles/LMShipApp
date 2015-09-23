@@ -212,29 +212,33 @@ public class SelectProductActivity extends SwipeBackActivity {
     }
 
     public void bookShipment(RateItem rateItem){
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage(getString(R.string.loading));
-        pd.show();
-
-        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + "userToken",
-                Order.buildOrderParam(AppController.getInstance().getUserId(), "",rateItem,mPickupAddr,mDropoffAddr,mPackageList,mTime,mEstValue,mInsuranceValue)
-                , new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.e(TAG, response.toString());
-                pd.dismiss();
-                bookShipRequest = null;
-                returnSelectedRate();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                bookShipRequest = null;
-                pd.dismiss();
-                Util.handleVolleyError(error, context);
-            }
-        });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(bookShipRequest);
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(Constant.EXTRA_RATE_ITEM, rateItem);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+//        final ProgressDialog pd = new ProgressDialog(this);
+//        pd.setMessage(getString(R.string.loading));
+//        pd.show();
+//
+//        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + "userToken",
+//                Order.buildOrderParam(AppController.getInstance().getUserId(), "",rateItem,mPickupAddr,mDropoffAddr,mPackageList,mTime,mEstValue,mInsuranceValue)
+//                , new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Logger.e(TAG, response.toString());
+//                pd.dismiss();
+//                bookShipRequest = null;
+//                returnSelectedRate();
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                bookShipRequest = null;
+//                pd.dismiss();
+//                Util.handleVolleyError(error, context);
+//            }
+//        });
+//        // Adding request to request queue
+//        AppController.getInstance().addToRequestQueue(bookShipRequest);
     }
 }

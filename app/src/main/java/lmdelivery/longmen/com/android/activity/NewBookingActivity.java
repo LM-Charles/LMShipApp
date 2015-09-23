@@ -1,5 +1,6 @@
 package lmdelivery.longmen.com.android.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -211,9 +212,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
-
+                RateItem rateItem = data.getParcelableExtra(Constant.EXTRA_RATE_ITEM);
+                if(rateItem!=null)
+                    bookShipment(rateItem);
                 //Logger.e(TAG, "selected item: " + ((RateItem) data.getParcelableExtra("selected_rate")).getServiceName());
-                Logger.e(TAG, "make order successfully");
+                Logger.d(TAG, "make order successfully");
                 // Do something with the contact here (bigger example below)
             }
         }
@@ -536,10 +539,10 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.e(TAG, response.toString());
+                        Logger.e(TAG, "book Shipment response: " + response.toString());
                         pd.dismiss();
                         bookShipRequest = null;
-
+                        showBookSuccessDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -578,7 +581,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 pickupAddr.setPostalCode("V6X 0A6");
                 pickupAddr.buildFullAddress();
 
-                dropOffAddr.setCountry("CA");
+                dropOffAddr.setCountry("Canada");
                 dropOffAddr.setProvince("MB");
                 dropOffAddr.setCity("Winnipeg");
                 dropOffAddr.setName("Rufus");
@@ -604,7 +607,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 pickupAddr.setPostalCode("V6X 0A6");
                 pickupAddr.buildFullAddress();
 
-                dropOffAddr.setCountry("CA");
+                dropOffAddr.setCountry("Canada");
                 dropOffAddr.setProvince("BC");
                 dropOffAddr.setCity("Vancouver");
                 dropOffAddr.setName("Rufus");
@@ -622,5 +625,21 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showBookSuccessDialog() {
+        new AlertDialog.Builder(context)
+                .setMessage(getString(R.string.book_success))
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finishBooking();
+                    }
+                })
+                .show();
+    }
+
+    private void finishBooking(){
+        finish();
     }
 }
