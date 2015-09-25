@@ -3,6 +3,7 @@ package lmdelivery.longmen.com.android.bean;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -14,10 +15,13 @@ public class Address extends Model implements Serializable {
     @Column(name = "FullAddress")
     private String fullAddress;
     @Column(name = "StreetName")
+    @SerializedName("address")
     private String streetName;
     @Column(name = "UnitNumber")
+    @SerializedName("address2")
     private String unitNumber;
     @Column(name = "PostalCode")
+    @SerializedName("postal")
     private String postalCode;
     @Column(name = "City")
     private String city;

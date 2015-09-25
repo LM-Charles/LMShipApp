@@ -32,12 +32,18 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +51,9 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.Shipment;
+import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.bean.Shipments;
+import lmdelivery.longmen.com.android.bean.TrackingDetail;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -58,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private RecyclerView recyclerView;
     private ShipItemRecyclerViewAdapter adapter;
+
     private JsonObjectRequest logoutRequest;
+    private JsonArrayRequest updateTrackingRequest;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,26 +100,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        CardView cardView = (CardView) findViewById(R.id.welcome_card);
-        final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
 //        rv.setVisibility(View.GONE);
         setupRecyclerView();
-
+//
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        ArrayList<Shipment> shipItems = new ArrayList<>();
-                        for (int i = 0; i < 10; i++) {
-                            shipItems.add(Shipment.newFakeShipmentInstance());
-                        }
-                        adapter.updateValues(shipItems);
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
+                updateShipments();
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    public void run() {
+//                        ArrayList<Shipments> shipItems = new ArrayList<>();
+//                        for (int i = 0; i < 10; i++) {
+//                            shipItems.add(Shipments.newFakeShipmentInstance());
+//                        }
+//                        adapter.updateValues(shipItems);
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                }, 2000);
             }
         });
     }
@@ -116,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        ArrayList<Shipment> shipItems = new ArrayList<>();
-        Shipment empty = Shipment.newEmptyShipmentInstance();
+        ArrayList<Shipments> shipItems = new ArrayList<>();
+        Shipments empty = new Shipments();
         shipItems.add(empty);
 //        for(int i = 0; i < 10; i++){
 //            RateItem item = new RateItem("1","http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
@@ -139,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if (logoutRequest != null)
             logoutRequest.cancel();
+        if (updateTrackingRequest != null)
+            updateTrackingRequest.cancel();
     }
 
     @Override
@@ -185,6 +199,40 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateShipments() {
+        if (updateTrackingRequest != null) {
+            return;
+        }
+
+        updateTrackingRequest = new JsonArrayRequest(Request.Method.GET, Constant.REST_URL + "order?userId=" + AppController.getInstance().getUserId() + "&token=" + AppController.getInstance().getUserToken()
+                + "&limit=" + "20" + "&offset=" + "0", new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Logger.i(TAG, response.toString());
+                updateTrackingRequest = null;
+                mSwipeRefreshLayout.setRefreshing(false);
+                try {
+                    Type listType = new TypeToken<ArrayList<TrackingDetail>>() {
+                    }.getType();
+                    ArrayList<TrackingDetail> trackingDetailArrayList = new Gson().fromJson(response.toString(), listType);
+                    Logger.e(TAG,trackingDetailArrayList.size()+"");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                updateTrackingRequest = null;
+                mSwipeRefreshLayout.setRefreshing(false);
+                Util.handleVolleyError(error, context);
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(updateTrackingRequest, "updateTrackingRequest");
     }
 
     private void logout() {
@@ -247,12 +295,12 @@ public class MainActivity extends AppCompatActivity {
         private final TypedValue mTypedValue = new TypedValue();
         private Context context;
         private int mBackground;
-        private List<Shipment> mValues;
+        private List<Shipments> mValues;
         private int selectedPosition;
         private static final int TYPE_EMPTY = 0;
         private static final int TYPE_SHIPMENT = 1;
 
-        public ShipItemRecyclerViewAdapter(ArrayList<Shipment> items, Context context) {
+        public ShipItemRecyclerViewAdapter(ArrayList<Shipments> items, Context context) {
             mValues = items;
             this.context = context;
         }
@@ -277,21 +325,21 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        public Shipment getValueAt(int position) {
+        public Shipments getValueAt(int position) {
             return mValues.get(position);
         }
 
-        public void updateValues(ArrayList<Shipment> shipments) {
+        public void updateValues(ArrayList<Shipments> shipments) {
             mValues = shipments;
             notifyDataSetChanged();
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (mValues.get(position).isEmpty)
-                return TYPE_EMPTY;
-            else
-                return TYPE_SHIPMENT;
+//            if (mValues.get(position).isEmpty)
+            return TYPE_EMPTY;
+//            else
+//                return TYPE_SHIPMENT;
         }
 
         @Override
@@ -307,29 +355,29 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-            if (getItemViewType(position) == TYPE_SHIPMENT) {
-                holder.title.setText(mValues.get(position).nickName);
-                holder.status.setText(mValues.get(position).status);
-                holder.btnTrack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "track btn clicked", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                Glide.with(context)
-                        .load(mValues.get(position).serviceIconUrl)
-                        .centerCrop()
-                                //.placeholder(R.drawable.loading_spinner)
-                        .crossFade()
-                        .into(holder.icon);
-
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "view clicked", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+//            if (getItemViewType(position) == TYPE_SHIPMENT) {
+//                holder.title.setText(mValues.get(position).nickName);
+//                holder.status.setText(mValues.get(position).status);
+//                holder.btnTrack.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(context, "track btn clicked", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                Glide.with(context)
+//                        .load(mValues.get(position).serviceIconUrl)
+//                        .centerCrop()
+//                                //.placeholder(R.drawable.loading_spinner)
+//                        .crossFade()
+//                        .into(holder.icon);
+//
+//                holder.mView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(context, "view clicked", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
         }
 
         @Override

@@ -477,8 +477,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 getRateRequest = null;
 
                 try {
-                    Type listType = new TypeToken<ArrayList<RateItem>>() {
-                    }.getType();
+                    Type listType = new TypeToken<ArrayList<RateItem>>() {}.getType();
                     final ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
                     RateItem insuranceItem = new Gson().fromJson(response.getJSONObject("insuranceRate").toString(), RateItem.class);
                     RateItem packageItem = new Gson().fromJson(response.getJSONObject("handlingRate").toString(), RateItem.class);
@@ -539,7 +538,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.e(TAG, "book Shipment response: " + response.toString());
+                        Logger.e(TAG, "book order response: " + response.toString());
                         pd.dismiss();
                         bookShipRequest = null;
                         showBookSuccessDialog();
