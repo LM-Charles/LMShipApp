@@ -110,27 +110,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 updateShipments();
-//                Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    public void run() {
-//                        ArrayList<Shipments> shipItems = new ArrayList<>();
-//                        for (int i = 0; i < 10; i++) {
-//                            shipItems.add(Shipments.newFakeShipmentInstance());
-//                        }
-//                        adapter.updateValues(shipItems);
-//                        mSwipeRefreshLayout.setRefreshing(false);
-//                    }
-//                }, 2000);
             }
         });
+        updateShipments();
     }
 
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        ArrayList<Shipments> shipItems = new ArrayList<>();
-        Shipments empty = new Shipments();
-        shipItems.add(empty);
+        ArrayList<TrackingDetail> shipItems = new ArrayList<>();
+
 //        for(int i = 0; i < 10; i++){
 //            RateItem item = new RateItem("1","http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
 //            rateItems.add(item);
@@ -138,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ShipItemRecyclerViewAdapter(shipItems, context);
         recyclerView.setItemAnimator(new SlideInUpAnimator());
         recyclerView.setAdapter(adapter);
+
     }
 
     @Override
@@ -206,6 +196,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        if(!AppController.getInstance().isUserActivated()) {
+            adapter.setEmptyView();
+            return;
+        }
+
+        if(!mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(true);
+
         updateTrackingRequest = new JsonArrayRequest(Request.Method.GET, Constant.REST_URL + "order?userId=" + AppController.getInstance().getUserId() + "&token=" + AppController.getInstance().getUserToken()
                 + "&limit=" + "20" + "&offset=" + "0", new Response.Listener<JSONArray>() {
             @Override
@@ -217,6 +215,10 @@ public class MainActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<TrackingDetail>>() {
                     }.getType();
                     ArrayList<TrackingDetail> trackingDetailArrayList = new Gson().fromJson(response.toString(), listType);
+                    if(trackingDetailArrayList.size()==0)
+                        adapter.setEmptyView();
+                    else
+                        adapter.updateValues(trackingDetailArrayList);
                     Logger.e(TAG,trackingDetailArrayList.size()+"");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -295,14 +297,23 @@ public class MainActivity extends AppCompatActivity {
         private final TypedValue mTypedValue = new TypedValue();
         private Context context;
         private int mBackground;
-        private List<Shipments> mValues;
+        private List<TrackingDetail> mValues;
         private int selectedPosition;
         private static final int TYPE_EMPTY = 0;
         private static final int TYPE_SHIPMENT = 1;
+        private boolean isEmpty = false;
 
-        public ShipItemRecyclerViewAdapter(ArrayList<Shipments> items, Context context) {
+        public ShipItemRecyclerViewAdapter(ArrayList<TrackingDetail> items, Context context) {
             mValues = items;
             this.context = context;
+        }
+
+        public void setEmptyView() {
+            isEmpty = true;
+            TrackingDetail trackingDetail = new TrackingDetail();
+            mValues.clear();
+            mValues.add(trackingDetail);
+            notifyDataSetChanged();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -325,21 +336,22 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        public Shipments getValueAt(int position) {
+        public TrackingDetail getValueAt(int position) {
             return mValues.get(position);
         }
 
-        public void updateValues(ArrayList<Shipments> shipments) {
+        public void updateValues(ArrayList<TrackingDetail> shipments) {
+            isEmpty = false;
             mValues = shipments;
             notifyDataSetChanged();
         }
 
         @Override
         public int getItemViewType(int position) {
-//            if (mValues.get(position).isEmpty)
-            return TYPE_EMPTY;
-//            else
-//                return TYPE_SHIPMENT;
+            if (isEmpty)
+                return TYPE_EMPTY;
+            else
+                return TYPE_SHIPMENT;
         }
 
         @Override
