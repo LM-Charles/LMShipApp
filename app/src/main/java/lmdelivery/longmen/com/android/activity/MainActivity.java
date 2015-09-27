@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -112,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 updateShipments();
             }
         });
-        updateShipments();
     }
 
     private void setupRecyclerView() {
@@ -127,13 +127,13 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ShipItemRecyclerViewAdapter(shipItems, context);
         recyclerView.setItemAnimator(new SlideInUpAnimator());
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         invalidateOptionsMenu();
+        updateShipments();
     }
 
     @Override
@@ -198,6 +198,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(!AppController.getInstance().isUserActivated()) {
             adapter.setEmptyView();
+            if(mSwipeRefreshLayout.isRefreshing()){
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             return;
         }
 
@@ -262,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
                     invalidateOptionsMenu();
                     Toast.makeText(context, R.string.logout_success, Toast.LENGTH_LONG).show();
+                    updateShipments();
                 } catch (Exception e) {
                     e.printStackTrace();
                     DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
@@ -367,29 +371,46 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-//            if (getItemViewType(position) == TYPE_SHIPMENT) {
-//                holder.title.setText(mValues.get(position).nickName);
-//                holder.status.setText(mValues.get(position).status);
-//                holder.btnTrack.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(context, "track btn clicked", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                Glide.with(context)
-//                        .load(mValues.get(position).serviceIconUrl)
-//                        .centerCrop()
-//                                //.placeholder(R.drawable.loading_spinner)
-//                        .crossFade()
-//                        .into(holder.icon);
-//
-//                holder.mView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(context, "view clicked", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
+            if (getItemViewType(position) == TYPE_SHIPMENT) {
+                final TrackingDetail trackingDetail = mValues.get(position);
+                holder.title.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
+                //display courier status if exist
+                if(trackingDetail.getShipments()!=null && trackingDetail.getShipments().length>0 && trackingDetail.getShipments()[0].getTracking()!=null){
+                    holder.status.setText(Util.toDisplayCase(trackingDetail.getShipments()[0].getTracking().getTrackingStatus()));
+                }else{
+                    //otherwise display LM status
+                    holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
+                }
+
+                holder.btnTrack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (trackingDetail.getShipments() != null && trackingDetail.getShipments().length > 0 && trackingDetail.getShipments()[0].getTracking() != null && trackingDetail.getShipments()[0].getTracking().getTrackingURL() != null) {
+                            try {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trackingDetail.getShipments()[0].getTracking().getTrackingURL()));
+                                context.startActivity(browserIntent);
+                            } catch (Exception e) {
+                                Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                Glide.with(context)
+                        .load(R.mipmap.ic_launcher)
+                        .centerCrop()
+                        .crossFade()
+                        .into(holder.icon);
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "view clicked", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
         @Override

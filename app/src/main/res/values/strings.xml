@@ -111,5 +111,6 @@
     <string name="book_success">Your shipment was booked successfully.</string>
     <string name="logout_confirm">Are you sure that you want to logout from:\n%1$s</string>
     <string name="logout_success">Successfully logged out</string>
+    <string name="no_tracking_number">Tracking number not available yet</string>
 
 </resources>
