@@ -1,9 +1,11 @@
 package lmdelivery.longmen.com.android.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by rufus on 2015-09-22.
  */
-public class OrderStatusModel {
+public class OrderStatusModel implements Serializable{
     String status;
     String statusDescription;
     String handler;

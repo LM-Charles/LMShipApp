@@ -370,17 +370,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-
             if (getItemViewType(position) == TYPE_SHIPMENT) {
                 final TrackingDetail trackingDetail = mValues.get(position);
                 holder.title.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
                 //display courier status if exist
-                if(trackingDetail.getShipments()!=null && trackingDetail.getShipments().length>0 && trackingDetail.getShipments()[0].getTracking()!=null){
-                    holder.status.setText(Util.toDisplayCase(trackingDetail.getShipments()[0].getTracking().getTrackingStatus()));
-                }else{
+//                if(trackingDetail.getShipments()!=null && trackingDetail.getShipments().length>0 && trackingDetail.getShipments()[0].getTracking()!=null){
+//                    holder.status.setText(Util.toDisplayCase(trackingDetail.getShipments()[0].getTracking().getTrackingStatus()));
+//                }else{
                     //otherwise display LM status
                     holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
-                }
+//                }
 
                 holder.btnTrack.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -407,7 +406,9 @@ public class MainActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "view clicked", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, TrackDetailActivity.class);
+                        intent.putExtra(Constant.EXTRA_TRACK_DETAIL, trackingDetail);
+                        context.startActivity(intent);
                     }
                 });
             }

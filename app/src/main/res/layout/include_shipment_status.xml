@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/tracking_detail_padding">
+
+        <TextView
+            android:id="@+id/tv_package_title"
+            style="@style/Track.Label"
+            tools:text="@string/package_name"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/tracking_detail_padding">
+
+        <TextView
+            style="@style/Track.Label"
+            android:text="@string/status"/>
+
+        <TextView
+            android:id="@+id/tv_tracking_status"
+            style="@style/Track.content"
+            tools:text="Delivered"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/tracking_detail_padding">
+
+        <TextView
+            style="@style/Track.Label"
+            android:text="@string/location"/>
+
+        <TextView
+            android:id="@+id/tv_location"
+            style="@style/Track.content"
+            tools:text="Beijing, China"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/tracking_detail_padding">
+
+        <TextView
+            style="@style/Track.Label"
+            android:text="@string/tracking_number"/>
+
+        <TextView
+            android:id="@+id/tv_tracking_number"
+            style="@style/Track.content"
+            android:maxLines="1"
+            tools:text="1Z12345E0291980793"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha=".1"
+        android:background="@android:color/black" />
+</LinearLayout>

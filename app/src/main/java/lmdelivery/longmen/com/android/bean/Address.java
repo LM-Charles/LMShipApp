@@ -1,5 +1,7 @@
 package lmdelivery.longmen.com.android.bean;
 
+import android.text.TextUtils;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -48,7 +50,12 @@ public class Address extends Model implements Serializable {
     }
 
     public String buildFullAddress(){
-        String result = name + "\n" + phone + "\n";
+        String result = "";
+        if(!TextUtils.isEmpty(name))
+            result += name + "\n";
+        if(!TextUtils.isEmpty(name))
+            result += phone + "\n";
+
         if(country.equals("China") || country.equals("中国")){
 
             result += streetName;

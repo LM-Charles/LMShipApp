@@ -20,6 +20,7 @@ public class Constant {
     public static final String EXTRA_ESTIMATE_VALUE = "EXTRA_ESTIMATE_VALUE";
     public static final String EXTRA_INSURANCE_ITEM = "EXTRA_INSURANCE_ITEM";
     public static final String EXTRA_PACKAGE_ITEM = "EXTRA_PACKAGE_ITEM";
+    public static final String EXTRA_TRACK_DETAIL = "EXTRA_TRACK_DETAIL";
 
     public static final int FAB_ANIMTION_DURATION = 500;
     public static final int MAX_CITY_LENGTH = 15;

@@ -129,8 +129,23 @@
         <item name="android:textSize">@dimen/label_icon_font_size</item>
         <item name="android:layout_marginBottom">7dp</item>
         <item name="android:gravity">center_vertical</item>
-
     </style>
+
+    <style name="Track.Label"  parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/label_text_font_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Track.content"  parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/label_text_font_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+
 
 
     <dimen name="label_icon_font_size">22sp</dimen>

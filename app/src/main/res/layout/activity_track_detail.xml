@@ -1,0 +1,227 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="lmdelivery.longmen.com.android.activity.TrackDetailActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tv_carrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif"
+                    android:textSize="24sp"
+                    tools:text="Title" />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tv_carrier"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:textSize="14sp"
+                    tools:text="Sub Title" />
+                <!--android:background="@drawable/shape_delivered_rectangle"-->
+
+                <ImageView
+                    android:id="@+id/iv_ship_icon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentEnd="true" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".1"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:id="@+id/ll_package"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/tracking_detail_padding">
+
+            <TextView
+                style="@style/Track.Label"
+                android:text="@string/id"/>
+
+                <TextView
+                    android:id="@+id/tv_id"
+                    style="@style/Track.content"
+                    tools:text="123"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".1"
+                android:background="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/tracking_detail_padding">
+
+                <TextView
+                    style="@style/Track.Label"
+                    android:text="@string/order_date"/>
+
+                <TextView
+                    android:id="@+id/tv_order_date"
+                    style="@style/Track.content"
+                    tools:text="Jun 6, 2014"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".1"
+                android:background="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/tracking_detail_padding">
+
+                <TextView
+                    style="@style/Track.Label"
+                    android:text="@string/ship_from"/>
+
+                <TextView
+                    android:id="@+id/tv_from"
+                    style="@style/Track.content"
+                    tools:text="11920 Forge Pl, Richmond"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".1"
+                android:background="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/tracking_detail_padding">
+
+                <TextView
+                    style="@style/Track.Label"
+                    android:text="@string/ship_to"/>
+
+                <TextView
+                    android:id="@+id/tv_to"
+                    style="@style/Track.content"
+                    tools:text="7362 Elmbridge Way, Richmond"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".1"
+                android:background="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/tracking_detail_padding">
+
+                <TextView
+                    style="@style/Track.Label"
+                    android:text="@string/pickup_date"/>
+
+                <TextView
+                    android:id="@+id/tv_pickup_date"
+                    style="@style/Track.content"
+                    tools:text="12:00AM - 2:00PM Jun 14, 2015"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".1"
+                android:background="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/tracking_detail_padding">
+
+                <TextView
+                    style="@style/Track.Label"
+                    android:text="@string/insurance"/>
+
+                <TextView
+                    android:id="@+id/tv_insurance"
+                    style="@style/Track.content"
+                    tools:text="$300"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".1"
+                android:background="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/tracking_detail_padding">
+
+                <TextView
+                    style="@style/Track.Label"
+                    android:text="@string/cost"/>
+
+                <TextView
+                    android:id="@+id/tv_cost"
+                    style="@style/Track.content"
+                    tools:text="$12.56"/>
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</LinearLayout>

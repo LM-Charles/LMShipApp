@@ -1,9 +1,11 @@
 package lmdelivery.longmen.com.android.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by rufus on 2015-09-22.
  */
-public class Tracking {
+public class Tracking implements Serializable{
     String pickupDate;
     String trackingDate;
     String trackingCity;

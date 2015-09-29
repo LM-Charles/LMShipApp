@@ -79,6 +79,7 @@ public class MyTime implements Serializable{
             return tomorrow.getTime()/1000L;
         }
     }
+
     public String getSlot(){
         return "SLOT_" + (timeCatergory+1);
     }

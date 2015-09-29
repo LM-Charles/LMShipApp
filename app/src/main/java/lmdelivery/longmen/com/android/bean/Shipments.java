@@ -4,13 +4,14 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by rzhu on 7/24/2015.
  */
 @Table(name = "Shipments")
-public class Shipments extends Model {
+public class Shipments extends Model implements Serializable {
     int id;
     double height;
     double width;
