@@ -123,5 +123,8 @@
     <string name="not_available">Not available</string>
     <string name="fail_to_open_browser">Failed to open browser</string>
     <string name="pickup_date">Pickup Date</string>
+    <string name="for_import_tax">For import tax calculation</string>
+    <string name="today">Today</string>
+    <string name="Tomorrow">Tomorrow</string>
 
 </resources>

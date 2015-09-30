@@ -34,6 +34,7 @@
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">@color/white_text</item>
         <item name="android:textSize">@dimen/btn_font_size</item>
+        <item name="android:padding">16dp</item>
     </style>
 
 </resources>

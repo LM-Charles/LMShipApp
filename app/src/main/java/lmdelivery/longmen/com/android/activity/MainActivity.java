@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +26,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,7 +66,7 @@ import lmdelivery.longmen.com.android.util.Util;
 public class MainActivity extends AppCompatActivity {
 
     private static final java.lang.String TAG = MainActivity.class.getSimpleName();
-    private DrawerLayout mDrawerLayout;
+    //    private DrawerLayout mDrawerLayout;
     private Context context;
     private RecyclerView recyclerView;
     private ShipItemRecyclerViewAdapter adapter;
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private JsonObjectRequest logoutRequest;
     private JsonArrayRequest updateTrackingRequest;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,69 +84,74 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
+//        final ActionBar ab = getSupportActionBar();
+//        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+//        ab.setDisplayHomeAsUpEnabled(true);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        if (navigationView != null) {
+//            setupDrawerContent(navigationView);
+//        }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fab.setEnabled(false);
                 Intent intent = new Intent(context, NewBookingActivity.class);
                 startActivity(intent);
             }
         });
 
-//        CardView cardView = (CardView) findViewById(R.id.welcome_card);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
-//        rv.setVisibility(View.GONE);
         setupRecyclerView();
-//
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 updateShipments();
             }
         });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+
     }
 
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         ArrayList<TrackingDetail> shipItems = new ArrayList<>();
-
-//        for(int i = 0; i < 10; i++){
-//            RateItem item = new RateItem("1","http://www.hdicon.com/wp-content/uploads/2010/08/ups_2003.png", "Category 1", "$ 55", "Average 1 - 2 Business day", "ups", "One day express");
-//            rateItems.add(item);
-//        }
         adapter = new ShipItemRecyclerViewAdapter(shipItems, context);
-        recyclerView.setItemAnimator(new SlideInUpAnimator());
+        //recyclerView.setItemAnimator(new SlideInUpAnimator());
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        fab.setEnabled(true);
         invalidateOptionsMenu();
-        updateShipments();
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                updateShipments();
+            }
+        });
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (logoutRequest != null)
+        if (logoutRequest != null) {
             logoutRequest.cancel();
-        if (updateTrackingRequest != null)
+            logoutRequest = null;
+        }
+        if (updateTrackingRequest != null) {
             updateTrackingRequest.cancel();
+            updateTrackingRequest = null;
+        }
     }
 
     @Override
@@ -157,15 +166,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                break;
+//            case android.R.id.home:
+//                mDrawerLayout.openDrawer(GravityCompat.START);
+//                break;
             case R.id.action_login:
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -196,15 +200,15 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if(!AppController.getInstance().isUserActivated()) {
+        if (!AppController.getInstance().isUserActivated()) {
             adapter.setEmptyView();
-            if(mSwipeRefreshLayout.isRefreshing()){
+            if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
             return;
         }
 
-        if(!mSwipeRefreshLayout.isRefreshing())
+        if (!mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
 
         updateTrackingRequest = new JsonArrayRequest(Request.Method.GET, Constant.REST_URL + "order?userId=" + AppController.getInstance().getUserId() + "&token=" + AppController.getInstance().getUserToken()
@@ -218,11 +222,10 @@ public class MainActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<TrackingDetail>>() {
                     }.getType();
                     ArrayList<TrackingDetail> trackingDetailArrayList = new Gson().fromJson(response.toString(), listType);
-                    if(trackingDetailArrayList.size()==0)
+                    if (trackingDetailArrayList.size() == 0)
                         adapter.setEmptyView();
                     else
                         adapter.updateValues(trackingDetailArrayList);
-                    Logger.e(TAG,trackingDetailArrayList.size()+"");
                 } catch (Exception e) {
                     e.printStackTrace();
                     DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
@@ -233,7 +236,8 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 updateTrackingRequest = null;
                 mSwipeRefreshLayout.setRefreshing(false);
-                Util.handleVolleyError(error, context);
+//                Util.handleVolleyError(error, context);
+                adapter.setEmptyView();
             }
         });
         // Adding request to request queue
@@ -284,17 +288,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
-    }
+//    private void setupDrawerContent(NavigationView navigationView) {
+//        navigationView.setNavigationItemSelectedListener(
+//                new NavigationView.OnNavigationItemSelectedListener() {
+//                    @Override
+//                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+//                        menuItem.setChecked(true);
+//                        mDrawerLayout.closeDrawers();
+//                        return true;
+//                    }
+//                });
+//    }
 
     static private class ShipItemRecyclerViewAdapter extends RecyclerView.Adapter<ShipItemRecyclerViewAdapter.ViewHolder> {
 
@@ -306,6 +310,8 @@ public class MainActivity extends AppCompatActivity {
         private static final int TYPE_EMPTY = 0;
         private static final int TYPE_SHIPMENT = 1;
         private boolean isEmpty = false;
+        // Allows to remember the last item shown on screen
+        private int lastPosition = -1;
 
         public ShipItemRecyclerViewAdapter(ArrayList<TrackingDetail> items, Context context) {
             mValues = items;
@@ -321,9 +327,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public String mBoundString;
-
-            public final LinearLayout mView;
+            public final CardView mView;
             public final TextView title;
             public final TextView status;
             public final TextView btnTrack;
@@ -331,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
             public ViewHolder(View view) {
                 super(view);
-                mView = (LinearLayout) view.findViewById(R.id.ll_card);
+                mView = (CardView) view.findViewById(R.id.card);
                 title = (TextView) view.findViewById(R.id.tv_title);
                 status = (TextView) view.findViewById(R.id.tv_status);
                 btnTrack = (TextView) view.findViewById(R.id.btn_track);
@@ -347,7 +351,32 @@ public class MainActivity extends AppCompatActivity {
         public void updateValues(ArrayList<TrackingDetail> shipments) {
             isEmpty = false;
             mValues = shipments;
+            lastPosition = -1;
             notifyDataSetChanged();
+//            isEmpty = false;
+//            mValues.clear();
+//            notifyDataSetChanged();
+//            int counter = 0;
+//            for(TrackingDetail trackingDetail : shipments){
+//                mValues.add(trackingDetail);
+//                notifyItemInserted(counter);
+//                counter++;
+//            }
+        }
+
+        /**
+         * Here is the key method to apply the animation
+         */
+        private void setAnimation(View viewToAnimate, int position)
+        {
+            // If the bound view wasn't previously displayed on screen, it's animated
+            if (position > lastPosition && viewToAnimate!=null)
+            {
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.abc_slide_in_bottom);
+                animation.setStartOffset(position*80);
+                viewToAnimate.startAnimation(animation);
+                lastPosition = position;
+            }
         }
 
         @Override
@@ -374,12 +403,12 @@ public class MainActivity extends AppCompatActivity {
                 final TrackingDetail trackingDetail = mValues.get(position);
                 holder.title.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
                 //display courier status if exist
-//                if(trackingDetail.getShipments()!=null && trackingDetail.getShipments().length>0 && trackingDetail.getShipments()[0].getTracking()!=null){
-//                    holder.status.setText(Util.toDisplayCase(trackingDetail.getShipments()[0].getTracking().getTrackingStatus()));
-//                }else{
-                    //otherwise display LM status
-                    holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
-//                }
+                if(trackingDetail.getShipments()!=null && trackingDetail.getShipments().length>0 && trackingDetail.getShipments()[0].getTracking()!=null){
+                    holder.status.setText(Util.toDisplayCase(trackingDetail.getShipments()[0].getTracking().getTrackingStatus()));
+                }else{
+                //otherwise display LM status
+                holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
+                }
 
                 holder.btnTrack.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -411,7 +440,12 @@ public class MainActivity extends AppCompatActivity {
                         context.startActivity(intent);
                     }
                 });
+
+                // Here you apply the animation when the view is bound
+                setAnimation(holder.mView, position);
             }
+
+
         }
 
         @Override

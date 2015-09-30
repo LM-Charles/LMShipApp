@@ -59,8 +59,7 @@ import rx.Subscriber;
  * Use the {@link PickupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PickupFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class PickupFragment extends Fragment {
 
     private static final java.lang.String TAG = PickupFragment.class.getName();
     private static final LatLngBounds BOUNDS_GREATER_VANCOUVER = new LatLngBounds(new LatLng(49.004506, -123.305074), new LatLng(49.292849, -122.710439));
@@ -116,11 +115,6 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
 
             // Register a listener that receives callbacks when a suggestion has been selected
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-
-            // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-            // the entire world.
-            Set<Integer> filterTypes = new HashSet<>();
-            filterTypes.add(Place.TYPE_STREET_ADDRESS);
             mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_GREATER_VANCOUVER, null);//AutocompleteFilter.create(filterTypes));
             mAutocompleteView.setAdapter(mAdapter);
 
@@ -134,34 +128,6 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
         // Inflate the layout for this fragment
         return rootView;
     }
-
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//
-//        super.onActivityCreated(savedInstanceState);
-//        Observable<String> textChangeObservable = Observable.create(new Observable.OnSubscribe<String>() {
-//            @Override
-//            public void call(final Subscriber<? super String> observer) {
-//                final TextWatcher watcher = new TextWatcher() {
-//                    @Override
-//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                    }
-//
-//                    @Override
-//                    public void afterTextChanged(final Editable editable) {
-//                        observer.onNext(editable.toString());
-//                    }
-//                };
-//            }
-//        });
-//    }
-
 
     private void setUpTextListener() {
         etPhone.addTextChangedListener(new TextWatcher() {
@@ -518,21 +484,5 @@ public class PickupFragment extends Fragment implements GoogleApiClient.Connecti
                 }
             });
         }
-    }
-
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 }

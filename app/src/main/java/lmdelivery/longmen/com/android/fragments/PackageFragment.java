@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
@@ -89,7 +90,7 @@ public class PackageFragment extends Fragment {
         packageArrayList = ((NewBookingActivity)getActivity()).packageArrayList;
         mAdapter = new PackageRecyclerViewAdapter(getActivity(), packageArrayList, recyclerView);
         recyclerView.setAdapter(mAdapter);
-        recyclerView.setItemAnimator(new SlideInLeftAnimator());
+        recyclerView.setItemAnimator(new SlideInUpAnimator());
     }
 
     public boolean validateAllPackage(){

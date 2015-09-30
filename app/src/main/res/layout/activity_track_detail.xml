@@ -151,7 +151,7 @@
                 <TextView
                     android:id="@+id/tv_to"
                     style="@style/Track.content"
-                    tools:text="7362 Elmbridge Way, Richmond"/>
+                    tools:text="7362 Elmbridge Way\nRichmond"/>
             </RelativeLayout>
 
             <View
@@ -172,7 +172,7 @@
                 <TextView
                     android:id="@+id/tv_pickup_date"
                     style="@style/Track.content"
-                    tools:text="12:00AM - 2:00PM Jun 14, 2015"/>
+                    tools:text="12:00AM - 2:00PM\nJun 14, 2015"/>
             </RelativeLayout>
 
             <View

@@ -1,6 +1,7 @@
 package lmdelivery.longmen.com.android.bean;
 
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -8,6 +9,8 @@ import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+
+import lmdelivery.longmen.com.android.util.CountryCode;
 
 /**
  * Created by rzhu on 6/22/2015.
@@ -56,22 +59,24 @@ public class Address extends Model implements Serializable {
         if(!TextUtils.isEmpty(name))
             result += phone + "\n";
 
-        if(country.equals("China") || country.equals("中国")){
+        String countryName = !TextUtils.isEmpty(CountryCode.getCountryName(country))?CountryCode.getCountryName(country):country;
 
+        if(countryName.equals("China") || countryName.equals("中国") || countryName.equals("CN")){
             result += streetName;
             if(!unitNumber.isEmpty()){
                 result += " " + unitNumber + "\n";
             }
-            result += city + ", " + province + ", " + postalCode + "\n" + country;
+            result += city + ", " + province + ", " + postalCode + "\n" + countryName;
         }else{
             if(!unitNumber.isEmpty()){
                 result += unitNumber+"-";
             }
-            result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + country;
+            result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + countryName;
         }
 
         return result;
     }
+
 
     public String getName() {
         return name;

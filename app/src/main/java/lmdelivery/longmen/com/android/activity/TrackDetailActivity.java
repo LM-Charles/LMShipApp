@@ -7,8 +7,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -105,7 +109,12 @@ public class TrackDetailActivity extends AppCompatActivity {
         TextView tvTrackingStatus = (TextView) v.findViewById(R.id.tv_tracking_status);
         TextView tvPackageTitle = (TextView) v.findViewById(R.id.tv_package_title);
         try {
-            tvTrackingNumber.setText(shipments.getTrackingNumber());
+            if(TextUtils.isEmpty(shipments.getTrackingNumber()))
+                throw new NullPointerException();
+            tvTrackingNumber.setTextColor(getResources().getColor(R.color.teal));
+            SpannableString spanString = new SpannableString(shipments.getTrackingNumber());
+            spanString.setSpan(new UnderlineSpan(), 0, spanString.length(), 0);
+            tvTrackingNumber.setText(spanString);
             tvTrackingNumber.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -122,19 +131,38 @@ public class TrackDetailActivity extends AppCompatActivity {
         }
 
         try {
+            if(TextUtils.isEmpty(shipments.getTracking().getTrackingCity()) || TextUtils.isEmpty(shipments.getTracking().getTrackingCountry()))
+                throw new NullPointerException();
             tvLocation.setText(shipments.getTracking().getTrackingCity() + " " + shipments.getTracking().getTrackingCountry());
         }catch (Exception e){
             tvLocation.setText(R.string.not_available);
         }
 
         try {
+            if(TextUtils.isEmpty(shipments.getTracking().getTrackingStatus()))
+                throw new NullPointerException();
             tvTrackingStatus.setText(shipments.getTracking().getTrackingStatus());
         }catch (Exception e){
             tvTrackingStatus.setText(R.string.not_available);
         }
 
-        tvPackageTitle.setText(getString(R.string.package_name) + " " + (index+1));
+        tvPackageTitle.setText(getString(R.string.package_name) + " " + (index + 1));
         return v;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -9,12 +9,7 @@
     <string name="street_name">Street Name</string>
     <string name="postal_code">Postal Code</string>
     <string name="city">City</string>
-    <string name="tab_title_from">From</string>
-    <string name="tab_title_to">To</string>
-    <string name="tab_title_package">Package</string>
-    <string name="tab_title_time">Time</string>
-    <string name="tab_title_insurance">Insurance</string>
-    <string name="tab_title_summary">Summary</string>
+
     <string name="ship_to">Ship to</string>
     <string name="province">Province</string>
     <string name="ship_from">Ship from</string>
@@ -46,4 +41,20 @@
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="box">"Box "</string>
+
+
+    <string name="tab_title_from">From</string>
+    <string name="tab_title_to">To</string>
+    <string name="tab_title_package">Package</string>
+    <string name="tab_title_time">Time</string>
+    <string name="tab_title_insurance">Insurance</string>
+    <string name="tab_title_summary">Summary</string>
+    <string-array name="tabs_title">
+        <item>From</item>
+        <item>To</item>
+        <item>Package</item>
+        <item>Time</item>
+        <item>Insurance</item>
+        <item>Summary</item>
+    </string-array>
 </resources>

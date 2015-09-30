@@ -17,6 +17,7 @@
 
     <style name="RobotoButtonStyle" parent="android:Widget.Holo.Light.Button">
         <item name="android:fontFamily">sans-serif</item>
+        <item name="android:padding">16dp</item>
     </style>
 
     <style name="FragmentTitleTextViewStyle" parent="android:Widget.TextView">
@@ -121,6 +122,7 @@
         <item name="android:textSize">@dimen/sublabel_text_font_size</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_centerVertical">true</item>
+        <item name="android:alpha">.6</item>
     </style>
 
     <style name="LabelIcon"  parent="android:Widget.TextView">
@@ -144,9 +146,8 @@
         <item name="android:textSize">@dimen/label_text_font_size</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:gravity">end</item>
     </style>
-
-
 
     <dimen name="label_icon_font_size">22sp</dimen>
     <dimen name="label_icon_width">56dp</dimen>

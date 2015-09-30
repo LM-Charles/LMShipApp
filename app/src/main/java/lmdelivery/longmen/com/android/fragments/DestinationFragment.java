@@ -129,11 +129,6 @@ public class DestinationFragment extends Fragment {
             // Register a listener that receives callbacks when a suggestion has been selected
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
 
-
-            // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-            // the entire world.
-            Set<Integer> filterTypes = new HashSet<>();
-            filterTypes.add(Place.TYPE_STREET_ADDRESS);
             mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_CANADA, null);//AutocompleteFilter.create(filterTypes));
             mAutocompleteView.setAdapter(mAdapter);
             setUpTextListener();

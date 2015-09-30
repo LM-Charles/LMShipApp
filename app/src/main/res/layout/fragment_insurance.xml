@@ -32,7 +32,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="8dp"
                     style="@style/SubLabel"
-                    android:text="For import tax calculation" />
+                    android:text="@string/for_import_tax" />
 
                 <TextView
                     style="@style/Label"
