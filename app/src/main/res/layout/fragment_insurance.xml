@@ -48,6 +48,7 @@
                         android:textSize="@dimen/edit_text_font_size"
                         tools:text="@string/zero_CAD"
                         android:lines="1"
+                        android:maxLength="4"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"/>
 
@@ -139,6 +140,7 @@
                         android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
                         android:lines="1"
+                        android:maxLength="4"
                         tools:text="@string/zero_CAD"
                         android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"/>

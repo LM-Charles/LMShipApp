@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.activity.MainActivity;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -47,6 +48,10 @@ public class InsuranceFragment extends Fragment {
         insuranceValue = (EditText) rootView.findViewById(R.id.et_insurance_value);
         tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
         llInsurance = (LinearLayout) rootView.findViewById(R.id.ll_insurance);
+
+        estimateValue.setText(((NewBookingActivity) getActivity()).declareValue);
+        insuranceValue.setText(((NewBookingActivity) getActivity()).insuranceValue);
+
 
         estimateValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -74,7 +79,7 @@ public class InsuranceFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                saveAndValidate(insuranceValue.getText().toString(),estimateValue.getText().toString());
+                saveAndValidate(insuranceValue.getText().toString(), estimateValue.getText().toString());
             }
         });
 
@@ -92,6 +97,16 @@ public class InsuranceFragment extends Fragment {
                 }
             }
         });
+
+        try {
+            if (Integer.parseInt(((NewBookingActivity) getActivity()).insuranceValue)>0) {
+                insuranceSwitch.setChecked(true);
+            } else {
+                insuranceSwitch.setChecked(false);
+            }
+        }catch (Exception e){
+            insuranceSwitch.setChecked(false);
+        }
 
         return rootView;
     }

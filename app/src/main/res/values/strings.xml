@@ -125,6 +125,6 @@
     <string name="pickup_date">Pickup Date</string>
     <string name="for_import_tax">For import tax calculation</string>
     <string name="today">Today</string>
-    <string name="Tomorrow">Tomorrow</string>
+    <string name="tomorrow">Tomorrow</string>
 
 </resources>

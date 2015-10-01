@@ -48,6 +48,7 @@ import java.util.regex.Pattern;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
+import lmdelivery.longmen.com.android.bean.Address;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
@@ -113,11 +114,18 @@ public class PickupFragment extends Fragment {
             etPhone = (EditText) rootView.findViewById(R.id.et_sender_phone);
             mapView = (FrameLayout) rootView.findViewById(R.id.map_view);
 
+            Address address = ((NewBookingActivity) getActivity()).pickupAddr;
+            etPostal.setText(address.getPostalCode());
+            etCity.setText(address.getCity());
+            etUnit.setText(address.getUnitNumber());
+            etName.setText(address.getName());
+            etPhone.setText(address.getPhone());
+            mAutocompleteView.setText(address.getStreetName());
+
             // Register a listener that receives callbacks when a suggestion has been selected
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
             mAdapter = new PlaceAutocompleteAdapter(getActivity(), android.R.layout.simple_list_item_1, ((NewBookingActivity) getActivity()).mGoogleApiClient, BOUNDS_GREATER_VANCOUVER, null);//AutocompleteFilter.create(filterTypes));
             mAutocompleteView.setAdapter(mAdapter);
-
             setUpTextListener();
             setUpMapIfNeeded();
         } catch (InflateException e) {

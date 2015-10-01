@@ -102,8 +102,19 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_booking);
+        context = this;
+        // Check whether we're recreating a previously destroyed instance
+        if (savedInstanceState != null) {
+            packageArrayList = savedInstanceState.getParcelableArrayList(Constant.EXTRA_PACKAGE);
+            pickupAddr = (Address) savedInstanceState.getSerializable(Constant.EXTRA_PICKUP);
+            dropOffAddr = (Address) savedInstanceState.getSerializable(Constant.EXTRA_DROPOFF);
+            selectedTime = (MyTime) savedInstanceState.getSerializable(Constant.EXTRA_TIME);
+            insuranceValue =savedInstanceState.getString(Constant.EXTRA_INSURANCE_ITEM);
+            declareValue =savedInstanceState.getString(Constant.EXTRA_ESTIMATE_VALUE);
+        } else {
+            init();
+        }
 
-        init();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, 0 /* clientId */, this)
@@ -144,7 +155,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 } else {
                     setupNextFab();
                 }
-
             }
 
             @Override
@@ -152,7 +162,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 int currentTab = tab.getPosition();
                 switch (currentTab) {
                     case Constant.TAB_FROM:
-                        if (pickupFragment.saveAndValidate()) {
+                        if (pickupFragment!=null && pickupFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_greendot);
                         } else {
                             tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_yellowdot);
@@ -160,7 +170,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         break;
 
                     case Constant.TAB_TO:
-                        if (dropOffFragment.saveAndValidate()) {
+                        if (dropOffFragment!=null && dropOffFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
                         } else {
                             tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_yellowdot);
@@ -168,7 +178,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         break;
 
                     case Constant.TAB_PACKAGE:
-                        if (packageFragment.validateAllPackage()) {
+                        if (packageFragment!=null && packageFragment.validateAllPackage()) {
                             tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_greendot);
                         } else {
                             tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_yellowdot);
@@ -203,6 +213,19 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         fab = (FloatingActionButton) findViewById(R.id.fab);
         setupNextFab();
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
+        savedInstanceState.putSerializable(Constant.EXTRA_PICKUP, pickupAddr);
+        savedInstanceState.putSerializable(Constant.EXTRA_DROPOFF, dropOffAddr);
+        savedInstanceState.putSerializable(Constant.EXTRA_TIME, selectedTime);
+        savedInstanceState.putString(Constant.EXTRA_INSURANCE_ITEM, insuranceValue);
+        savedInstanceState.putString(Constant.EXTRA_ESTIMATE_VALUE, declareValue);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
@@ -293,7 +316,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     private void init() {
-        context = this;
         pickupAddr = new Address();
         pickupAddr.setCountry("Canada");
         pickupAddr.setProvince("BC");
@@ -302,7 +324,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         packageArrayList.add(new Package());
         insuranceValue = "0";
         declareValue = "0";
-
     }
 
     public void scrollTo(int tabPosition) {
@@ -312,26 +333,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new Adapter(getSupportFragmentManager());
-
-//        if (pickupFragment == null)
-//            pickupFragment = PickupFragment.newInstance();
-//        if (dropOffFragment == null)
-//            dropOffFragment = DestinationFragment.newInstance();
-//        if (packageFragment == null)
-//            packageFragment = PackageFragment.newInstance();
-//        if (timeFragment == null)
-//            timeFragment = TimeFragment.newInstance();
-//        if (insuranceFragment == null)
-//            insuranceFragment = new InsuranceFragment();
-//        if (summaryFragment == null)
-//            summaryFragment = SummaryFragment.newInstance();
-
-//        adapter.addFragment(pickupFragment, getString(R.string.tab_title_from));
-//        adapter.addFragment(dropOffFragment, getString(R.string.tab_title_to));
-//        adapter.addFragment(packageFragment, getString(R.string.tab_title_package));
-//        adapter.addFragment(timeFragment, getString(R.string.tab_title_time));
-//        adapter.addFragment(insuranceFragment, getString(R.string.tab_title_insurance));
-//        adapter.addFragment(summaryFragment, getString(R.string.tab_title_summary));
         viewPager.setAdapter(adapter);
     }
 
