@@ -49,7 +49,7 @@
         <item>1pm - 3pm</item>
         <item>3pm - 6pm</item>
     </string-array>
-    <string name="title_activity_select_product">SelectProductActivity</string>
+    <string name="title_activity_select_product">Select a Service</string>
 
     <string name="contact_support">Contact Support</string>
 
@@ -112,5 +112,19 @@
     <string name="logout_confirm">Are you sure that you want to logout from:\n%1$s</string>
     <string name="logout_success">Successfully logged out</string>
     <string name="no_tracking_number">Tracking number not available yet</string>
+    <string name="title_activity_track_detail">Tracking Detail</string>
+    <string name="id">ID</string>
+    <string name="order_date">Order date</string>
+    <string name="cost">Total cost</string>
+    <string name="package_name">Package</string>
+    <string name="status">Status</string>
+    <string name="location">Location</string>
+    <string name="tracking_number">Tracking #</string>
+    <string name="not_available">Not available</string>
+    <string name="fail_to_open_browser">Failed to open browser</string>
+    <string name="pickup_date">Pickup Date</string>
+    <string name="for_import_tax">For import tax calculation</string>
+    <string name="today">Today</string>
+    <string name="Tomorrow">Tomorrow</string>
 
 </resources>

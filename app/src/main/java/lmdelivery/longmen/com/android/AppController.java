@@ -50,6 +50,9 @@ public class AppController extends com.activeandroid.app.Application {
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         // set the default tag if tag is empty
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+        req.setRetryPolicy(new DefaultRetryPolicy(10000, //10 seconds time out
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         getRequestQueue().add(req);
     }
 

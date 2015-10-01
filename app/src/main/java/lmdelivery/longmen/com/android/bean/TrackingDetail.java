@@ -1,9 +1,14 @@
 package lmdelivery.longmen.com.android.bean;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by rufus on 2015-09-22.
  */
-public class TrackingDetail {
+public class TrackingDetail implements Serializable{
+    @SerializedName("id")
     int id;
     int client;
     String orderDate;

@@ -53,7 +53,8 @@
             android:background="@color/colorPrimary"
             app:layout_scrollFlags="enterAlways"
             app:tabSelectedTextColor="@color/white_text"
-            app:tabIndicatorColor="@color/yellow"/>
+            app:tabIndicatorColor="@color/white_text"
+            android:elevation="4dp"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"

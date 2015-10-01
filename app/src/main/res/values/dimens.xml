@@ -32,4 +32,5 @@
     <dimen name="edit_text_height">83dp</dimen>
     <dimen name="map_snapshot_height">140dp</dimen>
     <dimen name="unit_spinner_width">80dp</dimen>
+    <dimen name="tracking_detail_padding">16dp</dimen>
 </resources>

@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -312,25 +313,25 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void setupViewPager(ViewPager viewPager) {
         adapter = new Adapter(getSupportFragmentManager());
 
-        if (pickupFragment == null)
-            pickupFragment = PickupFragment.newInstance();
-        if (dropOffFragment == null)
-            dropOffFragment = DestinationFragment.newInstance();
-        if (packageFragment == null)
-            packageFragment = PackageFragment.newInstance();
-        if (timeFragment == null)
-            timeFragment = TimeFragment.newInstance();
-        if (insuranceFragment == null)
-            insuranceFragment = new InsuranceFragment();
-        if (summaryFragment == null)
-            summaryFragment = SummaryFragment.newInstance();
+//        if (pickupFragment == null)
+//            pickupFragment = PickupFragment.newInstance();
+//        if (dropOffFragment == null)
+//            dropOffFragment = DestinationFragment.newInstance();
+//        if (packageFragment == null)
+//            packageFragment = PackageFragment.newInstance();
+//        if (timeFragment == null)
+//            timeFragment = TimeFragment.newInstance();
+//        if (insuranceFragment == null)
+//            insuranceFragment = new InsuranceFragment();
+//        if (summaryFragment == null)
+//            summaryFragment = SummaryFragment.newInstance();
 
-        adapter.addFragment(pickupFragment, getString(R.string.tab_title_from));
-        adapter.addFragment(dropOffFragment, getString(R.string.tab_title_to));
-        adapter.addFragment(packageFragment, getString(R.string.tab_title_package));
-        adapter.addFragment(timeFragment, getString(R.string.tab_title_time));
-        adapter.addFragment(insuranceFragment, getString(R.string.tab_title_insurance));
-        adapter.addFragment(summaryFragment, getString(R.string.tab_title_summary));
+//        adapter.addFragment(pickupFragment, getString(R.string.tab_title_from));
+//        adapter.addFragment(dropOffFragment, getString(R.string.tab_title_to));
+//        adapter.addFragment(packageFragment, getString(R.string.tab_title_package));
+//        adapter.addFragment(timeFragment, getString(R.string.tab_title_time));
+//        adapter.addFragment(insuranceFragment, getString(R.string.tab_title_insurance));
+//        adapter.addFragment(summaryFragment, getString(R.string.tab_title_summary));
         viewPager.setAdapter(adapter);
     }
 
@@ -342,32 +343,58 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         }
     }
 
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
+    class Adapter extends FragmentPagerAdapter {
+        private final String[] mFragmentTitles = AppController.getAppContext().getResources().getStringArray(R.array.tabs_title);
+        private final int PAGER_SIZE = 6;
 
         public Adapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
 
         @Override
         public Fragment getItem(int position) {
-            return mFragments.get(position);
+            Logger.e(TAG,"getItem: " + position);
+            switch (position){
+                case Constant.TAB_FROM:
+                    if (pickupFragment == null)
+                        pickupFragment = PickupFragment.newInstance();
+                    return pickupFragment;
+                case Constant.TAB_TO:
+                    if (dropOffFragment == null)
+                        dropOffFragment = DestinationFragment.newInstance();
+                    return dropOffFragment;
+                case Constant.TAB_PACKAGE:
+                    if (packageFragment == null)
+                        packageFragment = PackageFragment.newInstance();
+                    return packageFragment;
+                case Constant.TAB_TIME:
+                    if (timeFragment == null)
+                        timeFragment = TimeFragment.newInstance();
+                    return timeFragment;
+                case Constant.TAB_INSURANCE:
+                    if (insuranceFragment == null)
+                        insuranceFragment = new InsuranceFragment();
+                    return insuranceFragment;
+                case Constant.TAB_SUMMARY:
+                    if (summaryFragment == null)
+                        summaryFragment = SummaryFragment.newInstance();
+                    return summaryFragment;
+                default:
+                    if (pickupFragment == null)
+                        pickupFragment = PickupFragment.newInstance();
+                    return pickupFragment;
+            }
         }
 
         @Override
         public int getCount() {
-            return mFragments.size();
+            return PAGER_SIZE;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
+            return mFragmentTitles[position];
         }
     }
 
@@ -392,42 +419,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     public boolean validatePickup() {
-//        return pickupAddr != null && !pickupAddr.getCity().isEmpty() && !pickupAddr.getCountry().isEmpty() && !pickupAddr.getProvince().isEmpty()
-//                && !pickupAddr.getStreetName().isEmpty() && validateCanadaPostalCode(pickupAddr.getPostalCode());
         return pickupFragment.saveAndValidate();
     }
 
     public boolean validateDropOff() {
-//        return dropOffAddr != null && !dropOffAddr.getCity().isEmpty() && !dropOffAddr.getCountry().isEmpty() && !dropOffAddr.getProvince().isEmpty()
-//                && !dropOffAddr.getStreetName().isEmpty() && validateCanadaChinaPostalCode(dropOffAddr.getPostalCode());
         return dropOffFragment.saveAndValidate();
-    }
-
-    private boolean validateCanadaPostalCode(String zip) {
-        if (zip.isEmpty()) {
-            return false;
-        }
-
-        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(zip);
-
-        return matcher.matches();
-    }
-
-    private boolean validateCanadaChinaPostalCode(String zip) {
-        if (zip.isEmpty()) {
-            return false;
-        }
-
-        String cadRex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-        String chnRex = "^([0-9]){6}$";
-        Pattern pattern = Pattern.compile(cadRex, Pattern.CASE_INSENSITIVE);
-        Pattern pattern2 = Pattern.compile(chnRex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(zip);
-        Matcher matcher2 = pattern2.matcher(zip);
-        return matcher.matches() || matcher2.matches();
     }
 
     public boolean validateAllPackage() {
@@ -564,10 +560,6 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         switch (item.getItemId()) {
             case R.id.action_diff_city:
