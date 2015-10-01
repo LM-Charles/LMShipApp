@@ -83,6 +83,9 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="b6fd44f8b57b068a7817c651fb63a0fa5b05f5f6" />
     </application>
 
 </manifest>

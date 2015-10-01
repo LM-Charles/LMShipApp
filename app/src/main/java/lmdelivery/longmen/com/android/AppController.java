@@ -10,6 +10,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Kaiyu on 2015-06-25.
@@ -24,6 +26,7 @@ public class AppController extends com.activeandroid.app.Application {
 
     public void onCreate(){
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         AppController.context = getApplicationContext();
         mInstance = this;
     }
