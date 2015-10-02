@@ -123,6 +123,8 @@
                         android:hint="@string/weight"
                         android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
+                        android:singleLine="true"
+                        android:maxLength="3"
                         tools:text="weight" />
 
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
@@ -159,6 +161,8 @@
                         android:labelFor="@string/length"
                         android:textSize="@dimen/edit_text_font_size"
                         android:inputType="number"
+                        android:singleLine="true"
+                        android:maxLength="4"
                         tools:text="length" />
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
@@ -174,6 +178,8 @@
                         android:hint="@string/width"
                         android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
+                        android:singleLine="true"
+                        android:maxLength="4"
                         tools:text="width" />
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 
@@ -189,6 +195,8 @@
                         android:hint="@string/height"
                         android:inputType="number"
                         android:textSize="@dimen/edit_text_font_size"
+                        android:singleLine="true"
+                        android:maxLength="4"
                         tools:text="height" />
                 </lmdelivery.longmen.com.android.widget.CustomTextInputLayout>
 

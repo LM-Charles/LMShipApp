@@ -332,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
             public final TextView status;
             public final TextView btnTrack;
             public final ImageView icon;
+            public final LinearLayout llCard;
 
             public ViewHolder(View view) {
                 super(view);
@@ -340,6 +341,7 @@ public class MainActivity extends AppCompatActivity {
                 status = (TextView) view.findViewById(R.id.tv_status);
                 btnTrack = (TextView) view.findViewById(R.id.btn_track);
                 icon = (ImageView) view.findViewById(R.id.iv_ship_icon);
+                llCard = (LinearLayout) view.findViewById(R.id.ll_card);
             }
 
         }
@@ -432,20 +434,21 @@ public class MainActivity extends AppCompatActivity {
                         .crossFade()
                         .into(holder.icon);
 
-                holder.mView.setOnClickListener(new View.OnClickListener() {
+
+
+                // Here you apply the animation when the view is bound
+                setAnimation(holder.mView, position);
+
+                holder.llCard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Intent intent = new Intent(context, TrackDetailActivity.class);
                         intent.putExtra(Constant.EXTRA_TRACK_DETAIL, trackingDetail);
                         context.startActivity(intent);
                     }
                 });
-
-                // Here you apply the animation when the view is bound
-                setAnimation(holder.mView, position);
             }
-
-
         }
 
         @Override

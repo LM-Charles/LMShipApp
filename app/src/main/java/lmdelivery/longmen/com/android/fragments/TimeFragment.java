@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.bean.MyTime;
@@ -218,8 +217,7 @@ public class TimeFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.time.setText(getResources().getStringArray(R.array.time_interval_array)[mValues.get(position).getTimeCatergory()]);
-            holder.date.setText(mValues.get(position).isToday() ? getActivity().getString(R.string.today) : getActivity().getString(R.string.Tomorrow));
-
+            holder.date.setText(mValues.get(position).isToday() ? getActivity().getString(R.string.today) : getActivity().getString(R.string.tomorrow));
 
             if (mValues.get(position).equals(((NewBookingActivity) getActivity()).selectedTime))
                 holder.mView.setSelected(true);

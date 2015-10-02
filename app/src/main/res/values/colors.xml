@@ -40,8 +40,8 @@
     <color name="from_color">@color/card_background</color>
     <color name="to_color">@color/card_background</color>
     <color name="insurance_color">@color/card_background</color>
-    <color name="time_selected">@color/card_background</color>
-    <color name="time_ripple">#90A4AE</color>
+    <color name="time_selected">#90A4AE</color>
+    <color name="time_ripple">#455A64</color>
     <color name="package_color">@color/card_background</color>
 
     <color name="light_gray">#BDBDBD</color>

@@ -5,16 +5,6 @@
     android:layout_height="match_parent"
     tools:context="lmdelivery.longmen.com.android.fragments.DestinationFragment">
 
-
-    <!--<android.support.v7.widget.CardView-->
-    <!--android:id="@+id/card_to"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
-    <!--android:layout_marginStart="@dimen/normal_padding"-->
-    <!--android:layout_marginBottom="@dimen/activity_vertical_margin"-->
-    <!--android:layout_marginEnd="@dimen/normal_padding">-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,6 +44,8 @@
                         android:hint="@string/receiver_name"
                         android:inputType="textPersonName"
                         android:textSize="@dimen/edit_text_font_size"
+                        android:singleLine="true"
+                        android:maxLength="20"
                         tools:text="sender name" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -81,6 +73,8 @@
                         android:hint="@string/receiver_phone"
                         android:inputType="phone"
                         android:textSize="@dimen/edit_text_font_size"
+                        android:singleLine="true"
+                        android:maxLength="13"
                         tools:text="sender phone" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -108,6 +102,8 @@
                         android:hint="@string/search_address"
                         android:textSize="@dimen/edit_text_font_size"
                         android:imeOptions="actionSearch"
+                        android:singleLine="true"
+                        android:maxLength="40"
                         tools:text="address" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -132,6 +128,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/unit_number"
                     android:textSize="@dimen/edit_text_font_size"
+                    android:singleLine="true"
+                    android:maxLength="20"
                     tools:text="unit" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -143,6 +141,7 @@
                 android:layout_height="@dimen/edit_text_height"
                 android:layout_marginStart="@dimen/label_icon_width"
                 android:gravity="center_vertical"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
@@ -156,6 +155,8 @@
                     android:layout_height="match_parent"
                     android:hint="@string/city"
                     android:textSize="@dimen/edit_text_font_size"
+                    android:singleLine="true"
+                    android:maxLength="20"
                     tools:text="city" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -169,6 +170,8 @@
                     android:layout_height="match_parent"
                     android:hint="@string/province"
                     android:textSize="@dimen/edit_text_font_size"
+                    android:singleLine="true"
+                    android:maxLength="25"
                     tools:text="province" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -179,6 +182,7 @@
                 android:layout_height="93dp"
                 android:layout_marginStart="@dimen/label_icon_width"
                 android:gravity="center_vertical"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
 
@@ -192,6 +196,8 @@
                         android:layout_height="match_parent"
                         android:hint="@string/country"
                         android:textSize="@dimen/edit_text_font_size"
+                        android:singleLine="true"
+                        android:maxLength="20"
                         tools:text="country" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -205,6 +211,8 @@
                         android:layout_height="match_parent"
                         android:hint="@string/postal_code"
                         android:textSize="@dimen/edit_text_font_size"
+                        android:singleLine="true"
+                        android:maxLength="8"
                         tools:text="postal" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -228,7 +236,6 @@
 
 
     </LinearLayout>
-    <!--</android.support.v7.widget.CardView>-->
 
 
 </android.support.v4.widget.NestedScrollView>

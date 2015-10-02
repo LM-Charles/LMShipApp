@@ -146,7 +146,7 @@
         <item name="android:textSize">@dimen/label_text_font_size</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_alignParentEnd">true</item>
-        <item name="android:gravity">end</item>
+        <item name="android:gravity">start</item>
     </style>
 
     <dimen name="label_icon_font_size">22sp</dimen>

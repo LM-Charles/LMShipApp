@@ -38,8 +38,6 @@
     <string name="invalid_dropoff">Drop off address is invalid</string>
     <string name="invalid_package">Package info is invalid</string>
     <string name="no_pickup_time">Pickup time not selected</string>
-    <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
     <string name="box">"Box "</string>
 
 

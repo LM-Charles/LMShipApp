@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/time_ripple">
-
-    <item>
-        <selector>
-            <item android:state_selected="true">
-                <color android:color="@color/time_selected" />
-            </item>
-
-
-            <item>
-                <color android:color="@color/window_background" />
-            </item>
-        </selector>
-    </item>
+<!--<ripple-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:color="@color/time_ripple">-->
+    <!--<item>-->
+        <!--<selector>-->
+            <!--<item android:state_selected="true">-->
+                <!--<color android:color="@color/time_selected" />-->
+            <!--</item>-->
 
 
-</ripple>
+            <!--<item>-->
+                <!--<color android:color="@color/window_background" />-->
+            <!--</item>-->
+        <!--</selector>-->
+    <!--</item>-->
+<!--</ripple>-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/time_selected" android:state_selected="true"/>
+    <item android:drawable="@color/time_selected" android:state_pressed="true"/>
+    <item android:drawable="@color/window_background"/>
+
+</selector>

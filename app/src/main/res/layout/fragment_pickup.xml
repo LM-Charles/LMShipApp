@@ -62,6 +62,8 @@
                             android:hint="@string/send_name"
                             android:inputType="textPersonName"
                             android:textSize="@dimen/edit_text_font_size"
+                            android:singleLine="true"
+                            android:maxLength="20"
                             tools:text="sender name" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -90,6 +92,8 @@
                             android:hint="@string/sender_phone"
                             android:inputType="phone"
                             android:textSize="@dimen/edit_text_font_size"
+                            android:singleLine="true"
+                            android:maxLength="13"
                             tools:text="sender phone" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -120,6 +124,8 @@
                             android:inputType="textPostalAddress"
                             android:textSize="@dimen/edit_text_font_size"
                             android:imeOptions="actionSearch"
+                            android:singleLine="true"
+                            android:maxLength="40"
                             tools:text="address" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -142,8 +148,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/unit_number"
-                            android:inputType="numberDecimal"
+                            android:inputType="text"
                             android:textSize="@dimen/edit_text_font_size"
+                            android:singleLine="true"
+                            android:maxLength="15"
                             tools:text="unit" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -169,6 +177,8 @@
                             android:hint="@string/city"
                             android:inputType="textCapWords"
                             android:textSize="@dimen/edit_text_font_size"
+                            android:singleLine="true"
+                            android:maxLength="20"
                             tools:text="city" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -184,6 +194,9 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/postal_code"
                             android:textSize="@dimen/edit_text_font_size"
+                            android:singleLine="true"
+                            android:maxLength="10"
+                            android:imeOptions="actionDone"
                             tools:text="postal" />
                     </android.support.design.widget.TextInputLayout>
 
