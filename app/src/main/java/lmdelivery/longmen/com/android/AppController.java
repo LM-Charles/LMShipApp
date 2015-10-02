@@ -26,7 +26,7 @@ public class AppController extends com.activeandroid.app.Application {
 
     public void onCreate(){
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         AppController.context = getApplicationContext();
         mInstance = this;
     }

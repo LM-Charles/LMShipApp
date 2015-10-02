@@ -73,19 +73,23 @@ public class SelectProductActivity extends SwipeBackActivity {
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
         context = this;
-        Bundle bundle = getIntent().getExtras();
-        try {
-            mPackageList = bundle.getParcelableArrayList(Constant.EXTRA_PACKAGE);
-            mPickupAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
-            mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
-            mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
-            mRateList = bundle.getParcelableArrayList(Constant.EXTRA_RATE_ITEM);
-            mPackageRate = bundle.getParcelable(Constant.EXTRA_PACKAGE_ITEM);
-            mInsuranceRate = bundle.getParcelable(Constant.EXTRA_INSURANCE_ITEM);
-            mInsuranceValue = getIntent().getStringExtra(Constant.EXTRA_INSURANCE_VALUE);
-            mEstValue = getIntent().getStringExtra(Constant.EXTRA_ESTIMATE_VALUE);
-        }catch (Exception e){
+        if(savedInstanceState!=null){
+            mRateList = savedInstanceState.getParcelableArrayList(Constant.EXTRA_RATE_ITEM);
+        }else {
+            Bundle bundle = getIntent().getExtras();
+            try {
+//            mPackageList = bundle.getParcelableArrayList(Constant.EXTRA_PACKAGE);
+//            mPickupAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_PICKUP);
+//            mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
+//            mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
+                mRateList = bundle.getParcelableArrayList(Constant.EXTRA_RATE_ITEM);
+//            mPackageRate = bundle.getParcelable(Constant.EXTRA_PACKAGE_ITEM);
+//            mInsuranceRate = bundle.getParcelable(Constant.EXTRA_INSURANCE_ITEM);
+//            mInsuranceValue = getIntent().getStringExtra(Constant.EXTRA_INSURANCE_VALUE);
+//            mEstValue = getIntent().getStringExtra(Constant.EXTRA_ESTIMATE_VALUE);
+            } catch (Exception e) {
 
+            }
         }
 
 //        Logger.e(TAG, pickup.getFullAddress());
@@ -108,6 +112,15 @@ public class SelectProductActivity extends SwipeBackActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putParcelableArrayList(Constant.EXTRA_RATE_ITEM, mRateList);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());

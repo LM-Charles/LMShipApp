@@ -77,7 +77,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         tvFrom.setText(trackingDetail.getFromAddress().buildFullAddress());
         tvTo.setText(trackingDetail.getToAddress().buildFullAddress());
 //        tvId.setText("1");
-        tvId.setText(trackingDetail.getId()+"");
+        tvId.setText(String.valueOf(trackingDetail.getId()));
         tvOrderDate.setText(DateUtil.UnixTimeToDateString(trackingDetail.getOrderDate()));
         tvInsurace.setText("$" + Util.roundTo2(trackingDetail.getInsuranceValue()));
         tvStatus.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));

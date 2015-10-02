@@ -37,7 +37,8 @@
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_material_light"/>
+                android:background="@color/background_material_light"
+                android:paddingBottom="16dp"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

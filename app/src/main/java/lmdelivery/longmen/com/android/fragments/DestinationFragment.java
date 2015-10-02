@@ -50,6 +50,7 @@ import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.bean.Address;
 import lmdelivery.longmen.com.android.util.CountryCode;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -125,6 +126,16 @@ public class DestinationFragment extends Fragment {
             etPhone = (EditText) rootView.findViewById(R.id.et_receiver_phone);
             etCountry = (EditText) rootView.findViewById(R.id.et_to_country);
             mapView = (FrameLayout) rootView.findViewById(R.id.map_view);
+
+            Address address = ((NewBookingActivity) getActivity()).dropOffAddr;
+            etPostal.setText(address.getPostalCode());
+            etCity.setText(address.getCity());
+            etUnit.setText(address.getUnitNumber());
+            etName.setText(address.getName());
+            etPhone.setText(address.getPhone());
+            mAutocompleteView.setText(address.getStreetName());
+            etProvince.setText(address.getProvince());
+            etCountry.setText(address.getCountry());
 
             // Register a listener that receives callbacks when a suggestion has been selected
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);

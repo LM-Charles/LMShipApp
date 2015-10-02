@@ -74,7 +74,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:text="@string/five_bucks"
+                    android:text="@string/one_buck"
                     android:textColor="@color/price"
                     android:textSize="16sp"/>
             </RelativeLayout>
