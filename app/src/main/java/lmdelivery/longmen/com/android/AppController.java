@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -90,6 +91,12 @@ public class AppController extends com.activeandroid.app.Application {
     }
 
     public boolean isUserActivated(){
-        return getDefaultSharePreferences().getBoolean(Constant.SHARE_IS_USER_ACTIVATED,false);
+        return getDefaultSharePreferences().getBoolean(Constant.SHARE_IS_USER_ACTIVATED, false);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }
