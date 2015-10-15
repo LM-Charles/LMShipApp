@@ -49,8 +49,10 @@ public class InsuranceFragment extends Fragment {
         tvInsurace = (TextView) rootView.findViewById(R.id.tv_insurance);
         llInsurance = (LinearLayout) rootView.findViewById(R.id.ll_insurance);
 
-        estimateValue.setText(((NewBookingActivity) getActivity()).declareValue);
-        insuranceValue.setText(((NewBookingActivity) getActivity()).insuranceValue);
+        if(!((NewBookingActivity) getActivity()).declareValue.equalsIgnoreCase("0"))
+            estimateValue.setText(((NewBookingActivity) getActivity()).declareValue);
+        if(!((NewBookingActivity) getActivity()).insuranceValue.equalsIgnoreCase("0"))
+            insuranceValue.setText(((NewBookingActivity) getActivity()).insuranceValue);
 
 
         estimateValue.addTextChangedListener(new TextWatcher() {

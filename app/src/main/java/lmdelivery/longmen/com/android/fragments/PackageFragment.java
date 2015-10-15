@@ -257,7 +257,7 @@ public class PackageFragment extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     aPackage.setDistanceUnit(position == 0 ? Unit.CM : Unit.INCH);
-                    AppController.getInstance().getDefaultSharePreferences().edit().putInt(Constant.SHARE_LENGTH_UNIT,position == 0 ? Unit.CM : Unit.INCH).apply();
+                    //AppController.getInstance().getDefaultSharePreferences().edit().putInt(Constant.SHARE_LENGTH_UNIT,position == 0 ? Unit.CM : Unit.INCH).apply();
                 }
 
                 @Override
@@ -267,7 +267,7 @@ public class PackageFragment extends Fragment {
             });
 
             holder.distanceSpinner.setAdapter(adapter);
-            int lengthUnit = AppController.getInstance().getDefaultSharePreferences().getInt(Constant.SHARE_LENGTH_UNIT, Unit.CM);
+            int lengthUnit = aPackage.getDistanceUnit();
             if(lengthUnit == Unit.CM)
                 holder.distanceSpinner.setSelection(0);
             else
@@ -279,7 +279,7 @@ public class PackageFragment extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     aPackage.setWeightUnit(position == 0 ? Unit.KG : Unit.LB);
-                    AppController.getInstance().getDefaultSharePreferences().edit().putInt(Constant.SHARE_WEIGHT_UNIT,position == 0 ? Unit.KG : Unit.LB).apply();
+                    //AppController.getInstance().getDefaultSharePreferences().edit().putInt(Constant.SHARE_WEIGHT_UNIT,position == 0 ? Unit.KG : Unit.LB).apply();
                 }
 
                 @Override
@@ -288,7 +288,7 @@ public class PackageFragment extends Fragment {
             });
             holder.weightSpinner.setAdapter(weightAdapter);
 
-            int weightUnit = AppController.getInstance().getDefaultSharePreferences().getInt(Constant.SHARE_WEIGHT_UNIT, Unit.KG);
+            int weightUnit = aPackage.getWeightUnit();
             if(weightUnit == Unit.KG)
                 holder.weightSpinner.setSelection(0);
             else

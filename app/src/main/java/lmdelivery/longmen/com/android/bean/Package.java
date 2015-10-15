@@ -73,8 +73,10 @@ public class Package extends Model implements Parcelable {
     public String toString() {
         if (isOwnBox) {
             Resources resources = AppController.getAppContext().getResources();
-            return resources.getString(R.string.length) + ": " + length + "  " + resources.getString(R.string.width) + ": " + width + "\n" +
-                    resources.getString(R.string.height) + ": " + height + "  " + resources.getString(R.string.weight) + ": " + weight;
+            String disUnit = distanceUnit==Unit.CM?" cm ":" inch ";
+            String weiUnit = weightUnit==Unit.KG?" kg ":" lb ";
+            return resources.getString(R.string.length) + ": " + length + disUnit + resources.getString(R.string.width) + ": " + width + disUnit +"\n" +
+                    resources.getString(R.string.height) + ": " + height + disUnit + resources.getString(R.string.weight) + ": " + weight + weiUnit;
         } else {
             String strBoxSize = "";
             switch (boxSize) {
@@ -88,7 +90,7 @@ public class Package extends Model implements Parcelable {
                     strBoxSize = AppController.getAppContext().getString(R.string.big_box);
                     break;
             }
-            return "Longmen " + strBoxSize + " ($5)";
+            return "Longmen " + strBoxSize + " ($1)";
         }
     }
 
