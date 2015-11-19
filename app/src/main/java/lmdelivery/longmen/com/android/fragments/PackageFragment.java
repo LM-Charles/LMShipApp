@@ -27,13 +27,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
-import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.data.Package;
 import lmdelivery.longmen.com.android.util.Unit;
 import lmdelivery.longmen.com.android.widget.TypefaceTextView;
 
@@ -75,12 +73,7 @@ public class PackageFragment extends Fragment {
         setupRecyclerView();
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAdapter.addPackage();
-            }
-        });
+        fab.setOnClickListener(view1 -> mAdapter.addPackage());
         return view;
     }
 
@@ -347,29 +340,21 @@ public class PackageFragment extends Fragment {
                 holder.closeIcon.setVisibility(View.VISIBLE);
             }
 
-            holder.closeIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    removePackage(position);
-                }
-            });
+            holder.closeIcon.setOnClickListener(v -> removePackage(position));
 
-            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        aPackage.setIsOwnBox(true);
-                        holder.price.setText(context.getString(R.string.free));
-                        holder.llOwnBox.setVisibility(View.VISIBLE);
-                        holder.llLmBox.setVisibility(View.GONE);
-                        holder.price.setTextColor(context.getResources().getColor(R.color.green_done));
-                    } else {
-                        holder.price.setText(context.getString(R.string.one_buck));
-                        aPackage.setIsOwnBox(false);
-                        holder.llOwnBox.setVisibility(View.GONE);
-                        holder.llLmBox.setVisibility(View.VISIBLE);
-                        holder.price.setTextColor(context.getResources().getColor(R.color.card_background));
-                    }
+            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    aPackage.setIsOwnBox(true);
+                    holder.price.setText(context.getString(R.string.free));
+                    holder.llOwnBox.setVisibility(View.VISIBLE);
+                    holder.llLmBox.setVisibility(View.GONE);
+                    holder.price.setTextColor(context.getResources().getColor(R.color.green_done));
+                } else {
+                    holder.price.setText(context.getString(R.string.one_buck));
+                    aPackage.setIsOwnBox(false);
+                    holder.llOwnBox.setVisibility(View.GONE);
+                    holder.llLmBox.setVisibility(View.VISIBLE);
+                    holder.price.setTextColor(context.getResources().getColor(R.color.card_background));
                 }
             });
 
@@ -377,34 +362,25 @@ public class PackageFragment extends Fragment {
             holder.rbMed.setClickable(false);
             holder.rbSmall.setClickable(false);
 
-            holder.rlBigBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    aPackage.setBoxSize(Package.BIG_BOX);
-                    holder.rbBig.setChecked(true);
-                    holder.rbMed.setChecked(false);
-                    holder.rbSmall.setChecked(false);
-                }
+            holder.rlBigBox.setOnClickListener(v -> {
+                aPackage.setBoxSize(Package.BIG_BOX);
+                holder.rbBig.setChecked(true);
+                holder.rbMed.setChecked(false);
+                holder.rbSmall.setChecked(false);
             });
 
-            holder.rlMedBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    aPackage.setBoxSize(Package.MED_BOX);
-                    holder.rbBig.setChecked(false);
-                    holder.rbMed.setChecked(true);
-                    holder.rbSmall.setChecked(false);
-                }
+            holder.rlMedBox.setOnClickListener(v -> {
+                aPackage.setBoxSize(Package.MED_BOX);
+                holder.rbBig.setChecked(false);
+                holder.rbMed.setChecked(true);
+                holder.rbSmall.setChecked(false);
             });
 
-            holder.rlSmallBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    aPackage.setBoxSize(Package.SMALL_BOX);
-                    holder.rbBig.setChecked(false);
-                    holder.rbMed.setChecked(false);
-                    holder.rbSmall.setChecked(true);
-                }
+            holder.rlSmallBox.setOnClickListener(v -> {
+                aPackage.setBoxSize(Package.SMALL_BOX);
+                holder.rbBig.setChecked(false);
+                holder.rbMed.setChecked(false);
+                holder.rbSmall.setChecked(true);
             });
 
             holder.etHeight.addTextChangedListener(new TextWatcher() {

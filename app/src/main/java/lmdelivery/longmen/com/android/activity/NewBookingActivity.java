@@ -3,7 +3,6 @@ package lmdelivery.longmen.com.android.activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,9 +22,8 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,20 +36,20 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.api.LMXService;
 import lmdelivery.longmen.com.android.api.Order;
 import lmdelivery.longmen.com.android.api.Rate;
-import lmdelivery.longmen.com.android.bean.Address;
-import lmdelivery.longmen.com.android.bean.MyTime;
-import lmdelivery.longmen.com.android.bean.Package;
-import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.data.Address;
+import lmdelivery.longmen.com.android.data.MyTime;
+import lmdelivery.longmen.com.android.data.Package;
+import lmdelivery.longmen.com.android.data.RateItem;
+import lmdelivery.longmen.com.android.data.User;
 import lmdelivery.longmen.com.android.fragments.DestinationFragment;
 import lmdelivery.longmen.com.android.fragments.InsuranceFragment;
 import lmdelivery.longmen.com.android.fragments.PackageFragment;
@@ -91,6 +89,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private Context context;
 
+    @Inject
+    LMXService lmxService;
 
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
@@ -102,6 +102,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_booking);
+        AppController.getComponent().inject(this);
         context = this;
         // Check whether we're recreating a previously destroyed instance
         if (savedInstanceState != null) {
@@ -109,8 +110,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
             pickupAddr = (Address) savedInstanceState.getSerializable(Constant.EXTRA_PICKUP);
             dropOffAddr = (Address) savedInstanceState.getSerializable(Constant.EXTRA_DROPOFF);
             selectedTime = (MyTime) savedInstanceState.getSerializable(Constant.EXTRA_TIME);
-            insuranceValue =savedInstanceState.getString(Constant.EXTRA_INSURANCE_ITEM);
-            declareValue =savedInstanceState.getString(Constant.EXTRA_ESTIMATE_VALUE);
+            insuranceValue = savedInstanceState.getString(Constant.EXTRA_INSURANCE_ITEM);
+            declareValue = savedInstanceState.getString(Constant.EXTRA_ESTIMATE_VALUE);
         } else {
             init();
         }
@@ -162,7 +163,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 int currentTab = tab.getPosition();
                 switch (currentTab) {
                     case Constant.TAB_FROM:
-                        if (pickupFragment!=null && pickupFragment.saveAndValidate()) {
+                        if (pickupFragment != null && pickupFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_greendot);
                         } else {
                             tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_yellowdot);
@@ -170,7 +171,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         break;
 
                     case Constant.TAB_TO:
-                        if (dropOffFragment!=null && dropOffFragment.saveAndValidate()) {
+                        if (dropOffFragment != null && dropOffFragment.saveAndValidate()) {
                             tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
                         } else {
                             tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_yellowdot);
@@ -178,7 +179,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                         break;
 
                     case Constant.TAB_PACKAGE:
-                        if (packageFragment!=null && packageFragment.validateAllPackage()) {
+                        if (packageFragment != null && packageFragment.validateAllPackage()) {
                             tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_greendot);
                         } else {
                             tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_yellowdot);
@@ -237,7 +238,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
                 RateItem rateItem = data.getParcelableExtra(Constant.EXTRA_RATE_ITEM);
-                if(rateItem!=null)
+                if (rateItem != null)
                     bookShipment(rateItem);
                 //Logger.e(TAG, "selected item: " + ((RateItem) data.getParcelableExtra("selected_rate")).getServiceName());
                 Logger.d(TAG, "make order successfully");
@@ -247,12 +248,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     private void hideFab() {
-        fab.animate().scaleX(0).scaleY(0).setInterpolator(new AccelerateInterpolator()).setDuration(Constant.FAB_ANIMTION_DURATION).withEndAction(new Runnable() {
-            @Override
-            public void run() {
-                fab.setVisibility(View.GONE);
-            }
-        }).start();
+        fab.animate().scaleX(0).scaleY(0).setInterpolator(new AccelerateInterpolator()).setDuration(Constant.FAB_ANIMTION_DURATION).withEndAction(() -> fab.setVisibility(View.GONE)).start();
     }
 
     private void showFab() {
@@ -268,12 +264,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         if (summaryFragment.setupView()) {
             fab.setImageResource(R.drawable.ic_done);
             fab.setBackgroundTintList(getResources().getColorStateList(R.color.done_state_list));
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                   getRate();
-                }
-            });
+            fab.setOnClickListener(view -> getRate());
         } else {
             hideFab();
         }
@@ -282,33 +273,30 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void setupNextFab() {
         fab.setImageResource(R.drawable.ic_arrow_forward_white_36dp);
         fab.setBackgroundTintList(getResources().getColorStateList(R.color.normal_state_list));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentTab = viewPager.getCurrentItem();
-                if (currentTab == Constant.TAB_FROM) {
-                    if (pickupFragment.saveAndValidate()) {
-                        viewPager.setCurrentItem(Constant.TAB_TO, true);
-                    }
-                } else if (currentTab == Constant.TAB_TO) {
-                    if (dropOffFragment.saveAndValidate()) {
-                        viewPager.setCurrentItem(Constant.TAB_PACKAGE, true);
-                    }
-                } else if (currentTab == Constant.TAB_PACKAGE) {
-                    if (packageFragment.validateAllPackage()) {
-                        viewPager.setCurrentItem(Constant.TAB_TIME, true);
-                    }
-                    for (int i = 0; i < packageArrayList.size(); i++) {
-                        Logger.e(TAG, packageArrayList.get(i).toString());
-                    }
-                } else if (currentTab == Constant.TAB_TIME) {
-                    if (selectedTime != null) {
-                        viewPager.setCurrentItem(Constant.TAB_INSURANCE, true);
-                    }
-                } else if (currentTab == Constant.TAB_INSURANCE) {
-                    if (insuranceFragment.saveAndValidate(insuranceValue, declareValue)) {
-                        viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
-                    }
+        fab.setOnClickListener(view -> {
+            int currentTab = viewPager.getCurrentItem();
+            if (currentTab == Constant.TAB_FROM) {
+                if (pickupFragment.saveAndValidate()) {
+                    viewPager.setCurrentItem(Constant.TAB_TO, true);
+                }
+            } else if (currentTab == Constant.TAB_TO) {
+                if (dropOffFragment.saveAndValidate()) {
+                    viewPager.setCurrentItem(Constant.TAB_PACKAGE, true);
+                }
+            } else if (currentTab == Constant.TAB_PACKAGE) {
+                if (packageFragment.validateAllPackage()) {
+                    viewPager.setCurrentItem(Constant.TAB_TIME, true);
+                }
+                for (int i = 0; i < packageArrayList.size(); i++) {
+                    Logger.e(TAG, packageArrayList.get(i).toString());
+                }
+            } else if (currentTab == Constant.TAB_TIME) {
+                if (selectedTime != null) {
+                    viewPager.setCurrentItem(Constant.TAB_INSURANCE, true);
+                }
+            } else if (currentTab == Constant.TAB_INSURANCE) {
+                if (insuranceFragment.saveAndValidate(insuranceValue, declareValue)) {
+                    viewPager.setCurrentItem(Constant.TAB_SUMMARY, true);
                 }
             }
         });
@@ -316,9 +304,16 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     private void init() {
-        pickupAddr = new Address();
+
+        User user = new Select().from(User.class).where("UserId = ?", AppController.getInstance().getUserId()).executeSingle();
+        if(user!=null && user.address!=null){
+            pickupAddr = user.address;
+        }else{
+            pickupAddr = new Address();
+        }
         pickupAddr.setCountry("Canada");
         pickupAddr.setProvince("BC");
+
         dropOffAddr = new Address();
         packageArrayList = new ArrayList<>();
         packageArrayList.add(new Package());
@@ -355,8 +350,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
         @Override
         public Fragment getItem(int position) {
-            Logger.e(TAG,"getItem: " + position);
-            switch (position){
+            Logger.e(TAG, "getItem: " + position);
+            switch (position) {
                 case Constant.TAB_FROM:
                     if (pickupFragment == null)
                         pickupFragment = PickupFragment.newInstance();
@@ -449,14 +444,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void getRate() {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.loading));
-        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                Logger.d(TAG, "getRateRequest canceled");
-                if (null != getRateRequest) {
-                    getRateRequest.cancel();
-                    getRateRequest = null;
-                }
+        pd.setOnCancelListener(dialog -> {
+            Logger.d(TAG, "getRateRequest canceled");
+            if (null != getRateRequest) {
+                getRateRequest.cancel();
+                getRateRequest = null;
             }
         });
         pd.show();
@@ -466,60 +458,52 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
         Logger.d(TAG, "Sending get rate:\n" + params);
 
-        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "courier/rate/", params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.d(TAG, response.toString());
-                pd.dismiss();
-                getRateRequest = null;
+        getRateRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "courier/rate/", params, response -> {
+            Logger.d(TAG, response.toString());
+            pd.dismiss();
+            getRateRequest = null;
 
-                try {
-                    Type listType = new TypeToken<ArrayList<RateItem>>() {}.getType();
-                    final ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
-                    RateItem insuranceItem = new Gson().fromJson(response.getJSONObject("insuranceRate").toString(), RateItem.class);
-                    RateItem packageItem = new Gson().fromJson(response.getJSONObject("handlingRate").toString(), RateItem.class);
-                    if (rateItemList.isEmpty()) {
-                        DialogUtil.showMessageDialog(getString(R.string.err_no_estimate), context);
-                    } else if (rateItemList.size() == 1) {
-                        DialogUtil.showSingleEstimateDialog(context, rateItemList.get(0), insuranceItem, packageItem, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(AppController.getInstance().isUserActivated()){
-                                    bookShipment(rateItemList.get(0));
-                                }else{
-                                    Toast.makeText(getApplicationContext(), R.string.register_before_book,Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context, LoginActivity.class);
-                                    intent.putExtra(Constant.EXTRA_INSURANCE_ITEM, rateItemList.get(0));
-                                    startActivityForResult(intent,Constant.LOGIN_REQUEST_CODE);
-                                }
-                            }
-                        });
-                    } else {
-                        Intent intent = new Intent(context, SelectProductActivity.class);
-                        intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
-                        intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
-                        intent.putExtra(Constant.EXTRA_TIME, selectedTime);
+            try {
+                Type listType = new TypeToken<ArrayList<RateItem>>() {
+                }.getType();
+                final ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
+                RateItem insuranceItem = new Gson().fromJson(response.getJSONObject("insuranceRate").toString(), RateItem.class);
+                RateItem packageItem = new Gson().fromJson(response.getJSONObject("handlingRate").toString(), RateItem.class);
+                if (rateItemList.isEmpty()) {
+                    DialogUtil.showMessageDialog(getString(R.string.err_no_estimate), context);
+                } else if (rateItemList.size() == 1) {
+                    DialogUtil.showSingleEstimateDialog(context, rateItemList.get(0), insuranceItem, packageItem, (dialog, which) -> {
+                        if (AppController.getInstance().isUserActivated()) {
+                            bookShipment(rateItemList.get(0));
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.register_before_book, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(context, LoginActivity.class);
+                            intent.putExtra(Constant.EXTRA_INSURANCE_ITEM, rateItemList.get(0));
+                            startActivityForResult(intent, Constant.LOGIN_REQUEST_CODE);
+                        }
+                    });
+                } else {
+                    Intent intent = new Intent(context, SelectProductActivity.class);
+                    intent.putExtra(Constant.EXTRA_PICKUP, pickupAddr);
+                    intent.putExtra(Constant.EXTRA_DROPOFF, dropOffAddr);
+                    intent.putExtra(Constant.EXTRA_TIME, selectedTime);
 
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
-                        bundle.putParcelableArrayList(Constant.EXTRA_RATE_ITEM, rateItemList);
-                        bundle.putParcelable(Constant.EXTRA_INSURANCE_ITEM, insuranceItem);
-                        bundle.putParcelable(Constant.EXTRA_PACKAGE_ITEM, packageItem);
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, PICK_RATE_REQUEST);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(Constant.EXTRA_PACKAGE, packageArrayList);
+                    bundle.putParcelableArrayList(Constant.EXTRA_RATE_ITEM, rateItemList);
+                    bundle.putParcelable(Constant.EXTRA_INSURANCE_ITEM, insuranceItem);
+                    bundle.putParcelable(Constant.EXTRA_PACKAGE_ITEM, packageItem);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, PICK_RATE_REQUEST);
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                getRateRequest = null;
-                pd.dismiss();
-                Util.handleVolleyError(error, context);
-            }
+        }, error -> {
+            getRateRequest = null;
+            pd.dismiss();
+            Util.handleVolleyError(error, context);
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(getRateRequest);
@@ -532,21 +516,19 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
         bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + AppController.getInstance().getUserToken(),
                 Order.buildOrderParam(AppController.getInstance().getUserId(), "", rateItem, pickupAddr, dropOffAddr, packageArrayList, selectedTime, declareValue, insuranceValue),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Logger.e(TAG, "book order response: " + response.toString());
-                        pd.dismiss();
-                        bookShipRequest = null;
-                        showBookSuccessDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                bookShipRequest = null;
-                pd.dismiss();
-                Util.handleVolleyError(error, context);
-            }
+                response -> {
+                    Logger.e(TAG, "book order response: " + response.toString());
+                    pd.dismiss();
+                    bookShipRequest = null;
+                    showBookSuccessDialog();
+                    User user = new Select().from(User.class).where("UserId = ?", AppController.getInstance().getUserId()).executeSingle();
+                    user.address = pickupAddr;
+                    user.save();
+                    lmxService.updateUser(AppController.getInstance().getUserId(), user);
+                }, error -> {
+            bookShipRequest = null;
+            pd.dismiss();
+            Util.handleVolleyError(error, context);
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(bookShipRequest);
@@ -622,16 +604,14 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void showBookSuccessDialog() {
         new AlertDialog.Builder(context)
                 .setMessage(getString(R.string.book_success))
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finishBooking();
-                    }
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    dialog.dismiss();
+                    finishBooking();
                 })
                 .show();
     }
 
-    private void finishBooking(){
+    private void finishBooking() {
         finish();
     }
 }

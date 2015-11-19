@@ -1,21 +1,13 @@
 package lmdelivery.longmen.com.android.api;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.text.TextUtils;
-
-import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import lmdelivery.longmen.com.android.AppController;
-import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.*;
-import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.data.*;
+import lmdelivery.longmen.com.android.data.Package;
 import lmdelivery.longmen.com.android.util.CountryCode;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Unit;
@@ -26,7 +18,7 @@ import lmdelivery.longmen.com.android.util.Unit;
 public class Order {
     private static final String TAG = Order.class.getSimpleName();
 
-    public static JSONObject buildOrderParam(String clientId, String nickName, RateItem rateItem, Address pickupAddr, Address dropOffAddr, ArrayList<Package> packageArrayList,
+    public static JSONObject buildOrderParam(int clientId, String nickName, RateItem rateItem, Address pickupAddr, Address dropOffAddr, ArrayList<Package> packageArrayList,
                                                 MyTime selectedTime, String declareValue, String insuranceValue){
         JSONObject params = new JSONObject();
         try {
@@ -71,7 +63,7 @@ public class Order {
 
         JSONArray shipments = new JSONArray();
 
-        for(lmdelivery.longmen.com.android.bean.Package aPackage : packageArrayList){
+        for(lmdelivery.longmen.com.android.data.Package aPackage : packageArrayList){
 
             try {
                 JSONObject shipment = new JSONObject();

@@ -25,8 +25,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.Shipments;
-import lmdelivery.longmen.com.android.bean.TrackingDetail;
+import lmdelivery.longmen.com.android.data.Shipments;
+import lmdelivery.longmen.com.android.data.TrackingDetail;
 import lmdelivery.longmen.com.android.util.DateUtil;
 import lmdelivery.longmen.com.android.util.Util;
 
@@ -115,15 +115,12 @@ public class TrackDetailActivity extends AppCompatActivity {
             SpannableString spanString = new SpannableString(shipments.getTrackingNumber());
             spanString.setSpan(new UnderlineSpan(), 0, spanString.length(), 0);
             tvTrackingNumber.setText(spanString);
-            tvTrackingNumber.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(shipments.getTracking().getTrackingURL()));
-                        context.startActivity(browserIntent);
-                    } catch (Exception e) {
-                        Toast.makeText(context, R.string.fail_to_open_browser, Toast.LENGTH_SHORT).show();
-                    }
+            tvTrackingNumber.setOnClickListener(v1 -> {
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(shipments.getTracking().getTrackingURL()));
+                    context.startActivity(browserIntent);
+                } catch (Exception e) {
+                    Toast.makeText(context, R.string.fail_to_open_browser, Toast.LENGTH_SHORT).show();
                 }
             });
         }catch (Exception e){

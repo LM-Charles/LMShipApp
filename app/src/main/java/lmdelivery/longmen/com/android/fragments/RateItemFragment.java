@@ -1,7 +1,6 @@
 package lmdelivery.longmen.com.android.fragments;
 
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +20,7 @@ import java.util.List;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.SelectProductActivity;
-import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.data.RateItem;
 import lmdelivery.longmen.com.android.util.DateUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -145,12 +144,7 @@ public class RateItemFragment extends Fragment {
                     .into(holder.icon);
 
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((SelectProductActivity)getActivity()).showPaymentDialog(item);
-                }
-            });
+            holder.mView.setOnClickListener(v -> ((SelectProductActivity)getActivity()).showPaymentDialog(item));
         }
 
         @Override

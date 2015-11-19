@@ -15,14 +15,11 @@ import lmdelivery.longmen.com.android.util.Logger;
  * Created by rzhu on 7/6/2015.
  */
 public class LoginBaseActivity extends AppCompatActivity{
-    private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+    private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener = () -> {
 
-        @Override
-        public void onGlobalLayout() {
-
-            //this solution doesn't work because screen size is not changing when keyboard show/hide,
-            // so I hard code it to always collapse the toolbar image to make more room for user to enter edittext
-            onShowKeyboard(0);
+        //this solution doesn't work because screen size is not changing when keyboard show/hide,
+        // so I hard code it to always collapse the toolbar image to make more room for user to enter edittext
+        onShowKeyboard(0);
 //            int heightDiff = rootLayout.getRootView().getHeight() - rootLayout.getHeight();
 //            int rootHeight = rootLayout.getRootView().getHeight();
 //            int rootlayoutHeight = rootLayout.getHeight();
@@ -46,7 +43,6 @@ public class LoginBaseActivity extends AppCompatActivity{
 //                intent.putExtra("KeyboardHeight", keyboardHeight);
 //                broadcastManager.sendBroadcast(intent);
 //            }
-        }
     };
 
     private boolean keyboardListenersAttached = false;

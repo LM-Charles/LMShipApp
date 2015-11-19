@@ -17,7 +17,7 @@ import java.util.List;
 
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.MyTime;
+import lmdelivery.longmen.com.android.data.MyTime;
 
 /**
  * A fragment representing a list of Items.
@@ -224,14 +224,11 @@ public class TimeFragment extends Fragment {
             else
                 holder.mView.setSelected(false);
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mListener) {
-                        mListener.onTimeSelected(mValues.get(position));
-                        holder.mView.setSelected(true);
-                        notifyItemRangeChanged(0,mValues.size());
-                    }
+            holder.mView.setOnClickListener(v -> {
+                if (null != mListener) {
+                    mListener.onTimeSelected(mValues.get(position));
+                    holder.mView.setSelected(true);
+                    notifyItemRangeChanged(0,mValues.size());
                 }
             });
         }

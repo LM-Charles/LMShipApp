@@ -8,13 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,24 +35,19 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.RateItem;
-import lmdelivery.longmen.com.android.bean.Shipments;
-import lmdelivery.longmen.com.android.bean.TrackingDetail;
+import lmdelivery.longmen.com.android.data.TrackingDetail;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
@@ -96,25 +86,17 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fab.setEnabled(false);
-                Intent intent = new Intent(context, NewBookingActivity.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            fab.setEnabled(false);
+            Intent intent = new Intent(context, NewBookingActivity.class);
+            startActivity(intent);
         });
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
         setupRecyclerView();
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                updateShipments();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> updateShipments());
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
     }
@@ -133,12 +115,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         fab.setEnabled(true);
         invalidateOptionsMenu();
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                updateShipments();
-            }
-        });
+        mSwipeRefreshLayout.post(() -> updateShipments());
     }
 
     @Override
@@ -177,17 +154,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 new AlertDialog.Builder(context)
                         .setMessage(getString(R.string.logout_confirm, AppController.getInstance().getUserEmail()))
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                logout();
-                                dialog.dismiss();
-                            }
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            logout();
+                            dialog.dismiss();
                         })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                            dialog.dismiss();
                         })
                         .show();
                 break;
@@ -212,34 +184,28 @@ public class MainActivity extends AppCompatActivity {
             mSwipeRefreshLayout.setRefreshing(true);
 
         updateTrackingRequest = new JsonArrayRequest(Request.Method.GET, Constant.REST_URL + "order?userId=" + AppController.getInstance().getUserId() + "&token=" + AppController.getInstance().getUserToken()
-                + "&limit=" + "20" + "&offset=" + "0", new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Logger.i(TAG, response.toString());
-                updateTrackingRequest = null;
-                mSwipeRefreshLayout.setRefreshing(false);
-                try {
-                    Type listType = new TypeToken<ArrayList<TrackingDetail>>() {
-                    }.getType();
-                    ArrayList<TrackingDetail> trackingDetailArrayList = new Gson().fromJson(response.toString(), listType);
-                    if (trackingDetailArrayList.size() == 0)
-                        adapter.setEmptyView();
-                    else
-                        adapter.updateValues(trackingDetailArrayList);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                updateTrackingRequest = null;
-                mSwipeRefreshLayout.setRefreshing(false);
-//                Util.handleVolleyError(error, context);
-                adapter.setEmptyView();
-            }
-        });
+                + "&limit=" + "20" + "&offset=" + "0", response -> {
+                    Logger.i(TAG, response.toString());
+                    updateTrackingRequest = null;
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    try {
+                        Type listType = new TypeToken<ArrayList<TrackingDetail>>() {
+                        }.getType();
+                        ArrayList<TrackingDetail> trackingDetailArrayList = new Gson().fromJson(response.toString(), listType);
+                        if (trackingDetailArrayList.size() == 0)
+                            adapter.setEmptyView();
+                        else
+                            adapter.updateValues(trackingDetailArrayList);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
+                    }
+                }, error -> {
+                    updateTrackingRequest = null;
+                    mSwipeRefreshLayout.setRefreshing(false);
+    //                Util.handleVolleyError(error, context);
+                    adapter.setEmptyView();
+                });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(updateTrackingRequest, "updateTrackingRequest");
     }
@@ -253,35 +219,29 @@ public class MainActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.loading));
         pd.show();
 
-        logoutRequest = new JsonObjectRequest(Request.Method.DELETE, Constant.REST_URL + "login/" + AppController.getInstance().getUserId() + "?token=" + AppController.getInstance().getUserToken(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.e(TAG, response.toString());
-                pd.dismiss();
-                logoutRequest = null;
-                try {
-                    SharedPreferences.Editor editor = AppController.getInstance().getDefaultSharePreferences().edit();
-                    editor.putString(Constant.SHARE_USER_EMAIL, "");
-                    editor.putString(Constant.SHARE_USER_ID, "");
-                    editor.putString(Constant.SHARE_USER_TOKEN, "");
-                    editor.putString(Constant.SHARE_USER_PHONE, "");
-                    editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, false);
-                    editor.apply();
-                    invalidateOptionsMenu();
-                    Toast.makeText(context, R.string.logout_success, Toast.LENGTH_LONG).show();
-                    updateShipments();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
-                }
+        logoutRequest = new JsonObjectRequest(Request.Method.DELETE, Constant.REST_URL + "login/" + AppController.getInstance().getUserId() + "?token=" + AppController.getInstance().getUserToken(), response -> {
+            Logger.e(TAG, response.toString());
+            pd.dismiss();
+            logoutRequest = null;
+            try {
+                SharedPreferences.Editor editor = AppController.getInstance().getDefaultSharePreferences().edit();
+                editor.putString(Constant.SHARE_USER_EMAIL, "");
+                editor.putInt(Constant.SHARE_USER_ID, -1);
+                editor.putString(Constant.SHARE_USER_TOKEN, "");
+                editor.putString(Constant.SHARE_USER_PHONE, "");
+                editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, false);
+                editor.apply();
+                invalidateOptionsMenu();
+                Toast.makeText(context, R.string.logout_success, Toast.LENGTH_LONG).show();
+                updateShipments();
+            } catch (Exception e) {
+                e.printStackTrace();
+                DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                logoutRequest = null;
-                pd.dismiss();
-                Util.handleVolleyError(error, context);
-            }
+        }, error -> {
+            logoutRequest = null;
+            pd.dismiss();
+            Util.handleVolleyError(error, context);
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(logoutRequest, "logout");
@@ -412,19 +372,16 @@ public class MainActivity extends AppCompatActivity {
                 holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
                 }
 
-                holder.btnTrack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (trackingDetail.getShipments() != null && trackingDetail.getShipments().length > 0 && trackingDetail.getShipments()[0].getTracking() != null && trackingDetail.getShipments()[0].getTracking().getTrackingURL() != null) {
-                            try {
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trackingDetail.getShipments()[0].getTracking().getTrackingURL()));
-                                context.startActivity(browserIntent);
-                            } catch (Exception e) {
-                                Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
+                holder.btnTrack.setOnClickListener(v -> {
+                    if (trackingDetail.getShipments() != null && trackingDetail.getShipments().length > 0 && trackingDetail.getShipments()[0].getTracking() != null && trackingDetail.getShipments()[0].getTracking().getTrackingURL() != null) {
+                        try {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trackingDetail.getShipments()[0].getTracking().getTrackingURL()));
+                            context.startActivity(browserIntent);
+                        } catch (Exception e) {
                             Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -439,14 +396,11 @@ public class MainActivity extends AppCompatActivity {
                 // Here you apply the animation when the view is bound
                 setAnimation(holder.mView, position);
 
-                holder.llCard.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                holder.llCard.setOnClickListener(v -> {
 
-                        Intent intent = new Intent(context, TrackDetailActivity.class);
-                        intent.putExtra(Constant.EXTRA_TRACK_DETAIL, trackingDetail);
-                        context.startActivity(intent);
-                    }
+                    Intent intent = new Intent(context, TrackDetailActivity.class);
+                    intent.putExtra(Constant.EXTRA_TRACK_DETAIL, trackingDetail);
+                    context.startActivity(intent);
                 });
             }
         }

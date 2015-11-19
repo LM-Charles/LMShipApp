@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import lmdelivery.longmen.com.android.AppController;
-import lmdelivery.longmen.com.android.bean.*;
-import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.data.*;
+import lmdelivery.longmen.com.android.data.Package;
 import lmdelivery.longmen.com.android.util.CountryCode;
 import lmdelivery.longmen.com.android.util.Logger;
 
@@ -60,7 +60,7 @@ public class Rate {
 
         JSONArray shipments = new JSONArray();
 
-        for(lmdelivery.longmen.com.android.bean.Package aPackage : packageArrayList){
+        for(lmdelivery.longmen.com.android.data.Package aPackage : packageArrayList){
 
             try {
                 JSONObject shipment = new JSONObject();

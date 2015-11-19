@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.Package;
+import lmdelivery.longmen.com.android.data.Package;
 import lmdelivery.longmen.com.android.util.Util;
 
 /**
@@ -79,12 +79,7 @@ public class SummaryFragment extends Fragment {
             tvPickup.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
-        cardFrom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newBookingActivity.scrollTo(Constant.TAB_FROM);
-            }
-        });
+        cardFrom.setOnClickListener(v -> newBookingActivity.scrollTo(Constant.TAB_FROM));
 
         if (newBookingActivity.validateDropOff()) {
             tvDropoff.setText(newBookingActivity.dropOffAddr.buildFullAddress());
@@ -94,12 +89,7 @@ public class SummaryFragment extends Fragment {
             tvDropoff.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
-        cardTo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newBookingActivity.scrollTo(Constant.TAB_TO);
-            }
-        });
+        cardTo.setOnClickListener(v -> newBookingActivity.scrollTo(Constant.TAB_TO));
 
         if(newBookingActivity.validateAllPackage()){
             tvPackage.setText(buildPackageString());
@@ -109,12 +99,7 @@ public class SummaryFragment extends Fragment {
             tvPackage.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
-        cardPackage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newBookingActivity.scrollTo(Constant.TAB_PACKAGE);
-            }
-        });
+        cardPackage.setOnClickListener(v -> newBookingActivity.scrollTo(Constant.TAB_PACKAGE));
 
         if (newBookingActivity.selectedTime != null) {
             String time = newBookingActivity.selectedTime.isToday() ? getString(R.string.today) : getString(R.string.tomorrow);
@@ -126,12 +111,7 @@ public class SummaryFragment extends Fragment {
             tvTime.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
-        cardTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newBookingActivity.scrollTo(Constant.TAB_TIME);
-            }
-        });
+        cardTime.setOnClickListener(v -> newBookingActivity.scrollTo(Constant.TAB_TIME));
 
         if (newBookingActivity.validateInsurance()) {
             String text = getString(R.string.estimate_value)+ " $ " + newBookingActivity.declareValue + "\n";
@@ -151,12 +131,7 @@ public class SummaryFragment extends Fragment {
             tvInsurance.setTextColor(getResources().getColor(R.color.red));
             result = false;
         }
-        cardInsurance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newBookingActivity.scrollTo(Constant.TAB_INSURANCE);
-            }
-        });
+        cardInsurance.setOnClickListener(v -> newBookingActivity.scrollTo(Constant.TAB_INSURANCE));
         return  result;
     }
 

@@ -1,7 +1,6 @@
 package lmdelivery.longmen.com.android.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -26,9 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,20 +36,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
-import lmdelivery.longmen.com.android.bean.Address;
+import lmdelivery.longmen.com.android.data.Address;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -249,16 +241,13 @@ public class PickupFragment extends Fragment {
 
             }
         });
-        mAutocompleteView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    Util.closeKeyBoard(getActivity(), mAutocompleteView);
-                    handled = true;
-                }
-                return handled;
+        mAutocompleteView.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                Util.closeKeyBoard(getActivity(), mAutocompleteView);
+                handled = true;
             }
+            return handled;
         });
     }
 
@@ -401,82 +390,76 @@ public class PickupFragment extends Fragment {
 
         Logger.e(TAG, url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Display the first 500 characters of the response string.
-                        if (isAdded()) {
-                            Log.e(TAG, "Response is: " + response.toString());
+                response -> {
+                    // Display the first 500 characters of the response string.
+                    if (isAdded()) {
+                        Log.e(TAG, "Response is: " + response.toString());
 
 
-                            try {
-                                JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
-                                String streetNumber = "", streetName = "", city = "", province = "", country = "", post = "", adminLevel2 = "";
-                                for (int i = 0; i < addrComponentArr.length(); i++) {
+                        try {
+                            JSONArray addrComponentArr = response.getJSONObject("result").getJSONArray("address_components");
+                            String streetNumber = "", streetName = "", city = "", province = "", country = "", post = "", adminLevel2 = "";
+                            for (int i = 0; i < addrComponentArr.length(); i++) {
 
-                                    JSONObject component = ((JSONObject) addrComponentArr.get(i));
-                                    JSONArray typeArr = component.getJSONArray("types");
-                                    Logger.e(TAG, typeArr.get(0).toString());
-                                    if (typeArr.length() > 0) {
+                                JSONObject component = ((JSONObject) addrComponentArr.get(i));
+                                JSONArray typeArr = component.getJSONArray("types");
+                                Logger.e(TAG, typeArr.get(0).toString());
+                                if (typeArr.length() > 0) {
 
-                                        String type = typeArr.get(0).toString();
-                                        if (type.equals("administrative_area_level_2")) {
-                                            adminLevel2 = component.getString("long_name");
-                                        } else if (type.equals("street_number")) {
-                                            streetNumber = component.getString("long_name");
-                                        } else if (type.equals("route")) {
-                                            streetName = component.getString("long_name");
-                                        } else if (type.equals("locality")) {
-                                            city = component.getString("long_name");
-                                        } else if (type.equals("administrative_area_level_1")) {
-                                            province = component.getString("long_name");
-                                        } else if (type.equals("country")) {
-                                            country = component.getString("long_name");
-                                        } else if (type.equals("postal_code_prefix")) {
-                                            post = component.getString("long_name");
-                                        } else if (type.equals("postal_code")) {
-                                            post = component.getString("long_name");
-                                        }
+                                    String type = typeArr.get(0).toString();
+                                    if (type.equals("administrative_area_level_2")) {
+                                        adminLevel2 = component.getString("long_name");
+                                    } else if (type.equals("street_number")) {
+                                        streetNumber = component.getString("long_name");
+                                    } else if (type.equals("route")) {
+                                        streetName = component.getString("long_name");
+                                    } else if (type.equals("locality")) {
+                                        city = component.getString("long_name");
+                                    } else if (type.equals("administrative_area_level_1")) {
+                                        province = component.getString("long_name");
+                                    } else if (type.equals("country")) {
+                                        country = component.getString("long_name");
+                                    } else if (type.equals("postal_code_prefix")) {
+                                        post = component.getString("long_name");
+                                    } else if (type.equals("postal_code")) {
+                                        post = component.getString("long_name");
                                     }
                                 }
-
-                                if (!Constant.citiesInVan.contains(city.toUpperCase())) {
-                                    Toast.makeText(getActivity(), getActivity().getString(R.string.can_only_pick_up_in_van), Toast.LENGTH_LONG).show();
-                                } else {
-                                    etPostal.setText(post);
-                                    etCity.setText(city);
-                                    mAutocompleteView.setAdapter(null);
-                                    mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
-                                    mAutocompleteView.setAdapter(mAdapter);
-
-                                    //show map
-
-                                    JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
-                                    String lat = location.getString("lat");
-                                    String lng = location.getString("lng");
-                                    if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
-
-                                        Double dLat = Double.parseDouble(lat);
-                                        Double dLng = Double.parseDouble(lng);
-                                        LatLng latLng = new LatLng(dLat, dLng);
-                                        if (mMap != null && mapView != null) {
-                                            mapView.setVisibility(View.VISIBLE);
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                            mMap.addMarker(new MarkerOptions().position(latLng));
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
+
+                            if (!Constant.citiesInVan.contains(city.toUpperCase())) {
+                                Toast.makeText(getActivity(), getActivity().getString(R.string.can_only_pick_up_in_van), Toast.LENGTH_LONG).show();
+                            } else {
+                                etPostal.setText(post);
+                                etCity.setText(city);
+                                mAutocompleteView.setAdapter(null);
+                                mAutocompleteView.setText(((streetNumber.isEmpty()) ? "" : (streetNumber + " ")) + ((streetName.isEmpty()) ? "" : streetName));
+                                mAutocompleteView.setAdapter(mAdapter);
+
+                                //show map
+
+                                JSONObject location = response.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                                String lat = location.getString("lat");
+                                String lng = location.getString("lng");
+                                if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
+
+                                    Double dLat = Double.parseDouble(lat);
+                                    Double dLng = Double.parseDouble(lng);
+                                    LatLng latLng = new LatLng(dLat, dLng);
+                                    if (mMap != null && mapView != null) {
+                                        mapView.setVisibility(View.VISIBLE);
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                        mMap.addMarker(new MarkerOptions().position(latLng));
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "That didn't work!");
-            }
-        });
+                }, error -> {
+                    Log.e(TAG, "That didn't work!");
+                });
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
     }
@@ -485,12 +468,7 @@ public class PickupFragment extends Fragment {
         if (mMap == null) {
             final SupportMapFragment mMapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
             // Try to obtain the map from the SupportMapFragment.
-            mMapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    mMap = googleMap;
-                }
-            });
+            mMapFragment.getMapAsync(googleMap -> mMap = googleMap);
         }
     }
 }

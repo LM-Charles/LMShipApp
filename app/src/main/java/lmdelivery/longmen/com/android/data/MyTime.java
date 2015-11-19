@@ -1,4 +1,4 @@
-package lmdelivery.longmen.com.android.bean;
+package lmdelivery.longmen.com.android.data;
 
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;

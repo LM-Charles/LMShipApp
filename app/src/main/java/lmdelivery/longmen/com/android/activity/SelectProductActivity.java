@@ -1,6 +1,5 @@
 package lmdelivery.longmen.com.android.activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,38 +11,25 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.api.Order;
-import lmdelivery.longmen.com.android.bean.Address;
-import lmdelivery.longmen.com.android.bean.MyTime;
-import lmdelivery.longmen.com.android.bean.Package;
-import lmdelivery.longmen.com.android.bean.RateItem;
-import lmdelivery.longmen.com.android.bean.RateItemPriceComparator;
+import lmdelivery.longmen.com.android.data.Address;
+import lmdelivery.longmen.com.android.data.MyTime;
+import lmdelivery.longmen.com.android.data.Package;
+import lmdelivery.longmen.com.android.data.RateItem;
+import lmdelivery.longmen.com.android.data.RateItemPriceComparator;
 import lmdelivery.longmen.com.android.fragments.RateItemFragment;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackActivity;
 import lmdelivery.longmen.com.android.swipeback.SwipeBackLayout;
 import lmdelivery.longmen.com.android.util.DialogUtil;
-import lmdelivery.longmen.com.android.util.Logger;
-import lmdelivery.longmen.com.android.util.Util;
 
 
 public class SelectProductActivity extends SwipeBackActivity {
@@ -154,12 +140,7 @@ public class SelectProductActivity extends SwipeBackActivity {
     }
 
     public void showPaymentDialog(final RateItem item){
-        DialogUtil.showSingleEstimateDialog(this, item, mInsuranceRate, mPackageRate, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                bookShipment(item);
-            }
-        });
+        DialogUtil.showSingleEstimateDialog(this, item, mInsuranceRate, mPackageRate, (dialog, which) -> bookShipment(item));
     }
 
     static class Adapter extends FragmentPagerAdapter {

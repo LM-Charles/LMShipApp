@@ -1,11 +1,9 @@
-package lmdelivery.longmen.com.android.bean;
+package lmdelivery.longmen.com.android.data;
 
 import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by rzhu on 7/24/2015.

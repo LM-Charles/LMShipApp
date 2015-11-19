@@ -90,24 +90,16 @@ public class RegisterFragment extends Fragment {
         tilPassWord = (TextInputLayout) root.findViewById(R.id.til_password);
 
         mPasswordView = (EditText) root.findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptRegister();
-                    return true;
-                }
-                return false;
+        mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                attemptRegister();
+                return true;
             }
+            return false;
         });
 
         Button mEmailSignInButton = (Button) root.findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptRegister();
-            }
-        });
+        mEmailSignInButton.setOnClickListener(view -> attemptRegister());
 
 
         TextView link = (TextView) root.findViewById(R.id.link);
@@ -209,35 +201,29 @@ public class RegisterFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            registerRequest = new JsonObjectRequest(Request.Method.PUT, Constant.REST_URL + "user", params, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Logger.e(TAG, response.toString());
-                    pd.dismiss();
-                    registerRequest = null;
+            registerRequest = new JsonObjectRequest(Request.Method.PUT, Constant.REST_URL + "user", params, response -> {
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                registerRequest = null;
 
-                    try {
-                        String id = response.getString("id");
-                        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constant.SHARE_NAME, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString(Constant.SHARE_USER_EMAIL, email);
-                        editor.putString(Constant.SHARE_USER_ID, id);
-                        editor.apply();
-                        Toast.makeText(getActivity(), getString(R.string.register_successful), Toast.LENGTH_LONG).show();
-                        ((LoginActivity) getActivity()).showVerifyPhoneNumberDialog(email, password);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        DialogUtil.showMessageDialog(getString(R.string.err_connection), getActivity());
-                    }
+                try {
+                    int id = response.getInt("id");
+                    SharedPreferences sharedPref = getActivity().getSharedPreferences(Constant.SHARE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(Constant.SHARE_USER_EMAIL, email);
+                    editor.putInt(Constant.SHARE_USER_ID, id);
+                    editor.apply();
+                    Toast.makeText(getActivity(), getString(R.string.register_successful), Toast.LENGTH_LONG).show();
+                    ((LoginActivity) getActivity()).showVerifyPhoneNumberDialog(email, password);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DialogUtil.showMessageDialog(getString(R.string.err_connection), getActivity());
+                }
 
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    pd.dismiss();
-                    Util.handleVolleyError(error, getActivity());
-                    registerRequest = null;
-                }
+            }, error -> {
+                pd.dismiss();
+                Util.handleVolleyError(error, getActivity());
+                registerRequest = null;
             });
 
             // Adding request to request queue

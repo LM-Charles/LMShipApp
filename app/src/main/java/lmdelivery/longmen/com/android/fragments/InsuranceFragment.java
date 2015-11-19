@@ -86,17 +86,14 @@ public class InsuranceFragment extends Fragment {
         });
 
         Switch insuranceSwitch = (Switch) rootView.findViewById(R.id.switch1);
-        insuranceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    revealInsurance();
-                } else {
-                    hideInsurance();
-                    insuranceValue.setText("");
-                    tvInsurace.setText("$ 0");
-                    ((NewBookingActivity) getActivity()).insuranceValue = "";
-                }
+        insuranceSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                revealInsurance();
+            } else {
+                hideInsurance();
+                insuranceValue.setText("");
+                tvInsurace.setText("$ 0");
+                ((NewBookingActivity) getActivity()).insuranceValue = "";
             }
         });
 
@@ -208,12 +205,7 @@ public class InsuranceFragment extends Fragment {
             // start the animation
             anim.start();
         } else {
-            llInsurance.animate().alpha(0).setDuration(500).withEndAction(new Runnable() {
-                @Override
-                public void run() {
-                    llInsurance.setVisibility(View.GONE);
-                }
-            }).start();
+            llInsurance.animate().alpha(0).setDuration(500).withEndAction(() -> llInsurance.setVisibility(View.GONE)).start();
         }
     }
 

@@ -1,9 +1,7 @@
-package lmdelivery.longmen.com.android.bean;
+package lmdelivery.longmen.com.android.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.Comparator;
 
 /**
  * Created by rzhu on 6/30/2015.

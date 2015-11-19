@@ -9,10 +9,12 @@ import com.squareup.okhttp.OkHttpClient;
 import dagger.Component;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.activity.MainActivity;
+import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.dagger.module.DataModule;
 import lmdelivery.longmen.com.android.dagger.module.NetworkModule;
 import lmdelivery.longmen.com.android.dagger.module.ZoroModule;
 import lmdelivery.longmen.com.android.dagger.scope.PerApp;
+import lmdelivery.longmen.com.android.fragments.LoginFragment;
 import retrofit.Retrofit;
 
 /**
@@ -41,4 +43,6 @@ public interface LMXAppComponent {
     SharedPreferences getSharedPreferences();
 
     void inject(MainActivity mainActivity);
+    void inject(NewBookingActivity newBookingActivity);
+    void inject(LoginFragment loginFragment);
 }

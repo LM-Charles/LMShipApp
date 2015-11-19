@@ -1,7 +1,6 @@
-package lmdelivery.longmen.com.android.bean;
+package lmdelivery.longmen.com.android.data;
 
 import android.text.TextUtils;
-import android.widget.TextView;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;

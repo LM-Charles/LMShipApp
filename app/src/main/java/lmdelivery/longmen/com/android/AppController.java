@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
+import com.activeandroid.ActiveAndroid;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +13,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.facebook.stetho.Stetho;
 
 import io.fabric.sdk.android.Fabric;
 import lmdelivery.longmen.com.android.dagger.component.DaggerLMXAppComponent;
@@ -36,6 +38,7 @@ public class AppController extends com.activeandroid.app.Application {
         mInstance = this;
         component = DaggerLMXAppComponent.builder()
                 .zoroModule(new ZoroModule(this)).build();
+        Stetho.initializeWithDefaults(this);
     }
 
     public static LMXAppComponent getComponent() {
@@ -85,8 +88,8 @@ public class AppController extends com.activeandroid.app.Application {
         return getSharedPreferences(Constant.SHARE_NAME, MODE_PRIVATE);
     }
 
-    public String getUserId() {
-        return getDefaultSharePreferences().getString(Constant.SHARE_USER_ID, "");
+    public int getUserId() {
+        return getDefaultSharePreferences().getInt(Constant.SHARE_USER_ID, -1);
     }
 
     public String getUserToken() {

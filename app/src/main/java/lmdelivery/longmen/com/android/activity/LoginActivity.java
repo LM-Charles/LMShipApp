@@ -49,7 +49,7 @@ import java.util.List;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.data.RateItem;
 import lmdelivery.longmen.com.android.fragments.LoginFragment;
 import lmdelivery.longmen.com.android.fragments.RegisterFragment;
 import lmdelivery.longmen.com.android.util.DialogUtil;
@@ -105,12 +105,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         tabLayout.setupWithViewPager(viewPager);
 
 
-        rootLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setMinimumHeight(rootLayout.getHeight());
-            }
-        });
+        rootLayout.post(() -> viewPager.setMinimumHeight(rootLayout.getHeight()));
 
         populateAutoComplete();
 
@@ -315,104 +310,78 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
 
         final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
 
-        btnContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Util.sendSupportEmail(context);
-            }
-        });
+        btnContact.setOnClickListener(v -> Util.sendSupportEmail(context));
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getCodeRequest != null)
-                    return;
+        btnSave.setOnClickListener(v -> {
+            if (getCodeRequest != null)
+                return;
 
-                final String phone = etPhone.getText().toString();
-                if (phone.isEmpty()) {
-                    tilPhone.setError(getString(R.string.error_field_required));
-                } else if (phone.length() < 10) {
-                    tilPhone.setError(getString(R.string.error_phone_too_short));
-                } else if (phone.length() > 10) {
-                    tilPhone.setError(getString(R.string.error_phone_too_long));
-                } else {
-                    final ProgressDialog pd = new ProgressDialog(context);
-                    pd.setMessage(getString(R.string.loading));
-                    pd.show();
+            final String phone = etPhone.getText().toString();
+            if (phone.isEmpty()) {
+                tilPhone.setError(getString(R.string.error_field_required));
+            } else if (phone.length() < 10) {
+                tilPhone.setError(getString(R.string.error_phone_too_short));
+            } else if (phone.length() > 10) {
+                tilPhone.setError(getString(R.string.error_phone_too_long));
+            } else {
+                final ProgressDialog pd = new ProgressDialog(context);
+                pd.setMessage(getString(R.string.loading));
+                pd.show();
 
 
-                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation?phone=1" + phone + "&email=" + email + "&password=" + password, new Response.Listener<JSONObject>() {
+                getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation?phone=1" + phone + "&email=" + email + "&password=" + password, response -> {
+                    getCodeRequest = null;
+                    Logger.e(TAG, response.toString());
+                    pd.dismiss();
+                    AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
 
+                    try {
+                        String message = response.getString("message");
+                        DialogUtil.showMessageDialog(message, context);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
+                    etPhone.addTextChangedListener(new TextWatcher() {
                         @Override
-                        public void onResponse(JSONObject response) {
-                            getCodeRequest = null;
-                            Logger.e(TAG, response.toString());
-                            pd.dismiss();
-                            AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-
-                            try {
-                                String message = response.getString("message");
-                                DialogUtil.showMessageDialog(message, context);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            etPhone.addTextChangedListener(new TextWatcher() {
-                                @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                }
-
-                                @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                }
-
-                                @Override
-                                public void afterTextChanged(Editable s) {
-                                    btnContact.setVisibility(View.GONE);
-                                    btnVerify.setVisibility(View.GONE);
-                                    btnSave.setVisibility(View.VISIBLE);
-                                    tilCode.setVisibility(View.GONE);
-                                    btnRequestAgain.setVisibility(View.GONE);
-                                    tvNoCode.setVisibility(View.GONE);
-                                }
-                            });
-                            btnContact.setVisibility(View.VISIBLE);
-                            btnVerify.setVisibility(View.VISIBLE);
-                            btnSave.setVisibility(View.GONE);
-                            btnRequestAgain.setVisibility(View.VISIBLE);
-                            tilCode.setVisibility(View.VISIBLE);
-                            tvNoCode.setVisibility(View.VISIBLE);
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                         }
-                    }, new Response.ErrorListener() {
+
                         @Override
-                        public void onErrorResponse(VolleyError error) {
-                            getCodeRequest = null;
-                            pd.dismiss();
-                            Util.handleVolleyError(error, context);
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            btnContact.setVisibility(View.GONE);
+                            btnVerify.setVisibility(View.GONE);
+                            btnSave.setVisibility(View.VISIBLE);
+                            tilCode.setVisibility(View.GONE);
+                            btnRequestAgain.setVisibility(View.GONE);
+                            tvNoCode.setVisibility(View.GONE);
                         }
                     });
+                    btnContact.setVisibility(View.VISIBLE);
+                    btnVerify.setVisibility(View.VISIBLE);
+                    btnSave.setVisibility(View.GONE);
+                    btnRequestAgain.setVisibility(View.VISIBLE);
+                    tilCode.setVisibility(View.VISIBLE);
+                    tvNoCode.setVisibility(View.VISIBLE);
+                }, error -> {
+                    getCodeRequest = null;
+                    pd.dismiss();
+                    Util.handleVolleyError(error, context);
+                });
 
-                    // Adding request to request queue
-                    AppController.getInstance().addToRequestQueue(getCodeRequest);
-                }
+                // Adding request to request queue
+                AppController.getInstance().addToRequestQueue(getCodeRequest);
             }
         });
 
-        btnRequestAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendGetCodeRequest(etPhone, tilPhone);
-            }
-        });
+        btnRequestAgain.setOnClickListener(v -> sendGetCodeRequest(etPhone, tilPhone));
 
 
-        btnVerify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendActivateAccountRequest(etCode, tilCode, dialog, email, password);
-            }
-        });
+        btnVerify.setOnClickListener(v -> sendActivateAccountRequest(etCode, tilCode, dialog, email, password));
 
         // Inflate and set the layout for the dialog
         dialog.setContentView(view);
@@ -420,13 +389,10 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         dialog.setCanceledOnTouchOutside(false);
         dialog.setTitle(getString(R.string.verify_phone));
         dialog.show();
-        etPhone.post(new Runnable() {
-            @Override
-            public void run() {
-                String phoneNumber = Util.getPhoneNumber();
-                if (!TextUtils.isEmpty(phoneNumber))
-                    etPhone.setText(phoneNumber);
-            }
+        etPhone.post(() -> {
+            String phoneNumber = Util.getPhoneNumber();
+            if (!TextUtils.isEmpty(phoneNumber))
+                etPhone.setText(phoneNumber);
         });
     }
 
@@ -447,23 +413,16 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
             pd.setMessage(getString(R.string.loading));
             pd.show();
 
-            getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, new Response.Listener<JSONObject>() {
-
-                @Override
-                public void onResponse(JSONObject response) {
-                    getCodeRequest = null;
-                    Logger.e(TAG, response.toString());
-                    pd.dismiss();
-                    AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
-                    DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), context);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    getCodeRequest = null;
-                    pd.dismiss();
-                    Util.handleVolleyError(error, context);
-                }
+            getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/" + AppController.getInstance().getUserId() + "/activation?phone=" + "1" + phone, response -> {
+                getCodeRequest = null;
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
+                DialogUtil.showMessageDialog(getString(R.string.verify_dialog_text, phone), context);
+            }, error -> {
+                getCodeRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error, context);
             });
 
             // Adding request to request queue
@@ -485,29 +444,21 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
             pd.show();
 
 
-            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation/" + code + "?email=" + AppController.getInstance().getUserEmail(), new Response.Listener<JSONObject>() {
-
-
-                @Override
-                public void onResponse(JSONObject response) {
-                    activateAccountRequest = null;
-                    Logger.e(TAG, response.toString());
-                    pd.dismiss();
-                    dialog.dismiss();
-                    SharedPreferences sharedPref = context.getSharedPreferences(Constant.SHARE_NAME, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
-                    editor.apply();
-                    showVerifySuccessDialog(email, password);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Logger.e(TAG, error.toString());
-                    activateAccountRequest = null;
-                    pd.dismiss();
-                    Util.handleVolleyError(error, context);
-                }
+            activateAccountRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation/" + code + "?email=" + AppController.getInstance().getUserEmail(), response -> {
+                activateAccountRequest = null;
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                dialog.dismiss();
+                SharedPreferences sharedPref = context.getSharedPreferences(Constant.SHARE_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
+                editor.apply();
+                showVerifySuccessDialog(email, password);
+            }, error -> {
+                Logger.e(TAG, error.toString());
+                activateAccountRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error, context);
             });
 
             // Adding request to request queue
@@ -518,11 +469,9 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     private void showVerifySuccessDialog(final String email, final String password) {
         new AlertDialog.Builder(context)
                 .setMessage(getString(R.string.account_activated))
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        loginFragment.attemptLogin(email, password);
-                        dialog.dismiss();
-                    }
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    loginFragment.attemptLogin(email, password);
+                    dialog.dismiss();
                 })
                 .show();
     }

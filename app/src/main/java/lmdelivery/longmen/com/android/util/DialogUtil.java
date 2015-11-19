@@ -1,7 +1,6 @@
 package lmdelivery.longmen.com.android.util;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -9,20 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.bean.Address;
-import lmdelivery.longmen.com.android.bean.RateItem;
+import lmdelivery.longmen.com.android.data.RateItem;
 
 /**
  * Created by rufuszhu on 15-09-07.
@@ -34,10 +24,8 @@ public class DialogUtil {
         try {
             new AlertDialog.Builder(context)
                     .setMessage(message)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
                     })
                     .show();
         }catch (Exception e){
