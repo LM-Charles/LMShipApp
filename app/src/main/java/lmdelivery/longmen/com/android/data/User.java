@@ -9,8 +9,8 @@ import com.activeandroid.annotation.Table;
  */
 @Table(name = "User")
 public class User extends Model {
-    @Column(name = "UserId")
-    public int id;
+    @Column(name = "remote_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public long id;
     @Column(name = "Phone")
     public String phone;
     @Column(name = "Email")
@@ -23,5 +23,6 @@ public class User extends Model {
     public Address address;
 
     public User() {
+        super();
     }
 }

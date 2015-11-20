@@ -48,9 +48,11 @@ import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.RxUtils;
 import lmdelivery.longmen.com.android.util.Util;
 import rx.Scheduler;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -241,36 +243,49 @@ public class LoginFragment extends Fragment {
                     editor.putString(Constant.SHARE_USER_TOKEN, token);
                     editor.apply();
 
-                    subscriptions.add(lmxService.getUser(id)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new rx.Observer<User>() {
-                                @Override
-                                public void onCompleted() {
+                    Timber.i("starting");
+                    subscriptions.add(
+                            lmxService.getUser(id)
+                                    .subscribeOn(Schedulers.newThread())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<User>() {
+                                        @Override
+                                        public void onCompleted() {
+                                            Timber.i("onCompleted");
+                                            if (!status.equals("ACTIVE")) {
+                                                Toast.makeText(getActivity(), R.string.verify_again, Toast.LENGTH_LONG).show();
+                                                ((LoginActivity) getActivity()).showVerifyPhoneNumberDialog(finalEmail, finalPassword);
+                                            } else {
+                                                editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
+                                                editor.apply();
+                                                ((LoginActivity) getActivity()).returnLoginSuccessResult();
+                                                Toast.makeText(getActivity(), R.string.login_success, Toast.LENGTH_LONG).show();
+                                            }
+                                        }
 
-                                }
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            Timber.e("onError" + e.toString());
+                                            if (!status.equals("ACTIVE")) {
+                                                Toast.makeText(getActivity(), R.string.verify_again, Toast.LENGTH_LONG).show();
+                                                ((LoginActivity) getActivity()).showVerifyPhoneNumberDialog(finalEmail, finalPassword);
+                                            } else {
+                                                editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
+                                                editor.apply();
+                                                ((LoginActivity) getActivity()).returnLoginSuccessResult();
+                                                Toast.makeText(getActivity(), R.string.login_success, Toast.LENGTH_LONG).show();
+                                            }
+                                        }
 
-                                @Override
-                                public void onError(Throwable e) {
+                                        @Override
+                                        public void onNext(User user) {
+                                            if(user.address!=null){
+                                                user.address.save();
+                                            }
 
-                                }
-
-                                @Override
-                                public void onNext(User user) {
-                                    user.save();
-                                }
-                            }));
-
-                    if (!status.equals("ACTIVE")) {
-                        Toast.makeText(getActivity(), R.string.verify_again, Toast.LENGTH_LONG).show();
-                        ((LoginActivity) getActivity()).showVerifyPhoneNumberDialog(finalEmail, finalPassword);
-                    } else {
-                        editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, true);
-                        editor.apply();
-                        ((LoginActivity) getActivity()).returnLoginSuccessResult();
-                        Toast.makeText(getActivity(), R.string.login_success, Toast.LENGTH_LONG).show();
-                    }
-
+                                            user.save();
+                                        }
+                                    }));
                 } catch (Exception e) {
                     e.printStackTrace();
                     DialogUtil.showMessageDialog(getString(R.string.err_connection), getActivity());
@@ -316,7 +331,6 @@ public class LoginFragment extends Fragment {
             mEmailView.setAdapter(adapter);
         }
     }
-
 
 
     public interface OnLoginListener {

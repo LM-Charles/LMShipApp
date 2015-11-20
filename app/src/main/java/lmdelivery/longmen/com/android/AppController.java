@@ -19,6 +19,7 @@ import io.fabric.sdk.android.Fabric;
 import lmdelivery.longmen.com.android.dagger.component.DaggerLMXAppComponent;
 import lmdelivery.longmen.com.android.dagger.component.LMXAppComponent;
 import lmdelivery.longmen.com.android.dagger.module.ZoroModule;
+import timber.log.Timber;
 
 /**
  * Created by Kaiyu on 2015-06-25.
@@ -38,7 +39,16 @@ public class AppController extends com.activeandroid.app.Application {
         mInstance = this;
         component = DaggerLMXAppComponent.builder()
                 .zoroModule(new ZoroModule(this)).build();
+
+        //debug only
         Stetho.initializeWithDefaults(this);
+        Timber.plant(new Timber.DebugTree() {
+            //add line number to the tag
+            @Override
+            protected String createStackElementTag(StackTraceElement element) {
+                return super.createStackElementTag(element) + ':' + element.getLineNumber();
+            }
+        });
     }
 
     public static LMXAppComponent getComponent() {

@@ -11,9 +11,9 @@ import rx.Observable;
 
 public interface LMXService {
     @GET("/rest/user/{id}")
-    Observable<User> getUser(@Path("q") int id);
+    Observable<User> getUser(@Path("id") int id);
 
     @POST("/rest/user/{id}")
-    Observable<User> updateUser(@Path("q") int id, @Body User user);
+    Observable<User> updateUser(@Path("id") int id, @Body User user);
 
 }

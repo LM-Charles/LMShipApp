@@ -143,6 +143,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_trans_dot);
         tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_trans_dot);
         tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_trans_dot);
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -305,7 +306,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private void init() {
 
-        User user = new Select().from(User.class).where("UserId = ?", AppController.getInstance().getUserId()).executeSingle();
+        User user = new Select().from(User.class).where("remote_id = ?", AppController.getInstance().getUserId()).executeSingle();
         if(user!=null && user.address!=null){
             pickupAddr = user.address;
         }else{
@@ -521,7 +522,8 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     pd.dismiss();
                     bookShipRequest = null;
                     showBookSuccessDialog();
-                    User user = new Select().from(User.class).where("UserId = ?", AppController.getInstance().getUserId()).executeSingle();
+                    User user = new Select().from(User.class).where("remote_id = ?", AppController.getInstance().getUserId()).executeSingle();
+                    pickupAddr.save();
                     user.address = pickupAddr;
                     user.save();
                     lmxService.updateUser(AppController.getInstance().getUserId(), user);

@@ -38,12 +38,12 @@ public class Address extends Model implements Serializable {
     @Column(name = "Phone")
     private String phone;
 
+
     public Address() {
         name="";
         phone="";
         fullAddress="";
         streetName="";
-
         unitNumber="";
         postalCode="";
         city="";
