@@ -42,7 +42,7 @@ import javax.inject.Inject;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
-import lmdelivery.longmen.com.android.api.LMXService;
+import lmdelivery.longmen.com.android.api.LMXApi;
 import lmdelivery.longmen.com.android.api.Order;
 import lmdelivery.longmen.com.android.api.Rate;
 import lmdelivery.longmen.com.android.data.Address;
@@ -90,7 +90,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private Context context;
 
     @Inject
-    LMXService lmxService;
+    LMXApi lmxApi;
 
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
@@ -526,7 +526,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     pickupAddr.save();
                     user.address = pickupAddr;
                     user.save();
-                    lmxService.updateUser(AppController.getInstance().getUserId(), user);
+                    lmxApi.updateUser(AppController.getInstance().getUserId(), user);
                 }, error -> {
             bookShipRequest = null;
             pd.dismiss();

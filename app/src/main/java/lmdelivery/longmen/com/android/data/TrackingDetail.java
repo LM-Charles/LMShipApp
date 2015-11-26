@@ -1,28 +1,56 @@
 package lmdelivery.longmen.com.android.data;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by rufus on 2015-09-22.
  */
 public class TrackingDetail implements Serializable{
     @SerializedName("id")
+    @Expose
     int id;
+    @Expose
     int client;
-    String orderDate;
+    @Expose
+    Date orderDate;
+    @Expose
     String courierServiceType;
+
+    public String getService_icon_url() {
+        return service_icon_url;
+    }
+
+    public void setService_icon_url(String service_icon_url) {
+        this.service_icon_url = service_icon_url;
+    }
+
+    @Expose
+    String service_icon_url;
+    @Expose
     Shipments[] shipments;
+    @Expose
     double estimateCost;
+    @Expose
     double finalCost;
+    @Expose
     Address fromAddress;
+    @Expose
     Address toAddress;
+    @Expose
     String handler;
+    @Expose
     Double declareValue;
+    @Expose
     Double insuranceValue;
-    String appointmentDate;
+    @Expose
+    Date appointmentDate;
+    @Expose
     String appointmentSlotType;
+    @Expose
     OrderStatusModel orderStatusModel;
 
     public int getId() {
@@ -41,11 +69,11 @@ public class TrackingDetail implements Serializable{
         this.client = client;
     }
 
-    public String getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(String orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -121,11 +149,11 @@ public class TrackingDetail implements Serializable{
         this.insuranceValue = insuranceValue;
     }
 
-    public String getAppointmentDate() {
+    public Date getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(String appointmentDate) {
+    public void setAppointmentDate(Date appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 

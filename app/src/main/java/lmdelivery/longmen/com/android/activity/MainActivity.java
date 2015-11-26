@@ -3,7 +3,6 @@ package lmdelivery.longmen.com.android.activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -29,28 +28,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.api.LMXApi;
 import lmdelivery.longmen.com.android.data.TrackingDetail;
+import lmdelivery.longmen.com.android.data.User;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.RxUtils;
 import lmdelivery.longmen.com.android.util.Util;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -65,12 +69,17 @@ public class MainActivity extends AppCompatActivity {
     private JsonArrayRequest updateTrackingRequest;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FloatingActionButton fab;
+    private CompositeSubscription subscriptions = new CompositeSubscription();
+
+    @Inject
+    LMXApi lmxApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+        AppController.getComponent().inject(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -116,11 +125,14 @@ public class MainActivity extends AppCompatActivity {
         fab.setEnabled(true);
         invalidateOptionsMenu();
         mSwipeRefreshLayout.post(() -> updateShipments());
+        subscriptions = RxUtils.getNewCompositeSubIfUnsubscribed(subscriptions);
     }
+
 
     @Override
     public void onStop() {
         super.onStop();
+        RxUtils.unsubscribeIfNotNull(subscriptions);
         if (logoutRequest != null) {
             logoutRequest.cancel();
             logoutRequest = null;
@@ -168,10 +180,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateShipments() {
-        if (updateTrackingRequest != null) {
-            return;
-        }
-
         if (!AppController.getInstance().isUserActivated()) {
             adapter.setEmptyView();
             if (mSwipeRefreshLayout.isRefreshing()) {
@@ -183,31 +191,32 @@ public class MainActivity extends AppCompatActivity {
         if (!mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
 
-        updateTrackingRequest = new JsonArrayRequest(Request.Method.GET, Constant.REST_URL + "order?userId=" + AppController.getInstance().getUserId() + "&token=" + AppController.getInstance().getUserToken()
-                + "&limit=" + "20" + "&offset=" + "0", response -> {
-                    Logger.i(TAG, response.toString());
-                    updateTrackingRequest = null;
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    try {
-                        Type listType = new TypeToken<ArrayList<TrackingDetail>>() {
-                        }.getType();
-                        ArrayList<TrackingDetail> trackingDetailArrayList = new Gson().fromJson(response.toString(), listType);
-                        if (trackingDetailArrayList.size() == 0)
-                            adapter.setEmptyView();
-                        else
-                            adapter.updateValues(trackingDetailArrayList);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
-                    }
-                }, error -> {
-                    updateTrackingRequest = null;
-                    mSwipeRefreshLayout.setRefreshing(false);
-    //                Util.handleVolleyError(error, context);
-                    adapter.setEmptyView();
-                });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(updateTrackingRequest, "updateTrackingRequest");
+        subscriptions.add(
+                lmxApi.getOrderByUser(AppController.getInstance().getUserId(), AppController.getInstance().getUserToken(), 24, 0)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<ArrayList<TrackingDetail>>() {
+                            @Override
+                            public void onCompleted() {
+                                Timber.i("onCompleted");
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                e.printStackTrace();
+                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onNext(ArrayList<TrackingDetail> trackingDetailArrayList) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                if (trackingDetailArrayList.size() == 0)
+                                    adapter.setEmptyView();
+                                else
+                                    adapter.updateValues(trackingDetailArrayList);
+                            }
+                        }));
     }
 
     private void logout() {
@@ -329,13 +338,11 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Here is the key method to apply the animation
          */
-        private void setAnimation(View viewToAnimate, int position)
-        {
+        private void setAnimation(View viewToAnimate, int position) {
             // If the bound view wasn't previously displayed on screen, it's animated
-            if (position > lastPosition && viewToAnimate!=null)
-            {
+            if (position > lastPosition && viewToAnimate != null) {
                 Animation animation = AnimationUtils.loadAnimation(context, R.anim.abc_slide_in_bottom);
-                animation.setStartOffset(position*80);
+                animation.setStartOffset(position * 80);
                 viewToAnimate.startAnimation(animation);
                 lastPosition = position;
             }
@@ -365,11 +372,11 @@ public class MainActivity extends AppCompatActivity {
                 final TrackingDetail trackingDetail = mValues.get(position);
                 holder.title.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
                 //display courier status if exist
-                if(trackingDetail.getShipments()!=null && trackingDetail.getShipments().length>0 && trackingDetail.getShipments()[0].getTracking()!=null){
+                if (trackingDetail.getShipments() != null && trackingDetail.getShipments().length > 0 && trackingDetail.getShipments()[0].getTracking() != null) {
                     holder.status.setText(Util.toDisplayCase(trackingDetail.getShipments()[0].getTracking().getTrackingStatus()));
-                }else{
-                //otherwise display LM status
-                holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
+                } else {
+                    //otherwise display LM status
+                    holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
                 }
 
                 holder.btnTrack.setOnClickListener(v -> {
@@ -386,11 +393,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 Glide.with(context)
-                        .load(R.mipmap.ic_launcher)
+                        .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
+                        .error(R.mipmap.ic_launcher)
                         .centerCrop()
                         .crossFade()
                         .into(holder.icon);
-
 
 
                 // Here you apply the animation when the view is bound

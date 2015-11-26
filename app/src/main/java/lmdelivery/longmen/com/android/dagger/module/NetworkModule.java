@@ -3,16 +3,24 @@ package lmdelivery.longmen.com.android.dagger.module;
 import android.app.Application;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import java.io.File;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.Date;
 
 import dagger.Module;
 import dagger.Provides;
 import lmdelivery.longmen.com.android.Constant;
-import lmdelivery.longmen.com.android.api.LMXService;
+import lmdelivery.longmen.com.android.api.LMXApi;
 import lmdelivery.longmen.com.android.dagger.scope.PerApp;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -52,7 +60,16 @@ public class NetworkModule {
         return new Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(Constant.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+                        .excludeFieldsWithoutExposeAnnotation()
+//                        .serializeNulls()
+                                // Register an adapter to manage the date types as long values
+                        .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                                return new Date(json.getAsJsonPrimitive().getAsLong());
+                            }
+                        })
+                        .create()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }
@@ -60,8 +77,8 @@ public class NetworkModule {
 
     @Provides
     @PerApp
-    LMXService provideLMXService(Retrofit retrofit) {
-        return retrofit.create(LMXService.class);
+    LMXApi provideLMXService(Retrofit retrofit) {
+        return retrofit.create(LMXApi.class);
     }
 
 }

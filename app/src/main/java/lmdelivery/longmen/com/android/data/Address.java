@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -17,58 +18,67 @@ import lmdelivery.longmen.com.android.util.CountryCode;
 @Table(name = "Addresses")
 public class Address extends Model implements Serializable {
     @Column(name = "FullAddress")
+    @Expose
     private String fullAddress;
+    @Expose
     @Column(name = "StreetName")
     @SerializedName("address")
     private String streetName;
+    @Expose
     @Column(name = "UnitNumber")
     @SerializedName("address2")
     private String unitNumber;
+    @Expose
     @Column(name = "PostalCode")
     @SerializedName("postal")
     private String postalCode;
+    @Expose
     @Column(name = "City")
     private String city;
+    @Expose
     @Column(name = "Country")
     private String country;
+    @Expose
     @Column(name = "Province")
     private String province;
+    @Expose
     @Column(name = "Name")
     private String name;
+    @Expose
     @Column(name = "Phone")
     private String phone;
 
 
     public Address() {
-        name="";
-        phone="";
-        fullAddress="";
-        streetName="";
-        unitNumber="";
-        postalCode="";
-        city="";
-        country="";
-        province="";
+        name = "";
+        phone = "";
+        fullAddress = "";
+        streetName = "";
+        unitNumber = "";
+        postalCode = "";
+        city = "";
+        country = "";
+        province = "";
     }
 
-    public String buildFullAddress(){
+    public String buildFullAddress() {
         String result = "";
-        if(!TextUtils.isEmpty(name))
+        if (!TextUtils.isEmpty(name))
             result += name + "\n";
-        if(!TextUtils.isEmpty(name))
+        if (!TextUtils.isEmpty(name))
             result += phone + "\n";
 
-        String countryName = !TextUtils.isEmpty(CountryCode.getCountryName(country))?CountryCode.getCountryName(country):country;
+        String countryName = !TextUtils.isEmpty(CountryCode.getCountryName(country)) ? CountryCode.getCountryName(country) : country;
 
-        if(countryName.equals("China") || countryName.equals("中国") || countryName.equals("CN")){
+        if (countryName.equals("China") || countryName.equals("中国") || countryName.equals("CN")) {
             result += streetName;
-            if(!unitNumber.isEmpty()){
+            if (!unitNumber.isEmpty()) {
                 result += " " + unitNumber + "\n";
             }
             result += city + ", " + province + ", " + postalCode + "\n" + countryName;
-        }else{
-            if(!unitNumber.isEmpty()){
-                result += unitNumber+"-";
+        } else {
+            if (!unitNumber.isEmpty()) {
+                result += unitNumber + "-";
             }
             result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + countryName;
         }

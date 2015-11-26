@@ -1,14 +1,20 @@
 package lmdelivery.longmen.com.android.data;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 
 /**
  * Created by rufus on 2015-09-22.
  */
 public class OrderStatusModel implements Serializable{
+    @Expose
     String status;
+    @Expose
     String statusDescription;
+    @Expose
     String handler;
+    @Expose
     String statusDate;
 
     public String getStatusDate() {

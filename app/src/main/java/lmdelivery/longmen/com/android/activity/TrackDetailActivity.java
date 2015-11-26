@@ -78,19 +78,20 @@ public class TrackDetailActivity extends AppCompatActivity {
         tvTo.setText(trackingDetail.getToAddress().buildFullAddress());
 //        tvId.setText("1");
         tvId.setText(String.valueOf(trackingDetail.getId()));
-        tvOrderDate.setText(DateUtil.UnixTimeToDateString(trackingDetail.getOrderDate()));
+        tvOrderDate.setText(trackingDetail.getOrderDate().toString());
         tvInsurace.setText("$" + Util.roundTo2(trackingDetail.getInsuranceValue()));
         tvStatus.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
         int slot;
         try{
             slot =Integer.parseInt(trackingDetail.getAppointmentSlotType().charAt(trackingDetail.getAppointmentSlotType().length()-1) + "");
-            tvPickupDate.setText(DateUtil.UnixTimeToDateString(trackingDetail.getAppointmentDate()) + "\n" + getResources().getStringArray(R.array.time_interval_array)[slot-1]);
+            tvPickupDate.setText(trackingDetail.getAppointmentDate().toString() + "\n" + getResources().getStringArray(R.array.time_interval_array)[slot-1]);
         }catch (Exception e){
             tvPickupDate.setText(getString(R.string.not_available));
         }
 
         Glide.with(this)
-                .load(R.mipmap.ic_launcher)
+                .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
+                .error(R.mipmap.ic_launcher)
                 .centerCrop()
                 .crossFade()
                 .into(ivIcon);

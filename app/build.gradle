@@ -69,7 +69,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'jp.wasabeef:recyclerview-animators:1.2.0@aar'
     compile 'com.github.bumptech.glide:glide:3.6.0'
-    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.code.gson:gson:2.5'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'io.reactivex:rxandroid:1.0.1'
@@ -96,5 +96,5 @@ dependencies {
     compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
 
     compile 'com.jakewharton.timber:timber:4.1.0'
-    compile 'com.squareup.okhttp:logging-interceptor:2.6.0-SNAPSHOT'
+    compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
 }

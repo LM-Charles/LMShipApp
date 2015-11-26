@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.inject.Inject;
 
@@ -41,13 +36,12 @@ import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.LoginActivity;
-import lmdelivery.longmen.com.android.api.LMXService;
+import lmdelivery.longmen.com.android.api.LMXApi;
 import lmdelivery.longmen.com.android.data.User;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.RxUtils;
 import lmdelivery.longmen.com.android.util.Util;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -78,7 +72,7 @@ public class LoginFragment extends Fragment {
     private OnLoginListener mListener;
 
     @Inject
-    LMXService lmxService;
+    LMXApi lmxApi;
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     public LoginFragment() {
@@ -245,7 +239,7 @@ public class LoginFragment extends Fragment {
 
                     Timber.i("starting");
                     subscriptions.add(
-                            lmxService.getUser(id)
+                            lmxApi.getUser(id)
                                     .subscribeOn(Schedulers.newThread())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<User>() {
