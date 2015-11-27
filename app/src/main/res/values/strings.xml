@@ -126,5 +126,7 @@
     <string name="for_import_tax">For import tax calculation</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
+    <string name="no_tracking_found">No booking found</string>
+    <string name="please_sign_in_first">Please sign in first in order to see your tracking here</string>
 
 </resources>

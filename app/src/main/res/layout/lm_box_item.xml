@@ -17,20 +17,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/big_box"
-        android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/view"
         android:textSize="@dimen/box_type_font_size"
+        android:layout_centerVertical="true"
         android:id="@+id/textView" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/big_box_dimention"
-        android:layout_centerVertical="true"
-        android:id="@+id/textView2"
-        android:textSize="@dimen/box_dimention_font_size"
-        android:layout_toEndOf="@id/view"
-        android:layout_below="@+id/textView" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/big_box_dimention"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:id="@+id/textView2"-->
+        <!--android:textSize="@dimen/box_dimention_font_size"-->
+        <!--android:layout_toEndOf="@id/view"-->
+        <!--android:layout_below="@+id/textView" />-->
 
     <CheckBox
         android:layout_width="wrap_content"

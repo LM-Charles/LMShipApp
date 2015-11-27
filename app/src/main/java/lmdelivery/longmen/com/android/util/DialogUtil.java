@@ -52,7 +52,7 @@ public class DialogUtil {
         Glide.with(context)
                 .load(Constant.ENDPOINT + rateItem.getService_icon_url())
                 .crossFade()
-                .error(R.mipmap.ic_launcher)
+                .error(R.drawable.logo)
                 .into(ivImage);
 
         tvCarrierType.setText(Util.toDisplayCase(rateItem.getServiceName()));

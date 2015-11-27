@@ -91,7 +91,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         Glide.with(this)
                 .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
-                .error(R.mipmap.ic_launcher)
+                .error(R.drawable.logo)
                 .centerCrop()
                 .crossFade()
                 .into(ivIcon);

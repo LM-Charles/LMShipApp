@@ -243,14 +243,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif"
+
                             android:text="@string/small_box"
                             android:textSize="@dimen/box_type_font_size" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/big_box_dimention"
-                            android:textSize="@dimen/box_dimention_font_size" />
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/big_box_dimention"-->
+                            <!--android:textSize="@dimen/box_dimention_font_size" />-->
                     </LinearLayout>
 
 
@@ -301,11 +302,11 @@
                             android:text="@string/med_box"
                             android:textSize="@dimen/box_type_font_size" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/big_box_dimention"
-                            android:textSize="@dimen/box_dimention_font_size" />
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/big_box_dimention"-->
+                            <!--android:textSize="@dimen/box_dimention_font_size" />-->
                     </LinearLayout>
 
                     <RadioButton
@@ -354,11 +355,11 @@
                             android:text="@string/big_box"
                             android:textSize="@dimen/box_type_font_size" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/big_box_dimention"
-                            android:textSize="@dimen/box_dimention_font_size" />
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/big_box_dimention"-->
+                            <!--android:textSize="@dimen/box_dimention_font_size" />-->
                     </LinearLayout>
 
 

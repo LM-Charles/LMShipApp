@@ -191,32 +191,40 @@ public class MainActivity extends AppCompatActivity {
         if (!mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
 
-        subscriptions.add(
-                lmxApi.getOrderByUser(AppController.getInstance().getUserId(), AppController.getInstance().getUserToken(), 24, 0)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<ArrayList<TrackingDetail>>() {
-                            @Override
-                            public void onCompleted() {
-                                Timber.i("onCompleted");
-                            }
+        int userId = AppController.getInstance().getUserId();
 
-                            @Override
-                            public void onError(Throwable e) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                                e.printStackTrace();
-                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+        if(userId!=-1) {
+            subscriptions.add(
+                    lmxApi.getOrderByUser(AppController.getInstance().getUserId(), AppController.getInstance().getUserToken(), 24, 0)
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber<ArrayList<TrackingDetail>>() {
+                                @Override
+                                public void onCompleted() {
+                                    Timber.i("onCompleted");
+                                }
 
-                            @Override
-                            public void onNext(ArrayList<TrackingDetail> trackingDetailArrayList) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                                if (trackingDetailArrayList.size() == 0)
-                                    adapter.setEmptyView();
-                                else
-                                    adapter.updateValues(trackingDetailArrayList);
-                            }
-                        }));
+                                @Override
+                                public void onError(Throwable e) {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    e.printStackTrace();
+                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onNext(ArrayList<TrackingDetail> trackingDetailArrayList) {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    if (trackingDetailArrayList.size() == 0) {
+                                        adapter.setEmptyView();
+                                        Toast.makeText(context, R.string.no_tracking_found, Toast.LENGTH_SHORT).show();
+                                    } else
+                                        adapter.updateValues(trackingDetailArrayList);
+                                }
+                            }));
+        }else{
+            Toast.makeText(context, R.string.please_sign_in_first, Toast.LENGTH_SHORT).show();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private void logout() {
@@ -324,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
             mValues = shipments;
             lastPosition = -1;
             notifyDataSetChanged();
+
 //            isEmpty = false;
 //            mValues.clear();
 //            notifyDataSetChanged();
@@ -394,14 +403,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Glide.with(context)
                         .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
-                        .error(R.mipmap.ic_launcher)
+                        .error(R.drawable.logo)
                         .centerCrop()
                         .crossFade()
                         .into(holder.icon);
 
 
                 // Here you apply the animation when the view is bound
-                setAnimation(holder.mView, position);
+//                setAnimation(holder.mView, position);
 
                 holder.llCard.setOnClickListener(v -> {
 

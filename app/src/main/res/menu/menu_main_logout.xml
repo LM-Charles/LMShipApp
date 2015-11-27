@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_logout"
         android:title="@string/title_activity_logout"
+        android:icon="@drawable/logout"
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 </menu>

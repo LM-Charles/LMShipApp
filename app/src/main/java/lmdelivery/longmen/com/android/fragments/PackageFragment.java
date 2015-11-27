@@ -54,11 +54,13 @@ public class PackageFragment extends Fragment {
         super.onAttach(activity);
         this.activity = (NewBookingActivity) activity;
     }
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PackageFragment() {}
+    public PackageFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class PackageFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_package_list, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
@@ -80,27 +82,27 @@ public class PackageFragment extends Fragment {
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        packageArrayList = ((NewBookingActivity)getActivity()).packageArrayList;
+        packageArrayList = ((NewBookingActivity) getActivity()).packageArrayList;
         mAdapter = new PackageRecyclerViewAdapter(getActivity(), packageArrayList, recyclerView);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setItemAnimator(new SlideInUpAnimator());
     }
 
-    public boolean validateAllPackage(){
+    public boolean validateAllPackage() {
 
-        if(getActivity()== null || packageArrayList ==null){
+        if (getActivity() == null || packageArrayList == null) {
             return false;
         }
 
         ArrayList<Package> aPackages = packageArrayList;
         boolean result = true;
-        for(int i = 0; i < aPackages.size(); i++){
+        for (int i = 0; i < aPackages.size(); i++) {
             Package aPackage = aPackages.get(i);
-            if(aPackage.isOwnBox() && (aPackage.getHeight().isEmpty() || aPackage.getLength().isEmpty() || aPackage.getWeight().isEmpty() || aPackage.getWidth().isEmpty())) {
+            if (aPackage.isOwnBox() && (aPackage.getHeight().isEmpty() || aPackage.getLength().isEmpty() || aPackage.getWeight().isEmpty() || aPackage.getWidth().isEmpty())) {
                 aPackage.setShowValidation(true);
                 mAdapter.notifyDataSetChanged();
                 result = false;
-            }else if(!aPackage.isOwnBox() && aPackage.getWeight().isEmpty()){
+            } else if (!aPackage.isOwnBox() && aPackage.getWeight().isEmpty()) {
                 aPackage.setShowValidation(true);
                 mAdapter.notifyDataSetChanged();
                 result = false;
@@ -114,6 +116,7 @@ public class PackageFragment extends Fragment {
         private Context context;
         private List<Package> packageArrayList;
         private RecyclerView recyclerView;
+
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView date;
@@ -139,7 +142,7 @@ public class PackageFragment extends Fragment {
                 rlSmallBox = (RelativeLayout) view.findViewById(R.id.rl_small_box);
                 rlMedBox = (RelativeLayout) view.findViewById(R.id.rl_med_box);
                 rlBigBox = (RelativeLayout) view.findViewById(R.id.rl_big_box);
-                
+
                 checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 
                 rbSmall = (RadioButton) view.findViewById(R.id.rb_small_box);
@@ -167,17 +170,17 @@ public class PackageFragment extends Fragment {
         }
 
         public void addPackage() {
-                packageArrayList.add(new Package());
-                notifyItemInserted(packageArrayList.size());
-                //this is to notify first item to show the close icon
-                notifyItemChanged(0);
-                recyclerView.scrollToPosition(packageArrayList.size() - 1);
+            packageArrayList.add(new Package());
+            notifyItemInserted(packageArrayList.size());
+            //this is to notify first item to show the close icon
+            notifyItemChanged(0);
+            recyclerView.scrollToPosition(packageArrayList.size() - 1);
         }
 
-        private void removePackage(int position){
-            if(((NewBookingActivity) context).packageArrayList.size()==1) {
+        private void removePackage(int position) {
+            if (((NewBookingActivity) context).packageArrayList.size() == 1) {
                 //TODO: add a toast
-            }else{
+            } else {
                 packageArrayList.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, packageArrayList.size());
@@ -186,32 +189,32 @@ public class PackageFragment extends Fragment {
             }
         }
 
-        private void showEditTextValidation(Package aPackage, PackageRecyclerViewAdapter.ViewHolder viewHolder){
+        private void showEditTextValidation(Package aPackage, PackageRecyclerViewAdapter.ViewHolder viewHolder) {
             String weight = viewHolder.etWeight.getText().toString();
-            if(aPackage.isOwnBox()){
+            if (aPackage.isOwnBox()) {
                 String height = viewHolder.etHeight.getText().toString();
                 String length = viewHolder.etLength.getText().toString();
                 String width = viewHolder.etWidth.getText().toString();
-                if(height.isEmpty())
-                    ((TextInputLayout)viewHolder.etHeight.getParent()).setError(context.getString(R.string.required));
+                if (height.isEmpty())
+                    ((TextInputLayout) viewHolder.etHeight.getParent()).setError(context.getString(R.string.required));
                 else
-                    ((TextInputLayout)viewHolder.etHeight.getParent()).setErrorEnabled(false);
+                    ((TextInputLayout) viewHolder.etHeight.getParent()).setErrorEnabled(false);
 
-                if(length.isEmpty())
-                    ((TextInputLayout)viewHolder.etLength.getParent()).setError(context.getString(R.string.required));
+                if (length.isEmpty())
+                    ((TextInputLayout) viewHolder.etLength.getParent()).setError(context.getString(R.string.required));
                 else
-                    ((TextInputLayout)viewHolder.etLength.getParent()).setErrorEnabled(false);
+                    ((TextInputLayout) viewHolder.etLength.getParent()).setErrorEnabled(false);
 
-                if(width.isEmpty())
-                    ((TextInputLayout)viewHolder.etWidth.getParent()).setError(context.getString(R.string.required));
+                if (width.isEmpty())
+                    ((TextInputLayout) viewHolder.etWidth.getParent()).setError(context.getString(R.string.required));
                 else
-                    ((TextInputLayout)viewHolder.etWidth.getParent()).setErrorEnabled(false);
+                    ((TextInputLayout) viewHolder.etWidth.getParent()).setErrorEnabled(false);
             }
 
-            if(weight.isEmpty())
-                ((TextInputLayout)viewHolder.etWeight.getParent()).setError(context.getString(R.string.required));
+            if (weight.isEmpty())
+                ((TextInputLayout) viewHolder.etWeight.getParent()).setError(context.getString(R.string.required));
             else
-                ((TextInputLayout)viewHolder.etWeight.getParent()).setErrorEnabled(false);
+                ((TextInputLayout) viewHolder.etWeight.getParent()).setErrorEnabled(false);
         }
 
         public PackageRecyclerViewAdapter(Context context, ArrayList<Package> aPackages, RecyclerView recyclerView) {
@@ -227,12 +230,12 @@ public class PackageFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder,final int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             final Package aPackage = packageArrayList.get(position);
             //update view
-            if(aPackage.isOwnBox()){
+            if (aPackage.isOwnBox()) {
                 holder.checkBox.setChecked(true);
-            }else{
+            } else {
                 holder.checkBox.setChecked(false);
             }
 
@@ -261,7 +264,7 @@ public class PackageFragment extends Fragment {
 
             holder.distanceSpinner.setAdapter(adapter);
             int lengthUnit = aPackage.getDistanceUnit();
-            if(lengthUnit == Unit.CM)
+            if (lengthUnit == Unit.CM)
                 holder.distanceSpinner.setSelection(0);
             else
                 holder.distanceSpinner.setSelection(1);
@@ -282,7 +285,7 @@ public class PackageFragment extends Fragment {
             holder.weightSpinner.setAdapter(weightAdapter);
 
             int weightUnit = aPackage.getWeightUnit();
-            if(weightUnit == Unit.KG)
+            if (weightUnit == Unit.KG)
                 holder.weightSpinner.setSelection(0);
             else
                 holder.weightSpinner.setSelection(1);
@@ -306,7 +309,7 @@ public class PackageFragment extends Fragment {
                 }
             });
 
-            switch (aPackage.getBoxSize()){
+            switch (aPackage.getBoxSize()) {
                 case Package.BIG_BOX:
                     holder.rbBig.setChecked(true);
                     break;
@@ -330,13 +333,13 @@ public class PackageFragment extends Fragment {
                 holder.llLmBox.setVisibility(View.VISIBLE);
             }
 
-            if(aPackage.isShowValidation()){
-                showEditTextValidation(aPackage,holder);
+            if (aPackage.isShowValidation()) {
+                showEditTextValidation(aPackage, holder);
             }
 
-            if(position==0 && packageArrayList.size()==1){
+            if (position == 0 && packageArrayList.size() == 1) {
                 holder.closeIcon.setVisibility(View.GONE);
-            }else {
+            } else {
                 holder.closeIcon.setVisibility(View.VISIBLE);
             }
 
@@ -396,7 +399,7 @@ public class PackageFragment extends Fragment {
                 public void afterTextChanged(Editable s) {
                     String height = holder.etHeight.getText().toString();
 
-                    if(!height.isEmpty()) {
+                    if (!height.isEmpty()) {
                         ((TextInputLayout) holder.etHeight.getParent()).setErrorEnabled(false);
                     }
 
@@ -406,14 +409,16 @@ public class PackageFragment extends Fragment {
 
             holder.etLength.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if(!holder.etLength.getText().toString().isEmpty()) {
+                    if (!holder.etLength.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etLength.getParent()).setErrorEnabled(false);
                     }
                     aPackage.setLength(holder.etLength.getText().toString());
@@ -422,14 +427,16 @@ public class PackageFragment extends Fragment {
 
             holder.etWeight.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if(!holder.etWeight.getText().toString().isEmpty()) {
+                    if (!holder.etWeight.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etWeight.getParent()).setErrorEnabled(false);
                     }
                     aPackage.setWeight(holder.etWeight.getText().toString());
@@ -438,14 +445,16 @@ public class PackageFragment extends Fragment {
 
             holder.etWidth.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if(!holder.etWidth.getText().toString().isEmpty()) {
+                    if (!holder.etWidth.getText().toString().isEmpty()) {
                         ((TextInputLayout) holder.etWidth.getParent()).setErrorEnabled(false);
                     }
                     aPackage.setWidth(holder.etWidth.getText().toString());
@@ -459,9 +468,9 @@ public class PackageFragment extends Fragment {
         }
     }
 
-    private String toCM(String number, String unit){
+    private String toCM(String number, String unit) {
 
-        if(unit.equalsIgnoreCase("inch")){
+        if (unit.equalsIgnoreCase("inch")) {
             int value = Integer.parseInt(number);
             number = String.valueOf((int) (value * 2.54));
         }
@@ -469,9 +478,9 @@ public class PackageFragment extends Fragment {
         return number;
     }
 
-    private String toKG(String number, String unit){
+    private String toKG(String number, String unit) {
 
-        if(unit.equalsIgnoreCase("lb")){
+        if (unit.equalsIgnoreCase("lb")) {
             int value = Integer.parseInt(number);
             number = String.valueOf((int) (value * 0.453592));
         }
