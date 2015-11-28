@@ -25,6 +25,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/card_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -37,7 +38,6 @@
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_material_light"
                 android:paddingBottom="16dp"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_24dp"
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp" />

@@ -27,7 +27,7 @@
     <application
         android:name=".AppController"
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:theme="@style/Base.Theme.LMTheme">
         <meta-data
@@ -46,7 +46,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAzRmv6oViKZ-uQ5DJrJn64gHYQVyHfF0s" />
 
-        <!-- home -->
+        <!-- home_white -->
         <!-- <meta-data -->
         <!-- android:name="com.google.android.geo.API_KEY" -->
         <!-- android:value="AIzaSyAKJVxQ1njS_Ki_hgicuSLrTWpJTGLd1ao" /> -->

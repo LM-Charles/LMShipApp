@@ -138,11 +138,11 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_trans_dot);
-        tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_trans_dot);
-        tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_trans_dot);
-        tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_trans_dot);
-        tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_trans_dot);
+        tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.home_white);
+        tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.ic_package);
+        tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.calendar_clock);
+        tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.truck_delivery);
+        tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.key);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -165,42 +165,46 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 switch (currentTab) {
                     case Constant.TAB_FROM:
                         if (pickupFragment != null && pickupFragment.saveAndValidate()) {
-                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_greendot);
+                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.home_valid);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.shape_yellowdot);
+                            tabLayout.getTabAt(Constant.TAB_FROM).setIcon(R.drawable.home_error);
                         }
                         break;
 
                     case Constant.TAB_TO:
                         if (dropOffFragment != null && dropOffFragment.saveAndValidate()) {
-                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_greendot);
+                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.truck_delivery_valid);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.shape_yellowdot);
+                            tabLayout.getTabAt(Constant.TAB_TO).setIcon(R.drawable.truck_delivery_error);
                         }
                         break;
 
                     case Constant.TAB_PACKAGE:
                         if (packageFragment != null && packageFragment.validateAllPackage()) {
-                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_greendot);
+                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.package_valid);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.shape_yellowdot);
+                            tabLayout.getTabAt(Constant.TAB_PACKAGE).setIcon(R.drawable.package_error);
                         }
                         break;
 
                     case Constant.TAB_TIME:
                         if (selectedTime != null) {
-                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_greendot);
+                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.calendar_clock_valid);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.shape_yellowdot);
+                            tabLayout.getTabAt(Constant.TAB_TIME).setIcon(R.drawable.calendar_clock_error);
                         }
                         break;
 
                     case Constant.TAB_INSURANCE:
                         if (!TextUtils.isEmpty(declareValue)) {
-                            tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_greendot);
+                            tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.key_valid);
                         } else {
-                            tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.shape_yellowdot);
+                            tabLayout.getTabAt(Constant.TAB_INSURANCE).setIcon(R.drawable.key_error);
                         }
+
+                        break;
+                    case Constant.TAB_SUMMARY:
+                        //todo: set tab icon to green
 
                         break;
                 }
@@ -263,7 +267,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private void setupDoneFab() {
         if (summaryFragment.setupView()) {
-            fab.setImageResource(R.drawable.ic_done);
+            fab.setImageResource(R.drawable.ic_search_24dp);
             fab.setBackgroundTintList(getResources().getColorStateList(R.color.done_state_list));
             fab.setOnClickListener(view -> getRate());
         } else {
@@ -272,7 +276,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     }
 
     private void setupNextFab() {
-        fab.setImageResource(R.drawable.ic_arrow_forward_white_36dp);
+        fab.setImageResource(R.drawable.ic_arrow_forward_24dp);
         fab.setBackgroundTintList(getResources().getColorStateList(R.color.normal_state_list));
         fab.setOnClickListener(view -> {
             int currentTab = viewPager.getCurrentItem();

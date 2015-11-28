@@ -140,7 +140,7 @@ public class RateItemFragment extends Fragment {
             Glide.with(fragment)
                     .load(Constant.ENDPOINT + item.getService_icon_url())
                     .crossFade()
-                    .error(R.drawable.logo)
+                    .error(R.mipmap.logo)
                     .into(holder.icon);
 
 

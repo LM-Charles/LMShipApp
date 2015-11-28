@@ -52,7 +52,7 @@ public class DialogUtil {
         Glide.with(context)
                 .load(Constant.ENDPOINT + rateItem.getService_icon_url())
                 .crossFade()
-                .error(R.drawable.logo)
+                .error(R.mipmap.logo)
                 .into(ivImage);
 
         tvCarrierType.setText(Util.toDisplayCase(rateItem.getServiceName()));
@@ -76,7 +76,7 @@ public class DialogUtil {
         try {
             tvPackagePrice.setText("$ " + Util.roundTo2(packageRate.getEstimate()));
         }catch (Exception e){
-            Logger.e("Failed to parse package price");
+            Logger.e("Failed to parse ic_package price");
             tvPackagePrice.setText("$-");
         }
 

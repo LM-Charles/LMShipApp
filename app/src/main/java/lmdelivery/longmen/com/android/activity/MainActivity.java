@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case android.R.id.home:
+//            case android.R.id.home_white:
 //                mDrawerLayout.openDrawer(GravityCompat.START);
 //                break;
             case R.id.action_login:
@@ -403,7 +403,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Glide.with(context)
                         .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
-                        .error(R.drawable.logo)
+                        .error(R.mipmap.logo)
                         .centerCrop()
                         .crossFade()
                         .into(holder.icon);
