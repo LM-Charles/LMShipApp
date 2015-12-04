@@ -60,7 +60,7 @@
 
     <string name="loading">Loading</string>
 
-    <string name="no_shipping">Welcome!\nPlease click the + button below to ship a new package</string>
+    <string name="no_shipping">Welcome to LMX!\nPlease click the + button below to ship a new package</string>
     <string name="account_activated">Welcome to LM Delivery!</string>
     <string name="track_package">Track Package</string>
     <string name="send_name">Sender\'s name</string>
@@ -128,5 +128,7 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="no_tracking_found">No booking found</string>
     <string name="please_sign_in_first">Please sign in first in order to see your tracking here</string>
+    <string name="transition_icon">transition_icon</string>
+    <string name="transition_title">transition_title</string>
 
 </resources>

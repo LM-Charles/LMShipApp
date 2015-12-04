@@ -21,7 +21,7 @@ repositories {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -69,6 +69,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'jp.wasabeef:recyclerview-animators:2.1.0'
     compile 'com.github.bumptech.glide:glide:3.6.0'
+    compile 'jp.wasabeef:glide-transformations:1.2.1'
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.jakewharton:butterknife:7.0.1'

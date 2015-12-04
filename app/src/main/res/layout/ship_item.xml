@@ -7,7 +7,6 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/normal_padding"
     android:layout_marginEnd="@dimen/normal_padding"
-    android:layout_marginTop="@dimen/normal_padding"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -32,6 +31,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="8dp"
+                android:singleLine="true"
+                android:layout_toStartOf="@+id/iv_ship_icon"
                 tools:text="Title"
                 android:fontFamily="sans-serif"
                 android:textSize="24sp"/>

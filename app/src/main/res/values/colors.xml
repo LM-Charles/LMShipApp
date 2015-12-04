@@ -47,7 +47,7 @@
     <color name="light_gray">#BDBDBD</color>
     <color name="default_text_color">#737373</color>
 
-    <color name="green_done">#00C853</color>
+    <color name="green_done">#8BC34A</color>
     <color name="red">#EF5350</color>
     <color name="teal">#009688</color>
     <color name="welcome_text_color">#91b6f7</color>
@@ -55,7 +55,7 @@
     <color name="gift_icon_color">#72aef3</color>
     <color name="welcome_text_background">#ec6392</color>
     <color name="welcome_icon_color">#96baf8</color>
-    <color name="yellow">#FFEB3B</color>
+    <color name="yellow">#FFC107</color>
 
     <color name="label_text_color">#212121</color>
 

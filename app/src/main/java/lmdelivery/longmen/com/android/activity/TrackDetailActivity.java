@@ -10,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -70,8 +73,10 @@ public class TrackDetailActivity extends AppCompatActivity {
         if (ab != null)
             ab.setDisplayHomeAsUpEnabled(true);
 
+
         context = this;
         TrackingDetail trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
+
         tvCarrier.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
         tvCost.setText("$" + Util.roundTo2(trackingDetail.getFinalCost()));
         tvFrom.setText(trackingDetail.getFromAddress().buildFullAddress());
@@ -99,7 +104,19 @@ public class TrackDetailActivity extends AppCompatActivity {
         for(int i = 0; i < trackingDetail.getShipments().length; i++){
             llPackage.addView(addPackageTracking(trackingDetail.getShipments()[i], i));
         }
+
+        setupWindowAnimations();
     }
+
+    private void setupWindowAnimations() {
+        Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.slide_and_changebounds);
+        getWindow().setSharedElementEnterTransition(transition);
+        getWindow().setSharedElementExitTransition(transition);
+        getWindow().setEnterTransition(new Fade());
+
+    }
+
+
 
     private View addPackageTracking(final Shipments shipments, int index){
         final Context contextThemeWrapper = new ContextThemeWrapper(context, R.style.Base_Theme_LMTheme);

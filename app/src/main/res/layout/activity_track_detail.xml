@@ -11,8 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -37,6 +40,7 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:textSize="24sp"
+                    android:transitionName="@string/transition_title"
                     tools:text="Title" />
 
                 <TextView
@@ -57,7 +61,8 @@
                     android:id="@+id/iv_ship_icon"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"
+                    android:transitionName="@string/transition_icon"/>
 
 
             </RelativeLayout>
@@ -81,14 +86,14 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/tracking_detail_padding">
 
-            <TextView
-                style="@style/Track.Label"
-                android:text="@string/id"/>
+                <TextView
+                    style="@style/Track.Label"
+                    android:text="@string/id" />
 
                 <TextView
                     android:id="@+id/tv_id"
                     style="@style/Track.content"
-                    tools:text="123"/>
+                    tools:text="123" />
             </RelativeLayout>
 
             <View
@@ -104,12 +109,12 @@
 
                 <TextView
                     style="@style/Track.Label"
-                    android:text="@string/order_date"/>
+                    android:text="@string/order_date" />
 
                 <TextView
                     android:id="@+id/tv_order_date"
                     style="@style/Track.content"
-                    tools:text="Jun 6, 2014"/>
+                    tools:text="Jun 6, 2014" />
             </RelativeLayout>
 
             <View
@@ -125,12 +130,12 @@
 
                 <TextView
                     style="@style/Track.Label"
-                    android:text="@string/ship_from"/>
+                    android:text="@string/ship_from" />
 
                 <TextView
                     android:id="@+id/tv_from"
                     style="@style/Track.content"
-                    tools:text="11920 Forge Pl, Richmond"/>
+                    tools:text="11920 Forge Pl, Richmond" />
             </RelativeLayout>
 
             <View
@@ -146,12 +151,12 @@
 
                 <TextView
                     style="@style/Track.Label"
-                    android:text="@string/ship_to"/>
+                    android:text="@string/ship_to" />
 
                 <TextView
                     android:id="@+id/tv_to"
                     style="@style/Track.content"
-                    tools:text="7362 Elmbridge Way\nRichmond"/>
+                    tools:text="7362 Elmbridge Way\nRichmond" />
             </RelativeLayout>
 
             <View
@@ -167,12 +172,12 @@
 
                 <TextView
                     style="@style/Track.Label"
-                    android:text="@string/pickup_date"/>
+                    android:text="@string/pickup_date" />
 
                 <TextView
                     android:id="@+id/tv_pickup_date"
                     style="@style/Track.content"
-                    tools:text="12:00AM - 2:00PM\nJun 14, 2015"/>
+                    tools:text="12:00AM - 2:00PM\nJun 14, 2015" />
             </RelativeLayout>
 
             <View
@@ -188,12 +193,12 @@
 
                 <TextView
                     style="@style/Track.Label"
-                    android:text="@string/insurance"/>
+                    android:text="@string/insurance" />
 
                 <TextView
                     android:id="@+id/tv_insurance"
                     style="@style/Track.content"
-                    tools:text="$300"/>
+                    tools:text="$300" />
             </RelativeLayout>
 
             <View
@@ -209,14 +214,13 @@
 
                 <TextView
                     style="@style/Track.Label"
-                    android:text="@string/cost"/>
+                    android:text="@string/cost" />
 
                 <TextView
                     android:id="@+id/tv_cost"
                     style="@style/Track.content"
-                    tools:text="$12.56"/>
+                    tools:text="$12.56" />
             </RelativeLayout>
-
 
 
         </LinearLayout>

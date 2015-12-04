@@ -1,5 +1,6 @@
 package lmdelivery.longmen.com.android.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,12 +9,15 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +44,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
@@ -49,7 +54,10 @@ import lmdelivery.longmen.com.android.data.User;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.RxUtils;
+import lmdelivery.longmen.com.android.util.TransitionHelper;
+import lmdelivery.longmen.com.android.util.UIUtil;
 import lmdelivery.longmen.com.android.util.Util;
+import lmdelivery.longmen.com.android.widget.VerticalSpaceItemDecoration;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FloatingActionButton fab;
     private CompositeSubscription subscriptions = new CompositeSubscription();
+    private static final float DIVIDER_HEIGHT = 8; //in dp
 
     @Inject
     LMXApi lmxApi;
@@ -82,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
         AppController.getComponent().inject(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
+        getWindow().setReenterTransition(new Fade());
 //        final ActionBar ab = getSupportActionBar();
 //        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
 //        ab.setDisplayHomeAsUpEnabled(true);
@@ -115,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         ArrayList<TrackingDetail> shipItems = new ArrayList<>();
         adapter = new ShipItemRecyclerViewAdapter(shipItems, context);
+        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration((int) UIUtil.convertDpToPixel(DIVIDER_HEIGHT, this)));
         //recyclerView.setItemAnimator(new SlideInUpAnimator());
         recyclerView.setAdapter(adapter);
     }
@@ -193,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
         int userId = AppController.getInstance().getUserId();
 
-        if(userId!=-1) {
+        if (userId != -1) {
             subscriptions.add(
                     lmxApi.getOrderByUser(AppController.getInstance().getUserId(), AppController.getInstance().getUserToken(), 24, 0)
                             .subscribeOn(Schedulers.newThread())
@@ -221,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                                         adapter.updateValues(trackingDetailArrayList);
                                 }
                             }));
-        }else{
+        } else {
             Toast.makeText(context, R.string.please_sign_in_first, Toast.LENGTH_SHORT).show();
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -277,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 //                });
 //    }
 
-    static private class ShipItemRecyclerViewAdapter extends RecyclerView.Adapter<ShipItemRecyclerViewAdapter.ViewHolder> {
+    private class ShipItemRecyclerViewAdapter extends RecyclerView.Adapter<ShipItemRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
         private Context context;
@@ -403,6 +415,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Glide.with(context)
                         .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
+                        .bitmapTransform(new RoundedCornersTransformation(context, 80, 0))
                         .error(R.mipmap.logo)
                         .centerCrop()
                         .crossFade()
@@ -413,10 +426,13 @@ public class MainActivity extends AppCompatActivity {
 //                setAnimation(holder.mView, position);
 
                 holder.llCard.setOnClickListener(v -> {
-
+                    Pair<View, String> iconPair = new Pair<>(holder.icon, context.getString(R.string.transition_icon));
+                    Pair<View, String> titlePair = new Pair<>(holder.title, context.getString(R.string.transition_title));
+                    final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants((Activity) context, false, iconPair, titlePair);
+                    ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, pairs);
                     Intent intent = new Intent(context, TrackDetailActivity.class);
                     intent.putExtra(Constant.EXTRA_TRACK_DETAIL, trackingDetail);
-                    context.startActivity(intent);
+                    context.startActivity(intent, transitionActivityOptions.toBundle());
                 });
             }
         }

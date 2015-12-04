@@ -2,20 +2,14 @@ package lmdelivery.longmen.com.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-import com.activeandroid.ActiveAndroid;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 
-import io.fabric.sdk.android.Fabric;
 import lmdelivery.longmen.com.android.dagger.component.DaggerLMXAppComponent;
 import lmdelivery.longmen.com.android.dagger.component.LMXAppComponent;
 import lmdelivery.longmen.com.android.dagger.module.ZoroModule;
@@ -118,9 +112,9 @@ public class AppController extends com.activeandroid.app.Application {
         return getDefaultSharePreferences().getBoolean(Constant.SHARE_IS_USER_ACTIVATED, false);
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(base);
+//        MultiDex.install(this);
+//    }
 }
