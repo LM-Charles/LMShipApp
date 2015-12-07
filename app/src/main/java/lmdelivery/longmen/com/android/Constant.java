@@ -9,6 +9,7 @@ import java.util.Set;
 public class Constant {
     public static final String REST_URL = "http://lmshipservice-devo.elasticbeanstalk.com/rest/";
     public static final String ENDPOINT = "http://lmshipservice-devo.elasticbeanstalk.com";
+    public static final String ENDPOINT_GOOGLE = "https://maps.googleapis.com";
     public static final String GOOGLE_PLACE_API_SERVER_KEY = "AIzaSyCeiPMf730xLzLtE6OJ4wslNCvtSrpVPlA";
 
     public static final String EXTRA_PICKUP = "EXTRA_PICKUP";

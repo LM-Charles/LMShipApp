@@ -17,9 +17,12 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Date;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import lmdelivery.longmen.com.android.Constant;
+import lmdelivery.longmen.com.android.api.GoogleAPI;
 import lmdelivery.longmen.com.android.api.LMXApi;
 import lmdelivery.longmen.com.android.dagger.scope.PerApp;
 import retrofit.GsonConverterFactory;
@@ -55,15 +58,33 @@ public class NetworkModule {
     }
 
     @Provides
+    @Named("LMX")
     @PerApp
-    Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+    Retrofit provideLMXRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(Constant.ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
                         .excludeFieldsWithoutExposeAnnotation()
-//                        .serializeNulls()
-                                // Register an adapter to manage the date types as long values
+                        .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                                return new Date(json.getAsJsonPrimitive().getAsLong());
+                            }
+                        })
+                        .create()))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+    }
+
+    @Provides
+    @Named("Google")
+    @PerApp
+    Retrofit provideGoogleRetrofit(OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl(Constant.ENDPOINT_GOOGLE)
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+                        .excludeFieldsWithoutExposeAnnotation()
                         .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
                             public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                                 return new Date(json.getAsJsonPrimitive().getAsLong());
@@ -77,8 +98,14 @@ public class NetworkModule {
 
     @Provides
     @PerApp
-    LMXApi provideLMXService(Retrofit retrofit) {
+    LMXApi provideLMXService(@Named("LMX") Retrofit retrofit) {
         return retrofit.create(LMXApi.class);
+    }
+
+    @Provides
+    @PerApp
+    GoogleAPI provideGoogleService(@Named("Google") Retrofit retrofit) {
+        return retrofit.create(GoogleAPI.class);
     }
 
 }

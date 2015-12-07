@@ -10,6 +10,7 @@ import dagger.Component;
 import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.activity.MainActivity;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
+import lmdelivery.longmen.com.android.activity.TrackDetailActivity;
 import lmdelivery.longmen.com.android.dagger.module.DataModule;
 import lmdelivery.longmen.com.android.dagger.module.NetworkModule;
 import lmdelivery.longmen.com.android.dagger.module.ZoroModule;
@@ -32,17 +33,8 @@ import retrofit.Retrofit;
 public interface LMXAppComponent {
     Application getApplication();
 
-    AppController getAppController();
-
-    Gson getGson();
-
-    OkHttpClient getOkHttpClient();
-
-    Retrofit getRetrofit();
-
-    SharedPreferences getSharedPreferences();
-
     void inject(MainActivity mainActivity);
+    void inject(TrackDetailActivity trackDetailActivity);
     void inject(NewBookingActivity newBookingActivity);
     void inject(LoginFragment loginFragment);
 }

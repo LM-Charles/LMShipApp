@@ -24,14 +24,22 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import lmdelivery.longmen.com.android.AppController;
 import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
+import lmdelivery.longmen.com.android.api.GoogleAPI;
 import lmdelivery.longmen.com.android.data.Shipments;
 import lmdelivery.longmen.com.android.data.TrackingDetail;
-import lmdelivery.longmen.com.android.util.DateUtil;
+import lmdelivery.longmen.com.android.data.googleAPI.GeocodingResult;
 import lmdelivery.longmen.com.android.util.Util;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class TrackDetailActivity extends AppCompatActivity {
 
@@ -58,6 +66,8 @@ public class TrackDetailActivity extends AppCompatActivity {
     @Bind(R.id.tv_pickup_date)
     TextView tvPickupDate;
 
+    @Inject
+    GoogleAPI googleAPI;
 
     private Context context;
 
@@ -69,6 +79,8 @@ public class TrackDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        AppController.getComponent().inject(this);
+
         final ActionBar ab = getSupportActionBar();
         if (ab != null)
             ab.setDisplayHomeAsUpEnabled(true);
@@ -76,6 +88,8 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         context = this;
         TrackingDetail trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
+
+        geocoding(trackingDetail);
 
         tvCarrier.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
         tvCost.setText("$" + Util.roundTo2(trackingDetail.getFinalCost()));
@@ -116,6 +130,30 @@ public class TrackDetailActivity extends AppCompatActivity {
 
     }
 
+    private void geocoding(TrackingDetail trackingDetail){
+        googleAPI.geocoding(trackingDetail.getFromAddress().buildFullAddress(), Constant.GOOGLE_PLACE_API_SERVER_KEY).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GeocodingResult>() {
+                    @Override
+                    public void onCompleted() {
+                        Timber.i("onCompleted");
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e("onError" + e.toString());
+
+                    }
+
+                    @Override
+                    public void onNext(GeocodingResult geocodingResult) {
+                        Timber.i("onNext");
+                        Timber.i( geocodingResult.toString());
+                    }
+                });
+
+    }
 
 
     private View addPackageTracking(final Shipments shipments, int index){

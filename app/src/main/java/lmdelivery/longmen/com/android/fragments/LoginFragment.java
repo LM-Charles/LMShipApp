@@ -240,7 +240,7 @@ public class LoginFragment extends Fragment {
                     Timber.i("starting");
                     subscriptions.add(
                             lmxApi.getUser(id)
-                                    .subscribeOn(Schedulers.newThread())
+                                    .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<User>() {
                                         @Override

@@ -191,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     private void updateShipments() {
         if (!AppController.getInstance().isUserActivated()) {
             adapter.setEmptyView();
