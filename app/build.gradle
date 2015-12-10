@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.JavaVersion
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -26,25 +28,24 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    dataBinding {
+        enabled = true
+    }
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     defaultConfig {
         applicationId "lmdelivery.longmen.com.android"
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -53,6 +54,9 @@ android {
     }
 
     compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+
         encoding "UTF-8"
     }
 }

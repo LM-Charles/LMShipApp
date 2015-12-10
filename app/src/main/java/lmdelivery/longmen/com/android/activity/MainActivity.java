@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -32,11 +33,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -106,17 +111,25 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            fab.setEnabled(false);
-            Intent intent = new Intent(context, NewBookingActivity.class);
-            startActivity(intent);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fab.setEnabled(false);
+                Intent intent = new Intent(context, NewBookingActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
         });
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
         setupRecyclerView();
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(() -> updateShipments());
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                MainActivity.this.updateShipments();
+            }
+        });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
     }
@@ -136,7 +149,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         fab.setEnabled(true);
         invalidateOptionsMenu();
-        mSwipeRefreshLayout.post(() -> updateShipments());
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.this.updateShipments();
+            }
+        });
         subscriptions = RxUtils.getNewCompositeSubIfUnsubscribed(subscriptions);
     }
 
@@ -178,12 +196,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 new AlertDialog.Builder(context)
                         .setMessage(getString(R.string.logout_confirm, AppController.getInstance().getUserEmail()))
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            logout();
-                            dialog.dismiss();
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                MainActivity.this.logout();
+                                dialog.dismiss();
+                            }
                         })
-                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-                            dialog.dismiss();
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
                         })
                         .show();
                 break;
@@ -250,29 +274,35 @@ public class MainActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.loading));
         pd.show();
 
-        logoutRequest = new JsonObjectRequest(Request.Method.DELETE, Constant.REST_URL + "login/" + AppController.getInstance().getUserId() + "?token=" + AppController.getInstance().getUserToken(), response -> {
-            Logger.e(TAG, response.toString());
-            pd.dismiss();
-            logoutRequest = null;
-            try {
-                SharedPreferences.Editor editor = AppController.getInstance().getDefaultSharePreferences().edit();
-                editor.putString(Constant.SHARE_USER_EMAIL, "");
-                editor.putInt(Constant.SHARE_USER_ID, -1);
-                editor.putString(Constant.SHARE_USER_TOKEN, "");
-                editor.putString(Constant.SHARE_USER_PHONE, "");
-                editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, false);
-                editor.apply();
-                invalidateOptionsMenu();
-                Toast.makeText(context, R.string.logout_success, Toast.LENGTH_LONG).show();
-                updateShipments();
-            } catch (Exception e) {
-                e.printStackTrace();
-                DialogUtil.showMessageDialog(getString(R.string.err_connection), context);
+        logoutRequest = new JsonObjectRequest(Request.Method.DELETE, Constant.REST_URL + "login/" + AppController.getInstance().getUserId() + "?token=" + AppController.getInstance().getUserToken(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.e(TAG, response.toString());
+                pd.dismiss();
+                logoutRequest = null;
+                try {
+                    SharedPreferences.Editor editor = AppController.getInstance().getDefaultSharePreferences().edit();
+                    editor.putString(Constant.SHARE_USER_EMAIL, "");
+                    editor.putInt(Constant.SHARE_USER_ID, -1);
+                    editor.putString(Constant.SHARE_USER_TOKEN, "");
+                    editor.putString(Constant.SHARE_USER_PHONE, "");
+                    editor.putBoolean(Constant.SHARE_IS_USER_ACTIVATED, false);
+                    editor.apply();
+                    MainActivity.this.invalidateOptionsMenu();
+                    Toast.makeText(context, R.string.logout_success, Toast.LENGTH_LONG).show();
+                    MainActivity.this.updateShipments();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DialogUtil.showMessageDialog(MainActivity.this.getString(R.string.err_connection), context);
+                }
             }
-        }, error -> {
-            logoutRequest = null;
-            pd.dismiss();
-            Util.handleVolleyError(error, context);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                logoutRequest = null;
+                pd.dismiss();
+                Util.handleVolleyError(error, context);
+            }
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(logoutRequest, "logout");
@@ -402,16 +432,19 @@ public class MainActivity extends AppCompatActivity {
                     holder.status.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
                 }
 
-                holder.btnTrack.setOnClickListener(v -> {
-                    if (trackingDetail.getShipments() != null && trackingDetail.getShipments().length > 0 && trackingDetail.getShipments()[0].getTracking() != null && trackingDetail.getShipments()[0].getTracking().getTrackingURL() != null) {
-                        try {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trackingDetail.getShipments()[0].getTracking().getTrackingURL()));
-                            context.startActivity(browserIntent);
-                        } catch (Exception e) {
+                holder.btnTrack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (trackingDetail.getShipments() != null && trackingDetail.getShipments().length > 0 && trackingDetail.getShipments()[0].getTracking() != null && trackingDetail.getShipments()[0].getTracking().getTrackingURL() != null) {
+                            try {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trackingDetail.getShipments()[0].getTracking().getTrackingURL()));
+                                context.startActivity(browserIntent);
+                            } catch (Exception e) {
+                                Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
                             Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(context, R.string.no_tracking_number, Toast.LENGTH_SHORT).show();
                     }
                 });
 

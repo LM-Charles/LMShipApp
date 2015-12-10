@@ -2,6 +2,8 @@ package lmdelivery.longmen.com.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,7 @@ import lmdelivery.longmen.com.android.api.GoogleAPI;
 import lmdelivery.longmen.com.android.data.Shipments;
 import lmdelivery.longmen.com.android.data.TrackingDetail;
 import lmdelivery.longmen.com.android.data.googleAPI.GeocodingResult;
+import lmdelivery.longmen.com.android.databinding.TrackDetailActivityBinding;
 import lmdelivery.longmen.com.android.util.Util;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -74,7 +77,9 @@ public class TrackDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_track_detail);
+
+        TrackDetailActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.track_detail_activity);
+
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,6 +93,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         context = this;
         TrackingDetail trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
+        binding.setTrackDetail(trackingDetail);
 
         geocoding(trackingDetail);
 
@@ -95,9 +101,8 @@ public class TrackDetailActivity extends AppCompatActivity {
         tvCost.setText("$" + Util.roundTo2(trackingDetail.getFinalCost()));
         tvFrom.setText(trackingDetail.getFromAddress().buildFullAddress());
         tvTo.setText(trackingDetail.getToAddress().buildFullAddress());
-//        tvId.setText("1");
-        tvId.setText(String.valueOf(trackingDetail.getId()));
-        tvOrderDate.setText(trackingDetail.getOrderDate().toString());
+
+
         tvInsurace.setText("$" + Util.roundTo2(trackingDetail.getInsuranceValue()));
         tvStatus.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
         int slot;
@@ -108,12 +113,7 @@ public class TrackDetailActivity extends AppCompatActivity {
             tvPickupDate.setText(getString(R.string.not_available));
         }
 
-        Glide.with(this)
-                .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
-                .error(R.mipmap.logo)
-                .centerCrop()
-                .crossFade()
-                .into(ivIcon);
+
 
         for(int i = 0; i < trackingDetail.getShipments().length; i++){
             llPackage.addView(addPackageTracking(trackingDetail.getShipments()[i], i));
@@ -149,10 +149,20 @@ public class TrackDetailActivity extends AppCompatActivity {
                     @Override
                     public void onNext(GeocodingResult geocodingResult) {
                         Timber.i("onNext");
-                        Timber.i( geocodingResult.toString());
+                        Timber.i(geocodingResult.toString());
                     }
                 });
 
+    }
+
+    @BindingAdapter({"android:src"})
+    public static void setImageUrl(ImageView view, String url){
+        Glide.with(view.getContext())
+                .load(Constant.ENDPOINT + url)
+                .error(R.mipmap.logo)
+                .centerCrop()
+                .crossFade()
+                .into(view);
     }
 
 

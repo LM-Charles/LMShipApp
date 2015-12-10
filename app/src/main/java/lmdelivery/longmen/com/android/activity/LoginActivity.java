@@ -105,7 +105,12 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
         tabLayout.setupWithViewPager(viewPager);
 
 
-        rootLayout.post(() -> viewPager.setMinimumHeight(rootLayout.getHeight()));
+        rootLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setMinimumHeight(rootLayout.getHeight());
+            }
+        });
 
         populateAutoComplete();
 
@@ -310,7 +315,12 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
 
         final TextView tvNoCode = (TextView) view.findViewById(R.id.tv_no_code);
 
-        btnContact.setOnClickListener(v -> Util.sendSupportEmail(context));
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.sendSupportEmail(context);
+            }
+        });
 
         btnSave.setOnClickListener(v -> {
             if (getCodeRequest != null)
