@@ -38,10 +38,33 @@
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/map"
                     layout="@layout/fragment_lite_map"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/map_result_height" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/tracking_detail_padding">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_schedule_24dp"/>
+
+                    <TextView
+                        style="@style/Track.Label"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/order_date" />
+
+                    <TextView
+                        android:id="@+id/tv_order_date"
+                        style="@style/Track.content"
+                        android:text="@{trackDetail.orderDate.toString()}"
+                        tools:text="Jun 6, 2014" />
+                </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -121,21 +144,7 @@
                     android:alpha=".1"
                     android:background="@android:color/black" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/tracking_detail_padding">
 
-                    <TextView
-                        style="@style/Track.Label"
-                        android:text="@string/order_date" />
-
-                    <TextView
-                        android:id="@+id/tv_order_date"
-                        style="@style/Track.content"
-                        android:text="@{trackDetail.orderDate.toString()}"
-                        tools:text="Jun 6, 2014" />
-                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"

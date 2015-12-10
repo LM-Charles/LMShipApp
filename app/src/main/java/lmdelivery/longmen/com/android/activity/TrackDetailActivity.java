@@ -25,6 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import javax.inject.Inject;
 
@@ -37,14 +43,18 @@ import lmdelivery.longmen.com.android.api.GoogleAPI;
 import lmdelivery.longmen.com.android.data.Shipments;
 import lmdelivery.longmen.com.android.data.TrackingDetail;
 import lmdelivery.longmen.com.android.data.googleAPI.GeocodingResult;
+import lmdelivery.longmen.com.android.data.googleAPI.Location;
 import lmdelivery.longmen.com.android.databinding.TrackDetailActivityBinding;
 import lmdelivery.longmen.com.android.util.Util;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class TrackDetailActivity extends AppCompatActivity {
+
+    private GoogleMap mMap;
 
     @Bind(R.id.tv_carrier)
     TextView tvCarrier;
@@ -94,8 +104,8 @@ public class TrackDetailActivity extends AppCompatActivity {
         context = this;
         TrackingDetail trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
         binding.setTrackDetail(trackingDetail);
+        setUpMapIfNeeded(trackingDetail);
 
-        geocoding(trackingDetail);
 
         tvCarrier.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
         tvCost.setText("$" + Util.roundTo2(trackingDetail.getFinalCost()));
@@ -106,20 +116,32 @@ public class TrackDetailActivity extends AppCompatActivity {
         tvInsurace.setText("$" + Util.roundTo2(trackingDetail.getInsuranceValue()));
         tvStatus.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
         int slot;
-        try{
-            slot =Integer.parseInt(trackingDetail.getAppointmentSlotType().charAt(trackingDetail.getAppointmentSlotType().length()-1) + "");
-            tvPickupDate.setText(trackingDetail.getAppointmentDate().toString() + "\n" + getResources().getStringArray(R.array.time_interval_array)[slot-1]);
-        }catch (Exception e){
+        try {
+            slot = Integer.parseInt(trackingDetail.getAppointmentSlotType().charAt(trackingDetail.getAppointmentSlotType().length() - 1) + "");
+            tvPickupDate.setText(trackingDetail.getAppointmentDate().toString() + "\n" + getResources().getStringArray(R.array.time_interval_array)[slot - 1]);
+        } catch (Exception e) {
             tvPickupDate.setText(getString(R.string.not_available));
         }
 
 
-
-        for(int i = 0; i < trackingDetail.getShipments().length; i++){
+        for (int i = 0; i < trackingDetail.getShipments().length; i++) {
             llPackage.addView(addPackageTracking(trackingDetail.getShipments()[i], i));
         }
 
         setupWindowAnimations();
+
+
+    }
+
+    private void setUpMapIfNeeded(TrackingDetail trackingDetail) {
+        final SupportMapFragment mMapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        // Try to obtain the map from the SupportMapFragment.
+        mMapFragment.getMapAsync(
+                googleMap -> {
+                    mMap = googleMap;
+                    geocoding(trackingDetail);
+                });
+
     }
 
     private void setupWindowAnimations() {
@@ -130,10 +152,14 @@ public class TrackDetailActivity extends AppCompatActivity {
 
     }
 
-    private void geocoding(TrackingDetail trackingDetail){
-        googleAPI.geocoding(trackingDetail.getFromAddress().buildFullAddress(), Constant.GOOGLE_PLACE_API_SERVER_KEY).subscribeOn(Schedulers.io())
+    private void geocoding(TrackingDetail trackingDetail) {
+        googleAPI.geocoding(trackingDetail.getFromAddress().buildFullAddress(), Constant.GOOGLE_PLACE_API_SERVER_KEY)
+                .zipWith(googleAPI.geocoding(trackingDetail.getToAddress().buildFullAddress(), Constant.GOOGLE_PLACE_API_SERVER_KEY), (geocodingResult, geocodingResult2) -> {
+                    return createLatLngBound(geocodingResult, geocodingResult2);
+                })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GeocodingResult>() {
+                .subscribe(new Subscriber<LatLng[]>() {
                     @Override
                     public void onCompleted() {
                         Timber.i("onCompleted");
@@ -143,20 +169,43 @@ public class TrackDetailActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         Timber.e("onError" + e.toString());
+                        e.printStackTrace();
 
                     }
 
                     @Override
-                    public void onNext(GeocodingResult geocodingResult) {
-                        Timber.i("onNext");
-                        Timber.i(geocodingResult.toString());
+                    public void onNext(LatLng latLng[]) {
+                        if (latLng != null && latLng.length > 1) {
+                            LatLng fromLatLng = latLng[0];
+                            LatLng toLatLng = latLng[1];
+                            if (fromLatLng.latitude < toLatLng.latitude) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(fromLatLng, toLatLng), 60));
+                            } else {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(toLatLng, fromLatLng), 60));
+                            }
+                            mMap.addMarker(new MarkerOptions().position(fromLatLng));
+                            mMap.addMarker(new MarkerOptions().position(toLatLng));
+                        }
                     }
                 });
 
     }
 
+    private LatLng[] createLatLngBound(GeocodingResult geocodingResult, GeocodingResult geocodingResult2) {
+        try {
+            Location from = geocodingResult.getResults().get(0).getGeometry().getLocation();
+            Location to = geocodingResult2.getResults().get(0).getGeometry().getLocation();
+            LatLng fromLatLng = new LatLng(from.getLat(), from.getLng());
+            LatLng toLatLng = new LatLng(to.getLat(), to.getLng());
+            return new LatLng[]{fromLatLng, toLatLng};
+        } catch (NullPointerException e) {
+
+        }
+        return null;
+    }
+
     @BindingAdapter({"android:src"})
-    public static void setImageUrl(ImageView view, String url){
+    public static void setImageUrl(ImageView view, String url) {
         Glide.with(view.getContext())
                 .load(Constant.ENDPOINT + url)
                 .error(R.mipmap.logo)
@@ -166,7 +215,7 @@ public class TrackDetailActivity extends AppCompatActivity {
     }
 
 
-    private View addPackageTracking(final Shipments shipments, int index){
+    private View addPackageTracking(final Shipments shipments, int index) {
         final Context contextThemeWrapper = new ContextThemeWrapper(context, R.style.Base_Theme_LMTheme);
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = vi.cloneInContext(contextThemeWrapper).inflate(R.layout.include_shipment_status, null);
@@ -175,7 +224,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         TextView tvTrackingStatus = (TextView) v.findViewById(R.id.tv_tracking_status);
         TextView tvPackageTitle = (TextView) v.findViewById(R.id.tv_package_title);
         try {
-            if(TextUtils.isEmpty(shipments.getTrackingNumber()))
+            if (TextUtils.isEmpty(shipments.getTrackingNumber()))
                 throw new NullPointerException();
             tvTrackingNumber.setTextColor(getResources().getColor(R.color.teal));
             SpannableString spanString = new SpannableString(shipments.getTrackingNumber());
@@ -189,23 +238,23 @@ public class TrackDetailActivity extends AppCompatActivity {
                     Toast.makeText(context, R.string.fail_to_open_browser, Toast.LENGTH_SHORT).show();
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             tvTrackingNumber.setText(R.string.not_available);
         }
 
         try {
-            if(TextUtils.isEmpty(shipments.getTracking().getTrackingCity()) || TextUtils.isEmpty(shipments.getTracking().getTrackingCountry()))
+            if (TextUtils.isEmpty(shipments.getTracking().getTrackingCity()) || TextUtils.isEmpty(shipments.getTracking().getTrackingCountry()))
                 throw new NullPointerException();
             tvLocation.setText(shipments.getTracking().getTrackingCity() + " " + shipments.getTracking().getTrackingCountry());
-        }catch (Exception e){
+        } catch (Exception e) {
             tvLocation.setText(R.string.not_available);
         }
 
         try {
-            if(TextUtils.isEmpty(shipments.getTracking().getTrackingStatus()))
+            if (TextUtils.isEmpty(shipments.getTracking().getTrackingStatus()))
                 throw new NullPointerException();
             tvTrackingStatus.setText(shipments.getTracking().getTrackingStatus());
-        }catch (Exception e){
+        } catch (Exception e) {
             tvTrackingStatus.setText(R.string.not_available);
         }
 
