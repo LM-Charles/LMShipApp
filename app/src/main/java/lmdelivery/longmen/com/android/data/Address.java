@@ -75,12 +75,12 @@ public class Address extends Model implements Serializable {
             if (!unitNumber.isEmpty()) {
                 result += " " + unitNumber + "\n";
             }
-            result += city + ", " + province + ", " + postalCode + "\n" + countryName;
+            result += city + ", " + province + "\n" + countryName  + ", " + postalCode;
         } else {
             if (!unitNumber.isEmpty()) {
                 result += unitNumber + "-";
             }
-            result += streetName + "\n" + city + ", " + province + ", " + postalCode + "\n" + countryName;
+            result += streetName + "\n" + city + ", " + province + "\n" + countryName + ", " + postalCode;
         }
 
         return result;

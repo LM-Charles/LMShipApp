@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="trackDetail"
             type="lmdelivery.longmen.com.android.data.TrackingDetail" />
@@ -44,6 +46,45 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/tv_from"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@{trackDetail.fromAddress.buildFullAddress()}"
+                        tools:text="11920 Forge Pl, Richmond" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_send_24dp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_to"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@{trackDetail.toAddress.buildFullAddress()}"
+                        tools:text="7362 Elmbridge Way\nRichmond" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha=".1"
+                    android:background="@android:color/black" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="@dimen/tracking_detail_padding">
@@ -52,7 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_schedule_24dp"/>
+                        android:src="@drawable/ic_schedule_24dp" />
 
                     <TextView
                         style="@style/Track.Label"
@@ -65,6 +106,12 @@
                         android:text="@{trackDetail.orderDate.toString()}"
                         tools:text="Jun 6, 2014" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha=".1"
+                    android:background="@android:color/black" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -102,8 +149,8 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_alignParentEnd="true"
-                        android:src="@{trackDetail.service_icon_url}"
-                        android:transitionName="@string/transition_icon" />
+                        android:transitionName="@string/transition_icon"
+                        app:imageUrl="@{trackDetail.service_icon_url}" />
 
 
                 </RelativeLayout>
@@ -138,55 +185,6 @@
                         tools:text="123" />
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha=".1"
-                    android:background="@android:color/black" />
-
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha=".1"
-                    android:background="@android:color/black" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/tracking_detail_padding">
-
-                    <TextView
-                        style="@style/Track.Label"
-                        android:text="@string/ship_from" />
-
-                    <TextView
-                        android:id="@+id/tv_from"
-                        style="@style/Track.content"
-                        tools:text="11920 Forge Pl, Richmond" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha=".1"
-                    android:background="@android:color/black" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/tracking_detail_padding">
-
-                    <TextView
-                        style="@style/Track.Label"
-                        android:text="@string/ship_to" />
-
-                    <TextView
-                        android:id="@+id/tv_to"
-                        style="@style/Track.content"
-                        tools:text="7362 Elmbridge Way\nRichmond" />
-                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"

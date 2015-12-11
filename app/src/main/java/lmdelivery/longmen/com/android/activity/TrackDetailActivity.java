@@ -109,8 +109,8 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         tvCarrier.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
         tvCost.setText("$" + Util.roundTo2(trackingDetail.getFinalCost()));
-        tvFrom.setText(trackingDetail.getFromAddress().buildFullAddress());
-        tvTo.setText(trackingDetail.getToAddress().buildFullAddress());
+//        tvFrom.setText(trackingDetail.getFromAddress().buildFullAddress());
+//        tvTo.setText(trackingDetail.getToAddress().buildFullAddress());
 
 
         tvInsurace.setText("$" + Util.roundTo2(trackingDetail.getInsuranceValue()));
@@ -204,15 +204,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         return null;
     }
 
-    @BindingAdapter({"android:src"})
-    public static void setImageUrl(ImageView view, String url) {
-        Glide.with(view.getContext())
-                .load(Constant.ENDPOINT + url)
-                .error(R.mipmap.logo)
-                .centerCrop()
-                .crossFade()
-                .into(view);
-    }
+
 
 
     private View addPackageTracking(final Shipments shipments, int index) {

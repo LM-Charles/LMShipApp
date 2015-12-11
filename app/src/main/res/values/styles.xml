@@ -144,7 +144,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/label_text_font_size</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:gravity">start</item>
     </style>
