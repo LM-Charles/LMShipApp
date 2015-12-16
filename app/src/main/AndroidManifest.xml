@@ -87,7 +87,6 @@
 
         <activity
             android:name=".activity.TrackDetailActivity"
-            android:label="@string/title_activity_track_detail"
             android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -97,15 +97,16 @@ public class TrackDetailActivity extends AppCompatActivity {
         AppController.getComponent().inject(this);
 
         final ActionBar ab = getSupportActionBar();
-        if (ab != null)
+        if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
-
+            ab.setIcon(null);
+            ab.setDisplayShowTitleEnabled(false);
+        }
 
         context = this;
         TrackingDetail trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
         binding.setTrackDetail(trackingDetail);
         setUpMapIfNeeded(trackingDetail);
-
 
         tvCarrier.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
         tvCost.setText("$" + Util.roundTo2(trackingDetail.getFinalCost()));

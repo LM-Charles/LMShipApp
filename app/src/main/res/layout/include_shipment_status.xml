@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_package_brown" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/tracking_detail_padding">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
 
         <TextView
-            android:id="@+id/tv_package_title"
-            style="@style/Track.Label"
-            tools:text="@string/package_name"/>
+            android:id="@+id/size"
+            style="@style/PackageItem.Label"
+            android:text="@string/size" />
 
-
+        <TextView
+            android:id="@+id/tv_package_size"
+            style="@style/PackageItem.content"
+            android:layout_below="@+id/size"
+            android:maxLines="1"
+            tools:text="Large" />
     </RelativeLayout>
 
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/tracking_detail_padding">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
 
         <TextView
-            style="@style/Track.Label"
-            android:text="@string/status"/>
+            android:id="@+id/status"
+            style="@style/PackageItem.Label"
+            android:text="@string/status" />
 
         <TextView
             android:id="@+id/tv_tracking_status"
-            style="@style/Track.content"
-            tools:text="Delivered"/>
+            style="@style/PackageItem.content"
+            android:layout_below="@+id/status"
+            tools:text="Delivered" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/tracking_detail_padding">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
 
         <TextView
-            style="@style/Track.Label"
-            android:text="@string/location"/>
+            android:id="@+id/location"
+            style="@style/PackageItem.Label"
+            android:text="@string/location" />
 
         <TextView
             android:id="@+id/tv_location"
-            style="@style/Track.content"
-            tools:text="Beijing, China"/>
+            style="@style/PackageItem.content"
+            android:layout_below="@+id/location"
+            tools:text="Beijing\nChina" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/tracking_detail_padding">
 
-        <TextView
-            style="@style/Track.Label"
-            android:text="@string/tracking_number"/>
-
-        <TextView
-            android:id="@+id/tv_tracking_number"
-            style="@style/Track.content"
-            android:maxLines="1"
-            tools:text="1Z12345E0291980793"/>
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha=".1"
-        android:background="@android:color/black" />
 </LinearLayout>

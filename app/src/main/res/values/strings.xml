@@ -130,5 +130,6 @@
     <string name="please_sign_in_first">Please sign in first in order to see your tracking here</string>
     <string name="transition_icon">transition_icon</string>
     <string name="transition_title">transition_title</string>
+    <string name="size">Size</string>
 
 </resources>
