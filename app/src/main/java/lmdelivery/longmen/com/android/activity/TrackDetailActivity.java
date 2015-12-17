@@ -45,6 +45,7 @@ import lmdelivery.longmen.com.android.data.TrackingDetail;
 import lmdelivery.longmen.com.android.data.googleAPI.GeocodingResult;
 import lmdelivery.longmen.com.android.data.googleAPI.Location;
 import lmdelivery.longmen.com.android.databinding.TrackDetailActivityBinding;
+import lmdelivery.longmen.com.android.ui.PackageItemView;
 import lmdelivery.longmen.com.android.util.Util;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -81,7 +82,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
     @Inject
     GoogleAPI googleAPI;
-
+    TrackingDetail trackingDetail;
     private Context context;
 
     @Override
@@ -104,7 +105,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         }
 
         context = this;
-        TrackingDetail trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
+        trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
         binding.setTrackDetail(trackingDetail);
         setUpMapIfNeeded(trackingDetail);
 
@@ -126,7 +127,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
 
         for (int i = 0; i < trackingDetail.getShipments().length; i++) {
-            llPackage.addView(addPackageTracking(trackingDetail.getShipments()[i], i));
+            llPackage.addView(addPackageTracking(trackingDetail.getShipments()[i]));
         }
 
         setupWindowAnimations();
@@ -208,51 +209,10 @@ public class TrackDetailActivity extends AppCompatActivity {
 
 
 
-    private View addPackageTracking(final Shipments shipments, int index) {
-        final Context contextThemeWrapper = new ContextThemeWrapper(context, R.style.Base_Theme_LMTheme);
-        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.cloneInContext(contextThemeWrapper).inflate(R.layout.include_shipment_status, null);
-        TextView tvTrackingNumber = (TextView) v.findViewById(R.id.tv_tracking_number);
-        TextView tvLocation = (TextView) v.findViewById(R.id.tv_location);
-        TextView tvTrackingStatus = (TextView) v.findViewById(R.id.tv_tracking_status);
-        TextView tvPackageTitle = (TextView) v.findViewById(R.id.tv_package_title);
-        try {
-            if (TextUtils.isEmpty(shipments.getTrackingNumber()))
-                throw new NullPointerException();
-            tvTrackingNumber.setTextColor(getResources().getColor(R.color.teal));
-            SpannableString spanString = new SpannableString(shipments.getTrackingNumber());
-            spanString.setSpan(new UnderlineSpan(), 0, spanString.length(), 0);
-            tvTrackingNumber.setText(spanString);
-            tvTrackingNumber.setOnClickListener(v1 -> {
-                try {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(shipments.getTracking().getTrackingURL()));
-                    context.startActivity(browserIntent);
-                } catch (Exception e) {
-                    Toast.makeText(context, R.string.fail_to_open_browser, Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (Exception e) {
-            tvTrackingNumber.setText(R.string.not_available);
-        }
-
-        try {
-            if (TextUtils.isEmpty(shipments.getTracking().getTrackingCity()) || TextUtils.isEmpty(shipments.getTracking().getTrackingCountry()))
-                throw new NullPointerException();
-            tvLocation.setText(shipments.getTracking().getTrackingCity() + " " + shipments.getTracking().getTrackingCountry());
-        } catch (Exception e) {
-            tvLocation.setText(R.string.not_available);
-        }
-
-        try {
-            if (TextUtils.isEmpty(shipments.getTracking().getTrackingStatus()))
-                throw new NullPointerException();
-            tvTrackingStatus.setText(shipments.getTracking().getTrackingStatus());
-        } catch (Exception e) {
-            tvTrackingStatus.setText(R.string.not_available);
-        }
-
-        tvPackageTitle.setText(getString(R.string.package_name) + " " + (index + 1));
-        return v;
+    private PackageItemView addPackageTracking(final Shipments shipments) {
+        PackageItemView itemView = new PackageItemView(context);
+        itemView.bindPackageItem(shipments,trackingDetail.getOrderStatusModel().getStatus());
+        return itemView;
     }
 
     @Override

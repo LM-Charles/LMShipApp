@@ -131,5 +131,6 @@
     <string name="transition_icon">transition_icon</string>
     <string name="transition_title">transition_title</string>
     <string name="size">Size</string>
-
+    <string name="package_format">%1$s %2$s %3$s</string>
+    <string name="shiment_format">\n</string>
 </resources>

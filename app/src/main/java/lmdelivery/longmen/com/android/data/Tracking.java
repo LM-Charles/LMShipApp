@@ -1,16 +1,24 @@
 package lmdelivery.longmen.com.android.data;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 
 /**
  * Created by rufus on 2015-09-22.
  */
 public class Tracking implements Serializable{
+    @Expose
     String pickupDate;
+    @Expose
     String trackingDate;
+    @Expose
     String trackingCity;
+    @Expose
     String trackingCountry;
+    @Expose
     String trackingStatus;
+    @Expose
     String trackingURL;
 
     public String getPickupDate() {

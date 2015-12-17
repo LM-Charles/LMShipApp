@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android.data;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 
@@ -10,16 +11,27 @@ import java.io.Serializable;
  */
 @Table(name = "Shipments")
 public class Shipments extends Model implements Serializable {
+    @Expose
     int id;
+    @Expose
     double height;
+    @Expose
     double width;
+    @Expose
     double length;
+    @Expose
     double weight;
+    @Expose
     String trackingNumber;
+    @Expose
     String trackingDocumentType;
+    @Expose
     String shipmentPackageType;
+    @Expose
     Tracking tracking;
+    @Expose
     String displayLengthPreference;
+    @Expose
     String displayWeightPreference;
 
     public int getShipmentId() {
