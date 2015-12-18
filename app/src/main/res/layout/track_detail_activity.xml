@@ -38,11 +38,11 @@
                 android:id="@+id/tv_carrier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
                 android:fontFamily="sans-serif"
-                android:textSize="16sp"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
                 android:textColor="@color/white_text"
+                android:textSize="16sp"
                 android:transitionName="@string/transition_title"
                 tools:text="Title" />
 
@@ -50,8 +50,8 @@
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white_text"
                 android:gravity="center"
+                android:textColor="@color/white_text"
                 android:textSize="12sp"
                 tools:text="Sub Title" />
 
@@ -79,14 +79,30 @@
                     android:orientation="horizontal">
 
 
-                    <TextView
-                        android:id="@+id/tv_from"
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@{trackDetail.fromAddress.buildFullAddress()}"
-                        tools:text="11920 Forge Pl, Richmond" />
+                        android:gravity="center_horizontal">
+
+                        <TextView
+                            android:id="@+id/from"
+                            style="@style/PackageItem.Label"
+                            android:layout_width="match_parent"
+                            android:gravity="center"
+                            android:text="@string/ship_from" />
+
+                        <TextView
+                            android:id="@+id/tv_from"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@+id/from"
+                            android:gravity="center"
+                            android:text="@{trackDetail.fromAddress.buildFullAddress()}"
+                            tools:text="11920 Forge Pl\nRichmond\nasb" />
+                    </RelativeLayout>
+
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -94,15 +110,29 @@
                         android:layout_gravity="center"
                         android:src="@drawable/ic_send_24dp" />
 
-
-                    <TextView
-                        android:id="@+id/tv_to"
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@{trackDetail.toAddress.buildFullAddress()}"
-                        tools:text="7362 Elmbridge Way\nRichmond" />
+                        android:gravity="center_horizontal">
+
+                        <TextView
+                            android:id="@+id/to"
+                            style="@style/PackageItem.Label"
+                            android:layout_width="match_parent"
+                            android:gravity="center"
+                            android:text="@string/ship_to" />
+
+                        <TextView
+                            android:id="@+id/tv_to"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/to"
+                            android:gravity="center"
+                            android:text="@{trackDetail.toAddress.buildFullAddress()}"
+                            tools:text="7362 Elmbridge Way\nRichmond" />
+                    </RelativeLayout>
 
                 </LinearLayout>
 
@@ -142,11 +172,6 @@
                     android:alpha=".1"
                     android:background="@android:color/black" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha=".1"
-                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:id="@+id/ll_package"
@@ -156,21 +181,27 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/tracking_detail_padding">
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:alpha=".1"-->
+                    <!--android:background="@android:color/black" />-->
 
-                    <TextView
-                        style="@style/Track.Label"
-                        android:text="@string/id" />
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="@dimen/tracking_detail_padding">-->
 
-                    <TextView
-                        android:id="@+id/tv_id"
-                        style="@style/Track.content"
-                        android:text='@{String.format("%.1f",trackDetail.estimateCost)}'
-                        tools:text="123" />
-                </RelativeLayout>
+                    <!--<TextView-->
+                        <!--style="@style/Track.Label"-->
+                        <!--android:text="@string/id" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_id"-->
+                        <!--style="@style/Track.content"-->
+                        <!--android:text='@{String.format("%.1f",trackDetail.estimateCost)}'-->
+                        <!--tools:text="123" />-->
+                <!--</RelativeLayout>-->
 
 
                 <View

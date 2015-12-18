@@ -72,12 +72,12 @@ public class Address extends Model implements Serializable {
 
         if (countryName.equals("China") || countryName.equals("中国") || countryName.equals("CN")) {
             result += streetName;
-            if (!unitNumber.isEmpty()) {
+            if (!TextUtils.isEmpty(unitNumber)) {
                 result += " " + unitNumber + "\n";
             }
             result += city + ", " + province + "\n" + countryName  + ", " + postalCode;
         } else {
-            if (!unitNumber.isEmpty()) {
+            if (!TextUtils.isEmpty(unitNumber)) {
                 result += unitNumber + "-";
             }
             result += streetName + "\n" + city + ", " + province + "\n" + countryName + ", " + postalCode;

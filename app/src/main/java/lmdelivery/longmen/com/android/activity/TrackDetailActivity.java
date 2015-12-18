@@ -1,33 +1,23 @@
 package lmdelivery.longmen.com.android.activity;
 
 import android.content.Context;
-import android.content.Intent;
-import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.UnderlineSpan;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -49,7 +39,6 @@ import lmdelivery.longmen.com.android.ui.PackageItemView;
 import lmdelivery.longmen.com.android.util.Util;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -57,6 +46,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
     private GoogleMap mMap;
 
+    private static int MAP_ICON_PADDING = 5;
     @Bind(R.id.tv_carrier)
     TextView tvCarrier;
     @Bind(R.id.tv_status)
@@ -65,8 +55,8 @@ public class TrackDetailActivity extends AppCompatActivity {
     ImageView ivIcon;
     @Bind(R.id.ll_package)
     LinearLayout llPackage;
-    @Bind(R.id.tv_id)
-    TextView tvId;
+//    @Bind(R.id.tv_id)
+//    TextView tvId;
     @Bind(R.id.tv_order_date)
     TextView tvOrderDate;
     @Bind(R.id.tv_from)
@@ -181,12 +171,15 @@ public class TrackDetailActivity extends AppCompatActivity {
                             LatLng fromLatLng = latLng[0];
                             LatLng toLatLng = latLng[1];
                             if (fromLatLng.latitude < toLatLng.latitude) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(fromLatLng, toLatLng), 60));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(fromLatLng, toLatLng), MAP_ICON_PADDING));
                             } else {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(toLatLng, fromLatLng), 60));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(new LatLngBounds(toLatLng, fromLatLng), MAP_ICON_PADDING));
                             }
-                            mMap.addMarker(new MarkerOptions().position(fromLatLng));
-                            mMap.addMarker(new MarkerOptions().position(toLatLng));
+
+//                            mMap.addMarker(new MarkerOptions().position(fromLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.home_big)));
+//                            mMap.addMarker(new MarkerOptions().position(toLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.flag_variant_big)));
+                            mMap.addMarker(new MarkerOptions().position(fromLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_grey600_24dp)));
+                            mMap.addMarker(new MarkerOptions().position(toLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_flag_variant_grey600_24dp)));
                         }
                     }
                 });

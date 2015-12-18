@@ -165,7 +165,7 @@
 
     <dimen name="label_icon_font_size">22sp</dimen>
     <dimen name="label_icon_width">56dp</dimen>
-    <dimen name="label_text_font_size">16sp</dimen>
+    <dimen name="label_text_font_size">14sp</dimen>
     <dimen name="sublabel_text_font_size">14sp</dimen>
 
     <style name="SwipeBackLayout">
