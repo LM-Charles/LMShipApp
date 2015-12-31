@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.data.Shipments;
 import lmdelivery.longmen.com.android.data.TrackingDetail;
+import lmdelivery.longmen.com.android.util.Util;
 
 /**
  * Created by rufus on 2015-12-15.
@@ -70,13 +71,13 @@ public class PackageItemView extends LinearLayout {
         if (shipments.getShipmentPackageType().equalsIgnoreCase("CUSTOM")) {
             tvPackageSize.setText(getContext().getString(R.string.package_format, shipments.getLength(), shipments.getWidth(), shipments.getHeight()));
         } else {
-            tvPackageSize.setText(shipments.getShipmentPackageType());
+            tvPackageSize.setText(Util.toDisplayCase(shipments.getShipmentPackageType()));
         }
 
         if (shipments.getTracking() != null && !TextUtils.isEmpty(shipments.getTracking().getTrackingStatus())) {
-            tvTrackingStatus.setText(shipments.getTracking().getTrackingStatus());
+            tvTrackingStatus.setText(Util.toDisplayCase(shipments.getTracking().getTrackingStatus()));
         } else {
-            tvTrackingStatus.setText(lmxStatus);
+            tvTrackingStatus.setText(Util.toDisplayCase(lmxStatus));
         }
 
     }

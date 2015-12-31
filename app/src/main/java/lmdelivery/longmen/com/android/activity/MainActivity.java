@@ -461,8 +461,8 @@ public class MainActivity extends AppCompatActivity {
 //                setAnimation(holder.mView, position);
 
                 holder.llCard.setOnClickListener(v -> {
-                    Pair<View, String> iconPair = new Pair<>(holder.icon, context.getString(R.string.transition_icon));
-                    Pair<View, String> titlePair = new Pair<>(holder.title, context.getString(R.string.transition_title));
+                    Pair<View, String> iconPair = new Pair<>((View)holder.icon, context.getString(R.string.transition_icon));
+                    Pair<View, String> titlePair = new Pair<>((View)holder.title, context.getString(R.string.transition_title));
                     final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants((Activity) context, false, iconPair, titlePair);
                     ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, pairs);
                     Intent intent = new Intent(context, TrackDetailActivity.class);

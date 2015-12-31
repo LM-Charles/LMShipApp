@@ -2,6 +2,7 @@ package lmdelivery.longmen.com.android.activity;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import javax.inject.Inject;
 
@@ -36,6 +39,7 @@ import lmdelivery.longmen.com.android.data.googleAPI.GeocodingResult;
 import lmdelivery.longmen.com.android.data.googleAPI.Location;
 import lmdelivery.longmen.com.android.databinding.TrackDetailActivityBinding;
 import lmdelivery.longmen.com.android.ui.PackageItemView;
+import lmdelivery.longmen.com.android.util.DateUtil;
 import lmdelivery.longmen.com.android.util.Util;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -51,24 +55,17 @@ public class TrackDetailActivity extends AppCompatActivity {
     TextView tvCarrier;
     @Bind(R.id.tv_status)
     TextView tvStatus;
-    @Bind(R.id.iv_ship_icon)
-    ImageView ivIcon;
     @Bind(R.id.ll_package)
     LinearLayout llPackage;
-//    @Bind(R.id.tv_id)
-//    TextView tvId;
-    @Bind(R.id.tv_order_date)
-    TextView tvOrderDate;
     @Bind(R.id.tv_from)
     TextView tvFrom;
     @Bind(R.id.tv_to)
     TextView tvTo;
-    @Bind(R.id.tv_insurance)
-    TextView tvInsurace;
-    @Bind(R.id.tv_cost)
-    TextView tvCost;
+    @Bind(R.id.tv_package_cost)
+    TextView tvPackageCost;
     @Bind(R.id.tv_pickup_date)
     TextView tvPickupDate;
+
 
     @Inject
     GoogleAPI googleAPI;
@@ -80,6 +77,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         TrackDetailActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.track_detail_activity);
+
 
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -100,17 +98,16 @@ public class TrackDetailActivity extends AppCompatActivity {
         setUpMapIfNeeded(trackingDetail);
 
         tvCarrier.setText(Util.toDisplayCase(trackingDetail.getCourierServiceType()));
-        tvCost.setText("$" + Util.roundTo2(trackingDetail.getFinalCost()));
 //        tvFrom.setText(trackingDetail.getFromAddress().buildFullAddress());
 //        tvTo.setText(trackingDetail.getToAddress().buildFullAddress());
 
 
-        tvInsurace.setText("$" + Util.roundTo2(trackingDetail.getInsuranceValue()));
+
         tvStatus.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
         int slot;
         try {
             slot = Integer.parseInt(trackingDetail.getAppointmentSlotType().charAt(trackingDetail.getAppointmentSlotType().length() - 1) + "");
-            tvPickupDate.setText(trackingDetail.getAppointmentDate().toString() + "\n" + getResources().getStringArray(R.array.time_interval_array)[slot - 1]);
+            tvPickupDate.setText(String.format("%s %s", getResources().getStringArray(R.array.time_interval_array)[slot - 1], DateUtil.DateToString(trackingDetail.getAppointmentDate())));
         } catch (Exception e) {
             tvPickupDate.setText(getString(R.string.not_available));
         }
@@ -180,11 +177,18 @@ public class TrackDetailActivity extends AppCompatActivity {
 //                            mMap.addMarker(new MarkerOptions().position(toLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.flag_variant_big)));
                             mMap.addMarker(new MarkerOptions().position(fromLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home_grey600_24dp)));
                             mMap.addMarker(new MarkerOptions().position(toLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_flag_variant_grey600_24dp)));
+                            Polyline line = mMap.addPolyline(new PolylineOptions()
+                                    .add(fromLatLng, toLatLng)
+                                    .width(8)
+                                    .geodesic(true)
+                                    .color(getResources().getColor(R.color.red)));
                         }
                     }
                 });
 
     }
+
+
 
     private LatLng[] createLatLngBound(GeocodingResult geocodingResult, GeocodingResult geocodingResult2) {
         try {

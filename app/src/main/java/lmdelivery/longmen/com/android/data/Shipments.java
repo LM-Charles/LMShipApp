@@ -14,13 +14,13 @@ public class Shipments extends Model implements Serializable {
     @Expose
     int id;
     @Expose
-    double height;
+    int height;
     @Expose
-    double width;
+    int width;
     @Expose
-    double length;
+    int length;
     @Expose
-    double weight;
+    int weight;
     @Expose
     String trackingNumber;
     @Expose
@@ -42,35 +42,35 @@ public class Shipments extends Model implements Serializable {
         this.id = id;
     }
 
-    public double getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
-    public double getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
-    public double getLength() {
+    public int getLength() {
         return length;
     }
 
-    public void setLength(double length) {
+    public void setLength(int length) {
         this.length = length;
     }
 
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 

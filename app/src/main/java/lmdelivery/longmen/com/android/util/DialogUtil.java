@@ -60,21 +60,21 @@ public class DialogUtil {
         double taxTotal = 0.00;
 
         try {
-            tvShipPrice.setText("$ " + Util.roundTo2(rateItem.getEstimate()));
+            tvShipPrice.setText("$ " + rateItem.getEstimate());
         }catch (Exception e){
             Logger.e("Failed to parse estimate price");
             tvShipPrice.setText("$-");
         }
 
         try {
-            tvInsurancePrice.setText("$ " + Util.roundTo2(insuranceRate.getEstimate()));
+            tvInsurancePrice.setText("$ " + insuranceRate.getEstimate());
         }catch (Exception e){
             Logger.e("Failed to parse insurance price");
             tvInsurancePrice.setText("$-");
         }
 
         try {
-            tvPackagePrice.setText("$ " + Util.roundTo2(packageRate.getEstimate()));
+            tvPackagePrice.setText("$ " + packageRate.getEstimate());
         }catch (Exception e){
             Logger.e("Failed to parse ic_package price");
             tvPackagePrice.setText("$-");
@@ -83,7 +83,7 @@ public class DialogUtil {
 
         try {
             taxTotal = rateItem.getTaxEstimate() + insuranceRate.getTaxEstimate() + packageRate.getTaxEstimate();
-            tvTaxPrice.setText("$ " + Util.roundTo2(taxTotal));
+            tvTaxPrice.setText("$ " + taxTotal);
         }catch (Exception e){
             Logger.e("Failed to parse tax");
             tvTaxPrice.setText("$-");
@@ -91,7 +91,7 @@ public class DialogUtil {
 
         try {
             double total = taxTotal + packageRate.getEstimate() + rateItem.getEstimate() + insuranceRate.getEstimate();
-            tvTotalPrice.setText("$ " + Util.roundTo2(total));
+            tvTotalPrice.setText("$ " + total);
         }catch (Exception e){
             Logger.e("Failed to parse total price");
             tvTotalPrice.setText("$-");

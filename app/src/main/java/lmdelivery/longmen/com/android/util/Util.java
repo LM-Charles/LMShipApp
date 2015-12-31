@@ -36,7 +36,6 @@ public class Util {
     }
 
 
-
     public static String trimMessage(String json, String key){
         String trimmedString = null;
 

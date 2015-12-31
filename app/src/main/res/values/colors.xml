@@ -48,6 +48,8 @@
     <color name="default_text_color">#737373</color>
 
     <color name="green_done">#8BC34A</color>
+    <color name="green_500">#4CAF50</color>
+
     <color name="red">#EF5350</color>
     <color name="teal">#009688</color>
     <color name="welcome_text_color">#91b6f7</color>

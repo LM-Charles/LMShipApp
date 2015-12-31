@@ -52,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/white_text"
+                android:background="@drawable/shape_delivered_rectangle"
                 android:textSize="12sp"
                 tools:text="Sub Title" />
 
@@ -75,28 +76,59 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/tracking_detail_padding"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/calendar_clock_black" />
+
+                    <TextView
+                        style="@style/Track.Label"
+                        android:text="@string/pickup_date" />
+
+                    <TextView
+                        android:id="@+id/tv_pickup_date"
+                        style="@style/Track.content"
+                        android:layout_marginStart="8dp"
+                        tools:text="12:00AM - 2:00PM Jun 14, 2015" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha=".1"
+                    android:background="@android:color/black" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
 
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal">
 
                         <TextView
                             android:id="@+id/from"
-                            style="@style/PackageItem.Label"
+                            style="@style/Track.Label"
                             android:layout_width="match_parent"
                             android:gravity="center"
                             android:text="@string/ship_from" />
 
                         <TextView
                             android:id="@+id/tv_from"
+                            style="@style/Track.content"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/from"
                             android:gravity="center"
                             android:text="@{trackDetail.fromAddress.buildFullAddress()}"
@@ -108,26 +140,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_send_24dp" />
+                        android:src="@drawable/ic_arrow_forward_24dp_black" />
 
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:gravity="center_horizontal">
 
                         <TextView
                             android:id="@+id/to"
-                            style="@style/PackageItem.Label"
+                            style="@style/Track.Label"
                             android:layout_width="match_parent"
                             android:gravity="center"
                             android:text="@string/ship_to" />
 
                         <TextView
                             android:id="@+id/tv_to"
+                            style="@style/Track.content"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/to"
                             android:gravity="center"
                             android:text="@{trackDetail.toAddress.buildFullAddress()}"
@@ -142,35 +175,35 @@
                     android:alpha=".1"
                     android:background="@android:color/black" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/tracking_detail_padding">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:padding="@dimen/tracking_detail_padding">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_schedule_24dp" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginEnd="8dp"-->
+                        <!--android:src="@drawable/ic_schedule_24dp" />-->
 
-                    <TextView
-                        style="@style/Track.Label"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/order_date" />
+                    <!--<TextView-->
+                        <!--style="@style/Track.Label"-->
+                        <!--android:text="@string/order_date" />-->
 
-                    <TextView
-                        android:id="@+id/tv_order_date"
-                        style="@style/Track.content"
-                        android:text="@{trackDetail.orderDate.toString()}"
-                        tools:text="Jun 6, 2014" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_order_date"-->
+                        <!--style="@style/Track.content"-->
+                        <!--android:layout_marginStart="8dp"-->
+                        <!--android:text="@{trackDetail.orderDate.toString()}"-->
+                        <!--tools:text="Jun 6, 2014" />-->
+                <!--</LinearLayout>-->
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha=".1"
-                    android:background="@android:color/black" />
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:alpha=".1"-->
+                    <!--android:background="@android:color/black" />-->
 
 
                 <LinearLayout
@@ -181,27 +214,81 @@
 
                 </LinearLayout>
 
-                <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:alpha=".1"-->
-                    <!--android:background="@android:color/black" />-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha=".1"
+                    android:background="@android:color/black" />
 
-                <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:padding="@dimen/tracking_detail_padding">-->
 
-                    <!--<TextView-->
-                        <!--style="@style/Track.Label"-->
-                        <!--android:text="@string/id" />-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tv_id"-->
-                        <!--style="@style/Track.content"-->
-                        <!--android:text='@{String.format("%.1f",trackDetail.estimateCost)}'-->
-                        <!--tools:text="123" />-->
-                <!--</RelativeLayout>-->
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/cash_usd" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            style="@style/Track.Label"
+                            android:text="@string/packaging" />
+
+                        <TextView
+                            android:id="@+id/tv_package_cost"
+                            style="@style/Track.content"
+                            android:maxLines="1"
+                            tools:text="$12.5" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            style="@style/Track.Label"
+                            android:text="@string/insurance" />
+
+                        <TextView
+                            android:id="@+id/tv_tracking_status"
+                            style="@style/Track.content"
+                            android:text="@{@string/price_format(String.valueOf(trackDetail.insuranceValue * 0.03))}"
+                            tools:text="$12.5" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/Track.Label"
+                            android:text="@string/final_cost" />
+
+                        <TextView
+                            android:id="@+id/tv_final_cost"
+                            style="@style/Track.content"
+                            android:text="@{@string/price_format(String.valueOf(trackDetail.finalCost))}"
+                            tools:text="$12.5" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
 
                 <View
@@ -209,63 +296,6 @@
                     android:layout_height="1dp"
                     android:alpha=".1"
                     android:background="@android:color/black" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/tracking_detail_padding">
-
-                    <TextView
-                        style="@style/Track.Label"
-                        android:text="@string/pickup_date" />
-
-                    <TextView
-                        android:id="@+id/tv_pickup_date"
-                        style="@style/Track.content"
-                        tools:text="12:00AM - 2:00PM\nJun 14, 2015" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha=".1"
-                    android:background="@android:color/black" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/tracking_detail_padding">
-
-                    <TextView
-                        style="@style/Track.Label"
-                        android:text="@string/insurance" />
-
-                    <TextView
-                        android:id="@+id/tv_insurance"
-                        style="@style/Track.content"
-                        tools:text="$300" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:alpha=".1"
-                    android:background="@android:color/black" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/tracking_detail_padding">
-
-                    <TextView
-                        style="@style/Track.Label"
-                        android:text="@string/cost" />
-
-                    <TextView
-                        android:id="@+id/tv_cost"
-                        style="@style/Track.content"
-                        tools:text="$12.56" />
-                </RelativeLayout>
 
 
             </LinearLayout>

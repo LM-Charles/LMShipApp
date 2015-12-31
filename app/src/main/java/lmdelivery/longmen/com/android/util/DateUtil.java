@@ -21,4 +21,14 @@ public class DateUtil {
             return AppController.getAppContext().getString(R.string.unknown);
         }
     }
+
+    public static String DateToString(Date date){
+        try {
+            SimpleDateFormat fmtOut = new SimpleDateFormat("MMM d, yyyy", Locale.US);
+            return fmtOut.format(date);
+        }catch (Exception e){
+            return AppController.getAppContext().getString(R.string.unknown);
+        }
+    }
+
 }

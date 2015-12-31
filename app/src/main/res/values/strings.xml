@@ -131,6 +131,8 @@
     <string name="transition_icon">transition_icon</string>
     <string name="transition_title">transition_title</string>
     <string name="size">Size</string>
-    <string name="package_format">%1$s %2$s %3$s</string>
-    <string name="shiment_format">\n</string>
+    <string name="package_format">%1$s x %2$s x %3$s</string>
+    <string name="shipment_format">\n</string>
+    <string name="price_format">$ %1$s</string>
+    <string name="final_cost">Final cost</string>
 </resources>

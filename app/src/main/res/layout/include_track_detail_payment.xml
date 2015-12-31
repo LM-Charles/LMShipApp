@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:orientation="horizontal"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
@@ -12,68 +12,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_package_brown" />
+        android:src="@drawable/cash_usd" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
         android:gravity="center">
 
         <TextView
             android:id="@+id/size"
             style="@style/Track.Label"
-            android:text="@string/size" />
+            android:text="@string/packaging" />
 
         <TextView
             android:id="@+id/tv_package_size"
             style="@style/Track.content"
             android:layout_below="@+id/size"
             android:maxLines="1"
-            tools:text="Large" />
-    </LinearLayout>
+            tools:text="$12.5" />
+    </RelativeLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
         android:gravity="center">
 
         <TextView
+            android:id="@+id/status"
             style="@style/Track.Label"
-            android:text="@string/status" />
+            android:text="@string/insurance" />
 
         <TextView
             android:id="@+id/tv_tracking_status"
             style="@style/Track.content"
-            tools:text="Delivered" />
-    </LinearLayout>
+            android:layout_below="@+id/status"
 
-    <LinearLayout
+            tools:text="$12.5" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center">
 
         <TextView
+            android:id="@+id/location"
             style="@style/Track.Label"
-            android:text="@string/location" />
+            android:text="@string/final_cost" />
 
         <TextView
-            android:id="@+id/tv_location"
+            android:id="@+id/tv_final_cost"
             style="@style/Track.content"
-            tools:text="Beijing\nChina" />
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_navigate_next_24dp"/>
-
+            android:layout_below="@+id/location"
+            tools:text="$12.5" />
+    </RelativeLayout>
 
 </LinearLayout>
