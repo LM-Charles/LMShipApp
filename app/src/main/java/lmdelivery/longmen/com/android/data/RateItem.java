@@ -16,7 +16,7 @@ public class RateItem implements Parcelable {
     private String serviceName;
     private double taxEstimate;
 
-    public RateItem( String service_icon_url, String category, double estimate, String estimatedDelivery, String courierName, String serviceName, double taxEstimate) {
+    public RateItem(String service_icon_url, String category, double estimate, String estimatedDelivery, String courierName, String serviceName, double taxEstimate) {
         this.service_icon_url = service_icon_url;
         this.category = category;
         this.estimate = estimate;
@@ -32,6 +32,19 @@ public class RateItem implements Parcelable {
 
     public void setService_icon_url(String service_icon_url) {
         this.service_icon_url = service_icon_url;
+    }
+
+    @Override
+    public String toString() {
+        return "RateItem{" +
+                "service_icon_url='" + service_icon_url + '\'' +
+                ", category='" + category + '\'' +
+                ", estimate=" + estimate +
+                ", estimatedDelivery='" + estimatedDelivery + '\'' +
+                ", courierName='" + courierName + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", taxEstimate=" + taxEstimate +
+                '}';
     }
 
     public String getCategory() {
@@ -73,6 +86,7 @@ public class RateItem implements Parcelable {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+
     public double getTaxEstimate() {
         return taxEstimate;
     }

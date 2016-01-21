@@ -58,11 +58,6 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.NewBookingActivity"
@@ -91,6 +86,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="lmdelivery.longmen.com.android.activity.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data

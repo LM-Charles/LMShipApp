@@ -172,7 +172,7 @@
                 style="@style/Label.Price"
                 android:textStyle="bold"
                 android:layout_alignParentEnd="true"
-                tools:text="$ 11.4" />
+                tools:text="$ 11.45" />
         </RelativeLayout>
 
     </LinearLayout>

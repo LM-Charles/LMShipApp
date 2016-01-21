@@ -59,6 +59,7 @@ import lmdelivery.longmen.com.android.fragments.TimeFragment;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
+import timber.log.Timber;
 
 
 public class NewBookingActivity extends AppCompatActivity implements TimeFragment.OnTimeSelectedListener, GoogleApiClient.OnConnectionFailedListener {
@@ -474,6 +475,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                 final ArrayList<RateItem> rateItemList = new Gson().fromJson(response.getJSONArray("courierRates").toString(), listType);
                 RateItem insuranceItem = new Gson().fromJson(response.getJSONObject("insuranceRate").toString(), RateItem.class);
                 RateItem packageItem = new Gson().fromJson(response.getJSONObject("handlingRate").toString(), RateItem.class);
+
+                Timber.i("insuranceItem: " + insuranceItem.toString());
+                Timber.i("packageItem" + packageItem.toString());
                 if (rateItemList.isEmpty()) {
                     DialogUtil.showMessageDialog(getString(R.string.err_no_estimate), context);
                 } else if (rateItemList.size() == 1) {

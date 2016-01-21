@@ -69,8 +69,8 @@ public class SelectProductActivity extends SwipeBackActivity {
 //            mDropoffAddr = (Address) getIntent().getSerializableExtra(Constant.EXTRA_DROPOFF);
 //            mTime = (MyTime) getIntent().getSerializableExtra(Constant.EXTRA_TIME);
                 mRateList = bundle.getParcelableArrayList(Constant.EXTRA_RATE_ITEM);
-//            mPackageRate = bundle.getParcelable(Constant.EXTRA_PACKAGE_ITEM);
-//            mInsuranceRate = bundle.getParcelable(Constant.EXTRA_INSURANCE_ITEM);
+            mPackageRate = bundle.getParcelable(Constant.EXTRA_PACKAGE_ITEM);
+            mInsuranceRate = bundle.getParcelable(Constant.EXTRA_INSURANCE_ITEM);
 //            mInsuranceValue = getIntent().getStringExtra(Constant.EXTRA_INSURANCE_VALUE);
 //            mEstValue = getIntent().getStringExtra(Constant.EXTRA_ESTIMATE_VALUE);
             } catch (Exception e) {

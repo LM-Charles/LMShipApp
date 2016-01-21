@@ -20,7 +20,7 @@ import lmdelivery.longmen.com.android.data.RateItem;
 public class DialogUtil {
     private static final java.lang.String TAG = DialogUtil.class.getSimpleName();
 
-    public static void showMessageDialog(String message, Context context){
+    public static void showMessageDialog(String message, Context context) {
         try {
             new AlertDialog.Builder(context)
                     .setMessage(message)
@@ -28,7 +28,7 @@ public class DialogUtil {
                         dialog.dismiss();
                     })
                     .show();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -39,14 +39,14 @@ public class DialogUtil {
     public static void showSingleEstimateDialog(Context context, RateItem rateItem, RateItem insuranceRate, RateItem packageRate, DialogInterface.OnClickListener onClickListener) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.dialog_confirm_purchase_layout, null);
-        TextView tvCarrierType= (TextView) view.findViewById(R.id.tv_carrier_type);
+        TextView tvCarrierType = (TextView) view.findViewById(R.id.tv_carrier_type);
 
-        TextView tvEstDate= (TextView) view.findViewById(R.id.tv_est_date);
-        TextView tvTotalPrice= (TextView) view.findViewById(R.id.tv_total_price);
-        TextView tvTaxPrice= (TextView) view.findViewById(R.id.tv_tax_price);
-        TextView tvPackagePrice= (TextView) view.findViewById(R.id.tv_package_price);
-        TextView tvInsurancePrice= (TextView) view.findViewById(R.id.tv_insurance_price);
-        TextView tvShipPrice= (TextView) view.findViewById(R.id.tv_ship_price);
+        TextView tvEstDate = (TextView) view.findViewById(R.id.tv_est_date);
+        TextView tvTotalPrice = (TextView) view.findViewById(R.id.tv_total_price);
+        TextView tvTaxPrice = (TextView) view.findViewById(R.id.tv_tax_price);
+        TextView tvPackagePrice = (TextView) view.findViewById(R.id.tv_package_price);
+        TextView tvInsurancePrice = (TextView) view.findViewById(R.id.tv_insurance_price);
+        TextView tvShipPrice = (TextView) view.findViewById(R.id.tv_ship_price);
         ImageView ivImage = (ImageView) view.findViewById(R.id.logo);
 
         Glide.with(context)
@@ -60,22 +60,22 @@ public class DialogUtil {
         double taxTotal = 0.00;
 
         try {
-            tvShipPrice.setText("$ " + rateItem.getEstimate());
-        }catch (Exception e){
+            tvShipPrice.setText(context.getString(R.string.price_format, Util.roundTo2(rateItem.getEstimate())));
+        } catch (Exception e) {
             Logger.e("Failed to parse estimate price");
             tvShipPrice.setText("$-");
         }
 
         try {
-            tvInsurancePrice.setText("$ " + insuranceRate.getEstimate());
-        }catch (Exception e){
+            tvInsurancePrice.setText(context.getString(R.string.price_format, Util.roundTo2(insuranceRate.getEstimate())));
+        } catch (Exception e) {
             Logger.e("Failed to parse insurance price");
             tvInsurancePrice.setText("$-");
         }
 
         try {
-            tvPackagePrice.setText("$ " + packageRate.getEstimate());
-        }catch (Exception e){
+            tvPackagePrice.setText(context.getString(R.string.price_format, Util.roundTo2(packageRate.getEstimate())));
+        } catch (Exception e) {
             Logger.e("Failed to parse ic_package price");
             tvPackagePrice.setText("$-");
         }
@@ -83,16 +83,16 @@ public class DialogUtil {
 
         try {
             taxTotal = rateItem.getTaxEstimate() + insuranceRate.getTaxEstimate() + packageRate.getTaxEstimate();
-            tvTaxPrice.setText("$ " + taxTotal);
-        }catch (Exception e){
+            tvTaxPrice.setText(context.getString(R.string.price_format, Util.roundTo2(taxTotal)));
+        } catch (Exception e) {
             Logger.e("Failed to parse tax");
             tvTaxPrice.setText("$-");
         }
 
         try {
             double total = taxTotal + packageRate.getEstimate() + rateItem.getEstimate() + insuranceRate.getEstimate();
-            tvTotalPrice.setText("$ " + total);
-        }catch (Exception e){
+            tvTotalPrice.setText(context.getString(R.string.price_format, Util.roundTo2(total)));
+        } catch (Exception e) {
             Logger.e("Failed to parse total price");
             tvTotalPrice.setText("$-");
         }
