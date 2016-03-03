@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -44,6 +45,29 @@ public class TrackingDetail implements Serializable{
     String handler;
     @Expose
     Double declareValue;
+
+    @Override
+    public String toString() {
+        return "TrackingDetail{" +
+                "id=" + id +
+                ", client=" + client +
+                ", orderDate=" + orderDate +
+                ", courierServiceType='" + courierServiceType + '\'' +
+                ", service_icon_url='" + service_icon_url + '\'' +
+                ", shipments=" + Arrays.toString(shipments) +
+                ", estimateCost=" + estimateCost +
+                ", finalCost=" + finalCost +
+                ", fromAddress=" + fromAddress +
+                ", toAddress=" + toAddress +
+                ", handler='" + handler + '\'' +
+                ", declareValue=" + declareValue +
+                ", insuranceValue=" + insuranceValue +
+                ", appointmentDate=" + appointmentDate +
+                ", appointmentSlotType='" + appointmentSlotType + '\'' +
+                ", orderStatusModel=" + orderStatusModel +
+                '}';
+    }
+
     @Expose
     Double insuranceValue;
     @Expose

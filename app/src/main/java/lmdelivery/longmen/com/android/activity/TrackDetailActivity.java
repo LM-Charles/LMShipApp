@@ -94,6 +94,8 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         context = this;
         trackingDetail = (TrackingDetail) getIntent().getSerializableExtra(Constant.EXTRA_TRACK_DETAIL);
+
+        Timber.d(trackingDetail.toString());
         binding.setTrackDetail(trackingDetail);
         setUpMapIfNeeded(trackingDetail);
 
@@ -101,7 +103,13 @@ public class TrackDetailActivity extends AppCompatActivity {
 //        tvFrom.setText(trackingDetail.getFromAddress().buildFullAddress());
 //        tvTo.setText(trackingDetail.getToAddress().buildFullAddress());
 
-
+        double packagingCost = 0;
+        for (int i = 0; i < trackingDetail.getShipments().length; i++) {
+            Timber.d(trackingDetail.getShipments()[i].toString());
+            if(!trackingDetail.getShipments()[i].getShipmentPackageType().equalsIgnoreCase("CUSTOM"))
+                packagingCost = packagingCost+1;
+        }
+        tvPackageCost.setText(Util.getFormattedCurrencyString(packagingCost));
 
         tvStatus.setText(Util.toDisplayCase(trackingDetail.getOrderStatusModel().getStatus()));
         int slot;
