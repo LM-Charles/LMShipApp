@@ -3,12 +3,17 @@ package lmdelivery.longmen.com.android.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by rzhu on 6/30/2015.
  */
 public class RateItem implements Parcelable {
 
+
     private String service_icon_url;
+
     private String category;
     private double estimate;
     private String estimatedDelivery;

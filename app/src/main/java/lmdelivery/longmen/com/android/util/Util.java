@@ -20,6 +20,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
 
 import lmdelivery.longmen.com.android.AppController;
 
@@ -120,4 +124,20 @@ public class Util {
         return df.format(value);
     }
 
+    public static String getFormattedCurrencyString(double amount) {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+
+
+        // Our fix is to use the US locale as default for the symbol, unless the currency is USD
+        // and the locale is NOT the US, in which case we know it should be US$.
+        String symbol = Currency.getInstance("CAD").getSymbol(Locale.US); // US locale has the best symbol formatting table.
+
+
+        // We then tell our formatter to use this symbol.
+        DecimalFormatSymbols decimalFormatSymbols = ((java.text.DecimalFormat) currencyFormat).getDecimalFormatSymbols();
+        decimalFormatSymbols.setCurrencySymbol(symbol);
+        ((java.text.DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+
+        return currencyFormat.format(amount).replace("CA", "").replace("US","");
+    }
 }

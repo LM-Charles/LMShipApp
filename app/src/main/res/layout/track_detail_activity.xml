@@ -248,7 +248,7 @@
                             android:id="@+id/tv_package_cost"
                             style="@style/Track.content"
                             android:maxLines="1"
-                            tools:text="$12.5" />
+                            tools:text="$12.5"/>
                     </LinearLayout>
 
 

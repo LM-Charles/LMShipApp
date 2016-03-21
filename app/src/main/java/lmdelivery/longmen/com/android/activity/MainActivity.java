@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Glide.with(context)
                         .load(Constant.ENDPOINT + trackingDetail.getService_icon_url())
-                        .bitmapTransform(new RoundedCornersTransformation(context, 80, 0))
+                        .bitmapTransform(new RoundedCornersTransformation(context, 500, 0))
                         .error(R.mipmap.logo)
                         .centerCrop()
                         .crossFade()

@@ -135,4 +135,5 @@
     <string name="shipment_format">\n</string>
     <string name="price_format">$ %1$s</string>
     <string name="final_cost">Final cost</string>
+    <string name="permission_read_contact_reason">LMX would like to read your email address to help you register faster</string>
 </resources>

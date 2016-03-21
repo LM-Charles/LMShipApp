@@ -59,23 +59,26 @@ public class DialogUtil {
         tvEstDate.setText(context.getString(R.string.estimate_delivery) + DateUtil.UnixTimeToDateString(rateItem.getEstimatedDelivery()));
         double taxTotal = 0.00;
 
+
         try {
-            tvShipPrice.setText(context.getString(R.string.price_format, Util.roundTo2(rateItem.getEstimate())));
-        } catch (Exception e) {
+
+            tvShipPrice.setText(Util.getFormattedCurrencyString(rateItem.getEstimate()));
+        }catch (Exception e){
             Logger.e("Failed to parse estimate price");
             tvShipPrice.setText("$-");
         }
 
         try {
-            tvInsurancePrice.setText(context.getString(R.string.price_format, Util.roundTo2(insuranceRate.getEstimate())));
-        } catch (Exception e) {
+
+            tvInsurancePrice.setText(Util.getFormattedCurrencyString(insuranceRate.getEstimate()));
+        }catch (Exception e){
             Logger.e("Failed to parse insurance price");
             tvInsurancePrice.setText("$-");
         }
 
         try {
-            tvPackagePrice.setText(context.getString(R.string.price_format, Util.roundTo2(packageRate.getEstimate())));
-        } catch (Exception e) {
+            tvPackagePrice.setText(Util.getFormattedCurrencyString(packageRate.getEstimate()));
+        }catch (Exception e){
             Logger.e("Failed to parse ic_package price");
             tvPackagePrice.setText("$-");
         }
@@ -83,16 +86,17 @@ public class DialogUtil {
 
         try {
             taxTotal = rateItem.getTaxEstimate() + insuranceRate.getTaxEstimate() + packageRate.getTaxEstimate();
-            tvTaxPrice.setText(context.getString(R.string.price_format, Util.roundTo2(taxTotal)));
-        } catch (Exception e) {
+            tvTaxPrice.setText(Util.getFormattedCurrencyString(taxTotal));
+        }catch (Exception e){
             Logger.e("Failed to parse tax");
             tvTaxPrice.setText("$-");
         }
 
         try {
             double total = taxTotal + packageRate.getEstimate() + rateItem.getEstimate() + insuranceRate.getEstimate();
-            tvTotalPrice.setText(context.getString(R.string.price_format, Util.roundTo2(total)));
-        } catch (Exception e) {
+
+            tvTotalPrice.setText(Util.getFormattedCurrencyString(total));
+        }catch (Exception e){
             Logger.e("Failed to parse total price");
             tvTotalPrice.setText("$-");
         }

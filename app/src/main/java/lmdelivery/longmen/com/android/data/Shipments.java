@@ -25,6 +25,24 @@ public class Shipments extends Model implements Serializable {
     String trackingNumber;
     @Expose
     String trackingDocumentType;
+
+    @Override
+    public String toString() {
+        return "Shipments{" +
+                "id=" + id +
+                ", height=" + height +
+                ", width=" + width +
+                ", length=" + length +
+                ", weight=" + weight +
+                ", trackingNumber='" + trackingNumber + '\'' +
+                ", trackingDocumentType='" + trackingDocumentType + '\'' +
+                ", shipmentPackageType='" + shipmentPackageType + '\'' +
+                ", tracking=" + tracking +
+                ", displayLengthPreference='" + displayLengthPreference + '\'' +
+                ", displayWeightPreference='" + displayWeightPreference + '\'' +
+                '}';
+    }
+
     @Expose
     String shipmentPackageType;
     @Expose

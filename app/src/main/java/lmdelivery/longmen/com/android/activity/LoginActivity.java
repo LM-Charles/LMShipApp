@@ -1,5 +1,6 @@
 package lmdelivery.longmen.com.android.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.LoaderManager;
@@ -33,12 +34,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +58,8 @@ import lmdelivery.longmen.com.android.fragments.RegisterFragment;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
+import rx.functions.Action1;
+import timber.log.Timber;
 
 
 /**
@@ -112,7 +117,25 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
             }
         });
 
-        populateAutoComplete();
+        if (!RxPermissions.getInstance(this).isGranted(Manifest.permission.READ_CONTACTS)) {
+            RxPermissions.getInstance(this)
+                    .shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)
+                    .subscribe(shouldShow -> {
+                        if(shouldShow)
+                            Toast.makeText(this, R.string.permission_read_contact_reason, Toast.LENGTH_LONG).show();
+                    });
+        }
+
+        // Must be done during an initialization phase like onCreate
+        RxPermissions.getInstance(this)
+                .request(Manifest.permission.READ_CONTACTS)
+                .subscribe(granted -> {
+                    if (granted) {
+                        populateAutoComplete();
+                    } else {
+                        // Oups permission denied
+                    }
+                });
 
         //showVerifyPhoneNumberDialog();
 //        mProgressView = findViewById(R.id.login_progress);
@@ -176,6 +199,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        Timber.i("onCreateLoader");
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
@@ -197,7 +221,8 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
-
+        Timber.i("onLoadFinished");
+        Timber.i("email: " + emails.size() + (emails.size()>0 ? emails.get(0) : ""));
         registerFragment.addEmailsToAutoComplete(emails);
         loginFragment.addEmailsToAutoComplete(emails);
     }
@@ -236,6 +261,7 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
     public void onResume() {
         super.onResume();
         attachKeyboardListeners();
+
 
     }
 

@@ -264,10 +264,14 @@ public class RegisterFragment extends Fragment {
 
     public void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         if (getActivity() != null) {
+            if(emailAddressCollection.size()>0) {
+                mEmailView.setText(emailAddressCollection.get(0));
+            }
             //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
             mEmailView.setAdapter(adapter);
+
         }
     }
 

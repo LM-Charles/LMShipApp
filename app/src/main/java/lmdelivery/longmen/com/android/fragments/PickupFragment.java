@@ -43,6 +43,7 @@ import lmdelivery.longmen.com.android.Constant;
 import lmdelivery.longmen.com.android.R;
 import lmdelivery.longmen.com.android.activity.NewBookingActivity;
 import lmdelivery.longmen.com.android.data.Address;
+import lmdelivery.longmen.com.android.data.User;
 import lmdelivery.longmen.com.android.util.Logger;
 import lmdelivery.longmen.com.android.util.Util;
 import lmdelivery.longmen.com.android.widget.PlaceAutocompleteAdapter;
@@ -107,11 +108,14 @@ public class PickupFragment extends Fragment {
             mapView = (FrameLayout) rootView.findViewById(R.id.map_view);
 
             Address address = ((NewBookingActivity) getActivity()).pickupAddr;
+            User user = ((NewBookingActivity) getActivity()).user;
             etPostal.setText(address.getPostalCode());
             etCity.setText(address.getCity());
             etUnit.setText(address.getUnitNumber());
-            etName.setText(address.getName());
-            etPhone.setText(address.getPhone());
+            if(user!=null) {
+                etName.setText(String.format("%s %s", user.firstName, user.lastName));
+                etPhone.setText(user.phone);
+            }
             mAutocompleteView.setText(address.getStreetName());
 
             // Register a listener that receives callbacks when a suggestion has been selected

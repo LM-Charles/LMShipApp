@@ -58,6 +58,7 @@ import lmdelivery.longmen.com.android.fragments.SummaryFragment;
 import lmdelivery.longmen.com.android.fragments.TimeFragment;
 import lmdelivery.longmen.com.android.util.DialogUtil;
 import lmdelivery.longmen.com.android.util.Logger;
+import lmdelivery.longmen.com.android.util.StringUtil;
 import lmdelivery.longmen.com.android.util.Util;
 import timber.log.Timber;
 
@@ -89,6 +90,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     public String insuranceValue;
 
     private Context context;
+    public User user;
 
     @Inject
     LMXApi lmxApi;
@@ -311,7 +313,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
 
     private void init() {
 
-        User user = new Select().from(User.class).where("remote_id = ?", AppController.getInstance().getUserId()).executeSingle();
+        user = new Select().from(User.class).where("remote_id = ?", AppController.getInstance().getUserId()).executeSingle();
         if(user!=null && user.address!=null){
             pickupAddr = user.address;
         }else{
@@ -533,6 +535,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     User user = new Select().from(User.class).where("remote_id = ?", AppController.getInstance().getUserId()).executeSingle();
                     pickupAddr.save();
                     user.address = pickupAddr;
+                    user.phone = pickupAddr.getPhone();
+                    user.firstName = StringUtil.getFirstName(pickupAddr.getName());
+                    user.lastName = StringUtil.getLastName(pickupAddr.getName());
                     user.save();
                     lmxApi.updateUser(AppController.getInstance().getUserId(), user);
                 }, error -> {
