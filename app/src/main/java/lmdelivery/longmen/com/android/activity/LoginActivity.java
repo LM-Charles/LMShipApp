@@ -348,73 +348,78 @@ public class LoginActivity extends LoginBaseActivity implements LoaderManager.Lo
             }
         });
 
-        btnSave.setOnClickListener(v -> {
-            if (getCodeRequest != null)
-                return;
+        View.OnClickListener btnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getCodeRequest != null)
+                    return;
 
-            final String phone = etPhone.getText().toString();
-            if (phone.isEmpty()) {
-                tilPhone.setError(getString(R.string.error_field_required));
-            } else if (phone.length() < 10) {
-                tilPhone.setError(getString(R.string.error_phone_too_short));
-            } else if (phone.length() > 10) {
-                tilPhone.setError(getString(R.string.error_phone_too_long));
-            } else {
-                final ProgressDialog pd = new ProgressDialog(context);
-                pd.setMessage(getString(R.string.loading));
-                pd.show();
+                final String phone = etPhone.getText().toString();
+                if (phone.isEmpty()) {
+                    tilPhone.setError(getString(R.string.error_field_required));
+                } else if (phone.length() < 10) {
+                    tilPhone.setError(getString(R.string.error_phone_too_short));
+                } else if (phone.length() > 10) {
+                    tilPhone.setError(getString(R.string.error_phone_too_long));
+                } else {
+                    final ProgressDialog pd = new ProgressDialog(context);
+                    pd.setMessage(getString(R.string.loading));
+                    pd.show();
 
 
-                getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation?phone=1" + phone + "&email=" + email + "&password=" + password, response -> {
-                    getCodeRequest = null;
-                    Logger.e(TAG, response.toString());
-                    pd.dismiss();
-                    AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
+                    getCodeRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "user/activation?phone=1" + phone + "&email=" + email + "&password=" + password, response -> {
+                        getCodeRequest = null;
+                        Logger.e(TAG, response.toString());
+                        pd.dismiss();
+                        AppController.getInstance().getDefaultSharePreferences().edit().putString(Constant.SHARE_USER_PHONE, phone).apply();
 
-                    try {
-                        String message = response.getString("message");
-                        DialogUtil.showMessageDialog(message, context);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    etPhone.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        try {
+                            String message = response.getString("message");
+                            DialogUtil.showMessageDialog(message, context);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
+                        etPhone.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            btnContact.setVisibility(View.GONE);
-                            btnVerify.setVisibility(View.GONE);
-                            btnSave.setVisibility(View.VISIBLE);
-                            tilCode.setVisibility(View.GONE);
-                            btnRequestAgain.setVisibility(View.GONE);
-                            tvNoCode.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                btnContact.setVisibility(View.GONE);
+                                btnVerify.setVisibility(View.GONE);
+                                btnSave.setVisibility(View.VISIBLE);
+                                tilCode.setVisibility(View.GONE);
+                                btnRequestAgain.setVisibility(View.GONE);
+                                tvNoCode.setVisibility(View.GONE);
+                            }
+                        });
+                        btnContact.setVisibility(View.VISIBLE);
+                        btnVerify.setVisibility(View.VISIBLE);
+                        btnSave.setVisibility(View.GONE);
+                        btnRequestAgain.setVisibility(View.VISIBLE);
+                        tilCode.setVisibility(View.VISIBLE);
+                        tvNoCode.setVisibility(View.VISIBLE);
+                    }, error -> {
+                        getCodeRequest = null;
+                        pd.dismiss();
+                        Util.handleVolleyError(error, context);
                     });
-                    btnContact.setVisibility(View.VISIBLE);
-                    btnVerify.setVisibility(View.VISIBLE);
-                    btnSave.setVisibility(View.GONE);
-                    btnRequestAgain.setVisibility(View.VISIBLE);
-                    tilCode.setVisibility(View.VISIBLE);
-                    tvNoCode.setVisibility(View.VISIBLE);
-                }, error -> {
-                    getCodeRequest = null;
-                    pd.dismiss();
-                    Util.handleVolleyError(error, context);
-                });
 
-                // Adding request to request queue
-                AppController.getInstance().addToRequestQueue(getCodeRequest);
+                    // Adding request to request queue
+                    AppController.getInstance().addToRequestQueue(getCodeRequest);
+                }
             }
-        });
+        };
 
-        btnRequestAgain.setOnClickListener(v -> sendGetCodeRequest(etPhone, tilPhone));
+        btnSave.setOnClickListener(btnClickListener);
+
+        btnRequestAgain.setOnClickListener(btnClickListener);
 
 
         btnVerify.setOnClickListener(v -> sendActivateAccountRequest(etCode, tilCode, dialog, email, password));
