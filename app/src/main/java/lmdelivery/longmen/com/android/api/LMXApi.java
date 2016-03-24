@@ -15,12 +15,12 @@ import rx.Observable;
 
 public interface LMXApi {
     @GET("/rest/user/{id}")
-    Observable<User> getUser(@Path("id") int id);
+    Observable<User> getUser(@Path("id") int id, @Query("authId") int authId, @Query("token") String token);
 
     @POST("/rest/user/{id}")
-    Observable<User> updateUser(@Path("id") int id, @Body User user);
+    Observable<User> updateUser(@Path("id") int id, @Query("authId") int authId, @Query("token") String token, @Body User user);
 
     @GET("/rest/order")
-    Observable<ArrayList<TrackingDetail>> getOrderByUser(@Query("userId") int id, @Query("token") String token, @Query("limit") int limit, @Query("offset") int offset);
+    Observable<ArrayList<TrackingDetail>> getOrderByUser(@Query("authId") int authId, @Query("userId") int id, @Query("token") String token, @Query("limit") int limit, @Query("offset") int offset);
 
 }

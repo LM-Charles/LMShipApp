@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.InflateException;
@@ -112,9 +113,16 @@ public class PickupFragment extends Fragment {
             etPostal.setText(address.getPostalCode());
             etCity.setText(address.getCity());
             etUnit.setText(address.getUnitNumber());
-            if(user!=null) {
-                etName.setText(String.format("%s %s", user.firstName, user.lastName));
-                etPhone.setText(user.phone);
+            if (user != null) {
+                if (!TextUtils.isEmpty(user.firstName) && !TextUtils.isEmpty(user.lastName))
+                    etName.setText(String.format("%s %s", user.firstName, user.lastName));
+                else if (!TextUtils.isEmpty(user.firstName))
+                    etName.setText(user.firstName);
+                else if (!TextUtils.isEmpty(user.lastName))
+                    etName.setText(user.lastName);
+
+                if (!TextUtils.isEmpty(user.phone))
+                    etPhone.setText(user.phone);
             }
             mAutocompleteView.setText(address.getStreetName());
 
@@ -266,7 +274,7 @@ public class PickupFragment extends Fragment {
             boolean validateName = validateName(etName.getText().toString());
             boolean validatePhone = validatePhone(etPhone.getText().toString());
             return validatePickupCity && validatePostalCode && validateStreet && validateName && validatePhone;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
 
@@ -277,33 +285,33 @@ public class PickupFragment extends Fragment {
         if (isAdded()) {
             ((NewBookingActivity) getActivity()).pickupAddr.setName(name);
         }
-            if (name.isEmpty()) {
-                ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
-                return false;
-            } else {
-                ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
-                return true;
-            }
+        if (name.isEmpty()) {
+            ((TextInputLayout) etName.getParent()).setError(getString(R.string.required));
+            return false;
+        } else {
+            ((TextInputLayout) etName.getParent()).setErrorEnabled(false);
+            return true;
+        }
     }
 
     private boolean validatePhone(String phone) {
         if (isAdded()) {
             ((NewBookingActivity) getActivity()).pickupAddr.setPhone(phone);
         }
-            if (phone.isEmpty()) {
-                ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
-                return false;
-            } else if (phone.length() < 10) {
-                ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.error_phone_too_short));
-                return false;
-            } else {
-                ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
-                return true;
-            }
+        if (phone.isEmpty()) {
+            ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.required));
+            return false;
+        } else if (phone.length() < 10) {
+            ((TextInputLayout) etPhone.getParent()).setError(getString(R.string.error_phone_too_short));
+            return false;
+        } else {
+            ((TextInputLayout) etPhone.getParent()).setErrorEnabled(false);
+            return true;
+        }
     }
 
     private boolean validateStreet(String street) {
-        if(isAdded())
+        if (isAdded())
             ((NewBookingActivity) getActivity()).pickupAddr.setStreetName(street);
         if (street.isEmpty()) {
             ((TextInputLayout) mAutocompleteView.getParent()).setError(getString(R.string.required));
@@ -318,16 +326,16 @@ public class PickupFragment extends Fragment {
         if (isAdded()) {
             ((NewBookingActivity) getActivity()).pickupAddr.setCity(city);
         }
-            if (city.isEmpty()) {
-                ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
-                return false;
-            } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
-                ((TextInputLayout) etCity.getParent()).setError(getString(R.string.err_not_in_van));
-                return false;
-            } else {
-                ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
-                return true;
-            }
+        if (city.isEmpty()) {
+            ((TextInputLayout) etCity.getParent()).setError(getString(R.string.required));
+            return false;
+        } else if (!Constant.citiesInVan.contains(city.toUpperCase())) {
+            ((TextInputLayout) etCity.getParent()).setError(getString(R.string.err_not_in_van));
+            return false;
+        } else {
+            ((TextInputLayout) etCity.getParent()).setErrorEnabled(false);
+            return true;
+        }
 
     }
 
@@ -335,23 +343,23 @@ public class PickupFragment extends Fragment {
         if (isAdded()) {
             ((NewBookingActivity) getActivity()).pickupAddr.setPostalCode(zip);
         }
-            if (zip.isEmpty()) {
-                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
-                return false;
-            }
+        if (zip.isEmpty()) {
+            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.required));
+            return false;
+        }
 
-            String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
 
-            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(zip);
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(zip);
 
-            if (!matcher.matches()) {
-                ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_canada));
-                return false;
-            } else {
-                ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
-                return true;
-            }
+        if (!matcher.matches()) {
+            ((TextInputLayout) etPostal.getParent()).setError(getString(R.string.err_post_wrong_format_canada));
+            return false;
+        } else {
+            ((TextInputLayout) etPostal.getParent()).setErrorEnabled(false);
+            return true;
+        }
 
     }
 
@@ -462,8 +470,8 @@ public class PickupFragment extends Fragment {
                         }
                     }
                 }, error -> {
-                    Log.e(TAG, "That didn't work!");
-                });
+            Log.e(TAG, "That didn't work!");
+        });
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
     }

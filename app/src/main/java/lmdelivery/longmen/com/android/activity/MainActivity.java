@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (userId != -1) {
             subscriptions.add(
-                    lmxApi.getOrderByUser(AppController.getInstance().getUserId(), AppController.getInstance().getUserToken(), 24, 0)
+                    lmxApi.getOrderByUser(AppController.getInstance().getUserId(),AppController.getInstance().getUserId(), AppController.getInstance().getUserToken(), 24, 0)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Subscriber<ArrayList<TrackingDetail>>() {
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.loading));
         pd.show();
 
-        logoutRequest = new JsonObjectRequest(Request.Method.DELETE, Constant.REST_URL + "login/" + AppController.getInstance().getUserId() + "?token=" + AppController.getInstance().getUserToken(), new Response.Listener<JSONObject>() {
+        logoutRequest = new JsonObjectRequest(Request.Method.DELETE, Constant.REST_URL + "login/" + AppController.getInstance().getUserId() + "?token=" + AppController.getInstance().getUserToken() + "&authId=" + AppController.getInstance().getUserId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Logger.e(TAG, response.toString());

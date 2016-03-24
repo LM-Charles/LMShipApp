@@ -314,9 +314,9 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
     private void init() {
 
         user = new Select().from(User.class).where("remote_id = ?", AppController.getInstance().getUserId()).executeSingle();
-        if(user!=null && user.address!=null){
+        if (user != null && user.address != null) {
             pickupAddr = user.address;
-        }else{
+        } else {
             pickupAddr = new Address();
         }
         pickupAddr.setCountry("Canada");
@@ -525,7 +525,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
         pd.setMessage(getString(R.string.loading));
         pd.show();
 
-        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + AppController.getInstance().getUserToken(),
+        bookShipRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "order?token=" + AppController.getInstance().getUserToken() + "&authId=" + AppController.getInstance().getUserId(),
                 Order.buildOrderParam(AppController.getInstance().getUserId(), "", rateItem, pickupAddr, dropOffAddr, packageArrayList, selectedTime, declareValue, insuranceValue),
                 response -> {
                     Logger.e(TAG, "book order response: " + response.toString());
@@ -539,7 +539,7 @@ public class NewBookingActivity extends AppCompatActivity implements TimeFragmen
                     user.firstName = StringUtil.getFirstName(pickupAddr.getName());
                     user.lastName = StringUtil.getLastName(pickupAddr.getName());
                     user.save();
-                    lmxApi.updateUser(AppController.getInstance().getUserId(), user);
+                    lmxApi.updateUser(AppController.getInstance().getUserId(), AppController.getInstance().getUserId(), AppController.getInstance().getUserToken(), user);
                 }, error -> {
             bookShipRequest = null;
             pd.dismiss();

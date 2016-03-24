@@ -223,7 +223,7 @@ public class LoginFragment extends Fragment {
             final String finalEmail = email;
             final String finalPassword = password;
             loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.REST_URL + "login?email=" + email + "&password=" + password, params, response -> {
-                Logger.e(TAG, response.toString());
+                Timber.i(response.toString());
                 pd.dismiss();
                 loginRequest = null;
                 try {
@@ -239,7 +239,7 @@ public class LoginFragment extends Fragment {
 
                     Timber.i("starting");
                     subscriptions.add(
-                            lmxApi.getUser(id)
+                            lmxApi.getUser(id,id,token)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<User>() {
